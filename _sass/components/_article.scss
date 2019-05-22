@@ -29,7 +29,10 @@
 
 .c-article__title {
     @include fs--heading-1;
-    color: $c-base__02;
+    font-family: 'RobotoB' , 'Black Han Sans';
+    font-size: 5vh;
+
+    color: #000;
 }
 
 .c-article__time {
@@ -38,6 +41,8 @@
 }
 
 .c-article__main {
+    margin-left: 5%;
+    margin-right: 5%;
     margin-bottom: 5rem; // 50px
     @include fs--body;
     color: $c-base__01;

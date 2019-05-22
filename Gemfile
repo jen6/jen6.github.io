@@ -6,4 +6,5 @@ gem "rb-fsevent", "0.9.8"
 
 group :jekyll_plugins do
       gem 'jekyll-livereload'
+      gem 'bootstrap', '~> 4.3.1'
 end
