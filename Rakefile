@@ -1,4 +1,8 @@
+require "rubygems"
+require "tmpdir"
 
+require "bundler/setup"
+require "jekyll"
 #
 ## Customize post location and post extensions
 #
@@ -57,10 +61,40 @@ desc 'Check links for generated site'
 task :check do
   STDOUT.sync = true
 	cleanup
-  jekyll("build -d _site#{baseurl}")
+  system "bundle exec jekyll build"
 	puts cyan "Running html proofer..."
 	puts `htmlproofer --assume-extension --alt-ignore '/.*/' ./_site`
 end
+
+GITHUB_REPONAME = "jen6/jen6.github.io"
+PROD_DESTINATION = "_site"
+desc 'generated site'
+task :generate do
+  STDOUT.sync = true
+	cleanup
+  system "bundle exec jekyll build"
+end
+
+desc 'publishing the site'
+task :publish => [:generate] do
+    Dir.mktmpdir do |tmp|
+    cp_r "#{PROD_DESTINATION}/.", tmp
+
+    pwd = Dir.pwd
+    Dir.chdir tmp
+
+    system "git init"
+    system "git add ."
+    message = "Site updated at #{Time.now.utc}"
+    system "git commit -m #{message.inspect}"
+    system "git remote add origin https://github.com/#{GITHUB_REPONAME}.git"
+    system "git push origin master:refs/heads/master --force"
+    system "pause"
+
+    Dir.chdir pwd
+  end
+end
+  
 
 # Usage: rake post title="A Title" [date="2012-02-09"] [tags=[tag1,tag2]] [category="category"]
 desc "Begin a new post in #{CONFIG['posts']}"
