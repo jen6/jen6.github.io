@@ -79,8 +79,22 @@ task :post do
   end
   filename = File.join(CONFIG['posts'], "#{date}-#{slug}.#{CONFIG['post_ext']}")
   if File.exist?(filename)
-    abort("rake aborted!") if ask("#{filename} already exists. Do you want to overwrite?", ['y', 'n']) == 'n'
+    puts "#{filename} already exists. Do you want to overwrite? : y/n"
+    input = STDIN.gets.strip
+    if input == "n"
+      abort("rake aborted!") 
+    end
   end
+  thumbnail = ""
+  File.readlines(filename).each do |li|
+    m = li.match /\!\[.*\]\((.*)\)/
+    if m
+      thumbnail = m[1]
+      break
+    end
+  end
+
+    
   
   puts cyan "Creating new post: #{filename}"
   open(filename, 'w') do |post|
@@ -90,8 +104,58 @@ task :post do
     post.puts 'description: ""'
     post.puts "category: #{category}"
     post.puts "tags: #{tags}"
+    post.puts "thumbnail: #{thumbnail}"
     post.puts "---"
     post.puts "{% include JB/setup %}"
+  end
+end # task :post
+
+# Usage: rake post title="A Title" [file="./title.md"] [date="2012-02-09"] [tags=[tag1,tag2]] [category="category"]
+desc "Begin a new post in #{CONFIG['posts']}"
+task :addinfo do
+  abort("rake aborted: '#{CONFIG['posts']}' directory not found.") unless FileTest.directory?(CONFIG['posts'])
+  title = ENV["title"]
+  filePath = ENV["file"]
+  tags = ENV["tags"] || "[]"
+  category = ENV["category"] || ""
+  category = "\"#{category.gsub(/-/,' ')}\"" if !category.empty?
+  slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+  begin
+    date = (ENV['date'] ? Time.parse(ENV['date']) : Time.now).strftime('%Y-%m-%d')
+  rescue => e
+    puts red "Error - date format must be YYYY-MM-DD, please check you typed it correctly!"
+    exit -1
+  end
+  filename = File.join(CONFIG['posts'], "#{date}-#{slug}.#{CONFIG['post_ext']}")
+  if File.exist?(File.join(CONFIG['posts'], filePath))
+    abort("rake aborted! #{filename}") 
+  end
+
+  thumbnail = ""
+  File.readlines(filePath).each do |li|
+    m = li.match /\!\[.*\]\((.*)\)/
+    if m
+      thumbnail = m[1]
+      break
+    end
+  end
+
+    
+  
+  puts cyan "Creating new post: #{filename}"
+  open(filename, 'w') do |post|
+    post.puts "---"
+    post.puts "layout: post"
+    post.puts "title: \"#{title.gsub(/-/,' ')}\""
+    post.puts 'description: ""'
+    post.puts "category: #{category}"
+    post.puts "tags: #{tags}"
+    post.puts "comments: true"
+    post.puts "thumbnail: #{thumbnail}"
+    post.puts "---"
+    File.readlines(filePath).each do |li|
+      post.puts li
+    end
   end
 end # task :post
 

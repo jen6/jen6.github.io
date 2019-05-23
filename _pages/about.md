@@ -3,20 +3,23 @@ layout: content
 title: About
 permalink: /about/
 ---
-Hi, I'm Johnny and I live in the Shire. Thanks for visiting my site.
+Hi, I'm SonGeon and I live in the Seoul, Korea. Thanks for visiting my site.
 
-I program and write about software development when I have the time. More information can be found through <a href="https://www.linkedin.com/" data-network="LinkedIn" data-proofer-ignore>LinkedIn.</a>
+I'm interested in the Software Engineering and the Software Science.
+
+Currently I'm join the Google Summer of Code 2019 in the KDE community.
+
+If you interested in my career please check the links📝
+
+[LinkedIn](https://www.linkedin.com/in/jen6/) Lang  🇰🇷
+
+[Resume](https://drive.google.com/open?id=1Lv076JSROTKnJu_OGJoK0lIh21VpDh1m) Lang  🇺🇸
+
 
 ----
 
-## The Website
-This site was made on an [Apple MBP](https://www.apple.com/) powered by [Jekyll](https://jekyllrb.com) on [Github Pages](https://pages.github.com).
-I'd love to hear your feedback on this site and my work.
+## Contact
 
-----
-
-## Etcetera
-
-- [Instagram](https://www.instagram.com/) for 📸
-- [Facebook](https://www.facebook.com/) for 🕺
+- [Facebook](https://www.facebook.com/fjen6b) for 🕺
+- [Email](fjen6b@gmail.com) for 📬
 

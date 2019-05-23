@@ -26,11 +26,14 @@ title: Home
       {% endif %}
       <div class="slide-item">
         <div class="item-image">
+          {% if post.thumbnail %}
+          <img src="{{ post.thumbnail }}">
+          {% else %}
           <img src="https://ucarecdn.com/f6f6f811-c64a-4870-8570-0d777dd036bb/-/crop/1200x675/0,63/-/preview//">
+          {% endif %}
         </div>
-        <!-- <div class="carousel-caption"></div> -->
           <p class="item-title"><a href="{{ post.url | prepend: site.baseurl}}">{{ post.title }}</a></p>
-          <p class="item-content">{{ post.excerpt | strip_html }}</p>
+          <p class="item-content"><a href="{{ post.url | prepend: site.baseurl}}">{{ post.content | strip_html | truncate: 350 }}</a></p>
       </div>
     </div>
     {% capture carousel-cnt %} {{ carousel-cnt | plus: 1 }} {% endcapture %}

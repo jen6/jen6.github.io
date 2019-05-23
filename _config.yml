@@ -10,9 +10,10 @@ github_username: jen6
 
 baseurl: "/paper-jekyll-theme" # the subpath of your site, e.g. /blog
 url: "https://deadbeef.me" # the base hostname & protocol for your site
+excerpt_seperator:  <!--break-->
 
 google_analytics_id: UA-1111111111-1
-disqus_id:
+disqus_id: "makeall-jen6"
 
 # Build settings
 include: [_pages]

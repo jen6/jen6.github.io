@@ -3,12 +3,12 @@
    ========================================================================== */
 
 .c-page {
-
+  
 }
 
 .c-page__header {
   max-width: 1400px;
-    margin-bottom: 5rem; // 100px
+    margin-bottom: 2rem; // 100px
 
     h1 {
         margin-bottom: 2.5rem; // 25px
@@ -30,6 +30,7 @@
     nav {
         @include fs--meta;
     }
+    
 
 }
 
