@@ -8,11 +8,11 @@ email: kde.jen6@gmail.com
 twitter_username: 
 github_username: jen6
 
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://jen6.github.io" # the base hostname & protocol for your site
 excerpt_seperator:  <!--break-->
 
-google_analytics_id: UA-1111111111-1
+google_analytics_id: UA-140782418-1
 disqus_id: "makeall-jen6"
 
 # Build settings
@@ -20,6 +20,9 @@ include: [_pages]
 markdown: kramdown
 permalink: /:year/:month/:title.html
 
+kramdown:
+  input: GFM
+  syntax_hightlighter: rouge
 sass:
     style: compressed
 

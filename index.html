@@ -32,8 +32,8 @@ title: Home
           <img src="https://ucarecdn.com/f6f6f811-c64a-4870-8570-0d777dd036bb/-/crop/1200x675/0,63/-/preview//">
           {% endif %}
         </div>
-          <p class="item-title"><a href="{{ post.url | prepend: site.baseurl}}">{{ post.title }}</a></p>
-          <p class="item-content"><a href="{{ post.url | prepend: site.baseurl}}">{{ post.content | strip_html | truncate: 350 }}</a></p>
+          <p class="item-title"><a href="{{ post.url }}">{{ post.title }}</a></p>
+          <p class="item-content"><a href="{{ post.url }}">{{ post.content | strip_html | truncate: 350 }}</a></p>
       </div>
     </div>
     {% capture carousel-cnt %} {{ carousel-cnt | plus: 1 }} {% endcapture %}
@@ -64,7 +64,7 @@ title: Home
     {% endif %}
     <li class="c-archives__item">
       <h3>
-        <a href="{{ post.url | prepend: site.baseurl }}">{{post.title}}</a>
+        <a href="{{ post.url }}">{{post.title}}</a>
         <br>
         <small>{{post.description}}</small>
       </h3>

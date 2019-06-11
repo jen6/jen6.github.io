@@ -5,7 +5,7 @@ permalink: /about/
 ---
 Hi, I'm SonGeon and I live in the Seoul, Korea. Thanks for visiting my site.
 
-I'm interested in the Software Engineering and the Software Science.
+I'm interested in the Software Engineering and the Computer Science.
 
 Currently I'm join the Google Summer of Code 2019 in the KDE community.
 
