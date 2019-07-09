@@ -3,7 +3,7 @@ layout: post
 title: "First week of GSOC, Piece Table Implement"
 description: ""
 category: 
-tags: []
+tags: ["GSOC", "KDE", "markdown", "piece table"]
 comments: true
 thumbnail: http://drive.google.com/uc?export=view&id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7
 ---
