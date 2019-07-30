@@ -16,7 +16,7 @@ google_analytics_id: UA-140782418-1
 disqus_id: "makeall-jen6"
 
 # Build settings
-include: [_pages, _move]
+include: [_pages]
 markdown: kramdown
 permalink: /:year/:month/:title.html
 

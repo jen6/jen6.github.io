@@ -1,4 +1,5 @@
 ---
+layout: content
 title: Resume 
 permalink: /move/resume/
 redirect_from: /move/resume
