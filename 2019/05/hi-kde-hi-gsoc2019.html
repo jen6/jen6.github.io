@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HI KDE, HI GSOC 2019 - make all</title>
+  <meta name="description" content="HI KDE, HI GSOC2019">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2019/05/hi-kde-hi-gsoc2019.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <h1 class="c-article__title">HI KDE, HI GSOC 2019</h1>
+    <p class="c-article__time"><time datetime="2019-05-27T00:00:00+09:00" itemprop="datePublished">May 27, 2019</time></p>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">GSOC</li>
+    
+    <li class="c-tag">KDE</li>
+    
+    <li class="c-tag">markdown</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <h1 id="hi-kde-hi-gsoc2019">HI KDE, HI GSOC2019</h1>
+
+<p>Hi I’m SonGeon live in Seoul, South Korea.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1MVbLu69UDVpp8vpAM_fVzDDUReFdHHnv" alt="" /></p>
+
+<p>On this summer I’m working with the KDE community by participating the “Google Summer of Code” Program.</p>
+
+<p>My main goal during GSOC period is making a <strong>markdown view, WYSIWIG editor</strong> using C++ and Qt.</p>
+
+<p>There were two reasons that I started to make a new markdown view.</p>
+
+<p>First, most markdown editors are using webview based renderer. But webview based editors have the lack of printing options. Because Markdown is aiming to make a good looking document with simple text notations on the web environment. In a single webpage, It doesn’t have pagination for printing.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1fhRBHuVDkfqELUKJ9Auuum4MSm5IDGEW" alt="" /></p>
+
+<p>So webview based renders have the same problems. For example, document elements are printed across multiple pages and the document’s paragraphs, word spacing, and line spacing are slightly different compared to the screen. If the markdown editor support the preview of the paging,  better text rendering with the layout of printing, It will be more powerfull like word processors.</p>
+
+<p>Second, the KDE project already has the markdown renderer kmarkdownWebview. Currently, It has a forked third-party javascript library for markdown rendering. I want to minimize the dependencies. And It use the Qt’s QWebEngine and QWebChannel. Those are used to run a JS library and It brings a lot of overhead.</p>
+
+<p>I think writing new renderer using Qt API and C++ without a third-party library is a lighter approach. So I choose to make parser with the <strong>Boost Spirit</strong>. It’s the PEG parser generator implemented in the boost library and It’s <a href="https://www.boost.org/doc/libs/1_66_0/libs/spirit/doc/html/spirit/karma/performance_measurements/numeric_performance/int_performance.html">super fast</a>.</p>
+
+<p>I want to contribute many way not only makaing my own markdown editor. One of the main goal in this summer is make as a KDE part to reuse it. It can be markdown preivew module in Okular.</p>
+
+<p>If you interested in this project please feel free to contact me. I’ll check KDevelop, kde-soc telegram group (I joined in irc but it’s hard to check) . Or you can use my email kde.jen6@gmail.com.</p>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> May 23, 2019</small>
+      <br>
+      <a class="no-hov" href="/2019/05/transport-layer-note.html">&laquo; Transport Layer Note</a>
+    </div>
+    
+    
+    <div class="wrapper" id="right">
+      <small>Jun 11, 2019 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2019/06/first-week-of-gsoc-piece-table-implement.html">First week of GSOC, Piece Table Implement &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2019</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+</html>
