@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transport Layer Note - make all</title>
+  <meta name="description" content="Network">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2019/05/transport-layer-note.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <h1 class="c-article__title">Transport Layer Note</h1>
+    <p class="c-article__time"><time datetime="2019-05-23T00:00:00+09:00" itemprop="datePublished">May 23, 2019</time></p>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+  </ul>
+  <div class="c-article__main">
+    <h1 id="network">Network</h1>
+
+<h1 id="chapter-1">Chapter 1</h1>
+
+<h3 id="network-protocols">Network protocols</h3>
+
+<p>define format, order of messages sent, received entities, actions token on transmission 
+(token ring같은 경우를 말하는듯)</p>
+
+<h3 id="network-structure">Network structure</h3>
+
+<ul>
+  <li>Network Edge : hosts client and servers</li>
+  <li>On DSL(Digital Subscriber Line) using frequency division multiplexing
+(음성, 데이타 주파수 분리)</li>
+  <li>Host sending packet : packet : L bits, link transmission rate(게bandwidth) : R (bit/sec)
+<!--break-->
+                                      packet transmission delay = L/R</li>
+  <li>Network Core : interconnected routers, network of networks</li>
+  <li>packet-switching : application layer 메서지를 패킷단위로 쪼개 다음 라우터에게 보내줌</li>
+  <li>store and forward : 패킷 전체가 수신되기 전까지는 forward할 수 없음.</li>
+  <li>end-end delay : 2L/R</li>
+  <li>arrival rate가 transmission rate를 넘어가게 되면 패킷이 큐에 들어가서 기다림. (queueing delay)
+ 라우터 메모리가 꽉차게 되면 packet dropped. (loss)</li>
+  <li>Circuit switching(Alternative core)</li>
+  <li>src/dest 간의 경로가 보내기전에 결정되고 모든 리소스를 사용함. 안쓰이면 idle 공유따윈 없음</li>
+  <li>FDM(주파수 별로 다른 유저가 사용), TDM(시간을 쪼개서 유저간 공유)</li>
+  <li>Packet Switching vs Circuit Switching</li>
+</ul>
+
+<p><a href="http://gaia.cs.umass.edu/kurose_ross/interactive/ps_versus_cs.php">http://gaia.cs.umass.edu/kurose_ross/interactive/ps_versus_cs.php</a></p>
+
+<p>35명 전체 유저 중 전체 유저가 각각 한번에 시간을 10%씩 점유할 때 10명 이상의 사람이 동시 접속 할 확률</p>
+
+<p><a href="https://math.stackexchange.com/questions/918861/probability-problem-in-networking">Probability problem in networking.</a></p>
+
+<p><a href="http://icawww1.epfl.ch/sc250_2004/lecture_notes/sc250_exo2.pdf">http://icawww1.epfl.ch/sc250_2004/lecture_notes/sc250_exo2.pdf</a></p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=16HdP_F4x1C6U-ZJ5rKqSri40C-4DpD5z" alt="" /></p>
+
+<ul>
+  <li>circuit switching은 큰 데이터(video)같은걸 전송할 때 좋음. packet switching은 대역폭 보장</li>
+</ul>
+
+<h3 id="internet-structure">Internet Structure</h3>
+
+<ul>
+  <li>Network evolution was driven by <strong>economics</strong> and <strong>national policies</strong></li>
+  <li>소규모의 Network는 <strong>ISP</strong>를 통해 연결됨. ISP는 상호간의 연결이 필요함</li>
+  <li>Access ISP는 호텔, 회사, 대학에서 제공하는 네트워크를 의미
+    <ol>
+      <li>N개의 <strong>Access ISP</strong>(Node)가 있을 때 Interconnect 하려면 n(n-3)/2 + n O(n^2) scale</li>
+      <li>그래서 <strong>Global ISP</strong>가 출현해서 ISP간을 연결해주는 Network를 만듬.</li>
+      <li>Global ISP가 여러개 출현하면서 Global ISP간을 이어주는 <strong>IXP</strong>(Internet Exchange Point)가 나옴.</li>
+      <li>Access ISP를 묶어서 Global ISP에 연결해주는 <strong>regional networks</strong>들이 등장</li>
+      <li><strong>Content Provider</strong>(Google, Akamai)들이 <strong>자체 네트워크</strong>를 구성함</li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="delay-loss-throughput">Delay, Loss, Throughput</h3>
+
+<ul>
+  <li>Packet Delay Sources</li>
+  <li><strong>Transmission Delay</strong> : 라우터로 들어오는 패킷에 대한 딜레이 (L/R_in)</li>
+  <li>Nodal Processing Delay : 패킷 헤더 조사, 라우팅 경로 결정 (매우 짧은시간)</li>
+  <li>Queueing Delay : 큐에 들어가서 output link로 나가기까지의 딜레이 (congestion 상황에 따라 다름)</li>
+  <li><strong>Propagation Delay</strong> : 매질을 통해 실제 데이터가 전송되는 속도 
+ Ex. 라우터간 거리 200km, 전기의 속도 2<em>10^8m/sec → 2</em>10^5 / 2*10^8 = 1/1000 sec = 1 ms</li>
+  <li>Packet Loss : 라우터에 큐가 꽉 차면서 발생하는 문제.</li>
+  <li>Throughput : 1초에 몇 비트를 받고있는가? 전송률 (bits/time unit)</li>
+  <li>instantaeous : 순간 전송률</li>
+  <li>average : 평균 전송률</li>
+  <li>전송량 Rc, Rs이 있고 전달해주는 Core의 전송량이 R이고 열명이 나눠 쓸 경우
+ throughput은 min(Rc, Rs, R/10)</li>
+</ul>
+
+<p><a href="http://gaia.cs.umass.edu/kurose_ross/interactive/end-end-throughput.php">http://gaia.cs.umass.edu/kurose_ross/interactive/end-end-throughput.php</a></p>
+
+<hr />
+
+<h1 id="chapter-3-transport-layer">Chapter 3 Transport-layer</h1>
+
+<h3 id="transport-layer-services">Transport-layer services</h3>
+
+<p>다른 host에 있는 <strong>Application</strong>이 서로 통신 할 수 있는 <strong>Logical communication</strong><br />
+Network layer은 다른 <strong>Host</strong> 끼리 서로 통신할 수 있는 것 <strong>구별하기</strong>
+break message into segments and reassemble it</p>
+
+<h3 id="multiplexing--demultiplexding-at-transport-layer">Multiplexing / Demultiplexding at Transport Layer</h3>
+
+<p>Transport Layer에서 어떻게 데이터를 처리해줄것인지에 대한 내용
+Network Level에서 IP Datagrams를 받음. 여기에는 host, dest ip 정보가 들어있음.
+그리고 Datagram한 개에는 Transport Layer segment가 들어있고 여기 헤더에 port정보가 들어있음.</p>
+
+<p>multiplexing : L7 → L4 일 때 여러개의 Application Level socket에서 들어온 데이터들에 transport header를 추가 해줘서 어떤 포트로 갈지에 대한 정보를 넣어 줌
+demultiplexing : L4 → L7 헤더에 있는 포트 정보를 보고 해당 프로세스 소켓으로 넘겨줌</p>
+
+<p><strong>When demuliplexing</strong> 
+UDP는 기본적으로 Connectionless 그냥 <strong>dest ip, port</strong>만 알게 되면 보낼 수 있음. src ip,port 와 상관 없이 dest ip, port만 알게되면 같은 소켓으로 통신가능.
+TCP는 그와 반대로 Connection orientied  <strong>src ip,port 그리고 dest ip, port</strong> 총 4개를 이용해 소켓을 구분. 저 4개 중 한 개라도 달라지면 다른 소켓을 사용.</p>
+
+<hr />
+
+<h3 id="udp">UDP</h3>
+
+<p><strong>Connectionless</strong> : No handshaking, independent UDP segment.
+순서 없음. 수신 송신에 대한 확인이 없기 때문에 loss발생 가능. → No reliability
+(Application Level에서 하려면 할 수 있긴함.)
+하지만 이런 특성 때문에 간단해서 많이 쓰임. Congestion Control이 없기 때문에 원하는 만큼 보낼 수 있음.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1ihK-svJ6qkG3QNziDPIwhYrglCtwjubo" alt="" /></p>
+
+<p>(<a href="https://tools.ietf.org/html/rfc768">https://tools.ietf.org/html/rfc768</a>)</p>
+
+<p>Source Port is an optional field, when meaningful, it indicates the port
+of the sending  process,  and may be assumed  to be the port  to which a
+reply should  be addressed  in the absence of any other information.</p>
+
+<h3 id="checksum">Checksum</h3>
+
+<p>UDP헤더를 보면 Checksum이 존재하는데 IP header의 일부, UDP header, UDP data를 가지고 한다.
+문제는 Transport Layer에서는 IP header에 대한 정보를 안가지고 있기 때문에 정보중 일부인 persudo header를 만들어 계산한다. → TCP도 같은 방법으로
+<a href="http://www.netfor2.com/udpsum.htm">http://www.netfor2.com/udpsum.htm</a> ← checksum calculation code</p>
+
+<blockquote>
+  <p>흠,,, L3 switching 에서 DSR(Direct Server Return)을 하게 될 경우 
+dst ip addr을 vip로 바꿔주게 될텐데 그러면 다시 checksum을 업데이트..
+<a href="http://tech.kakao.com/2014/05/28/l3dsr/">http://tech.kakao.com/2014/05/28/l3dsr/</a> 그냥 갑자기 난 생각</p>
+</blockquote>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=17ymVpuFihSOUKPYurKw-0uRgTFLkSz2f" alt="" /></p>
+
+<p>이때 one’s complement를 사용해서 계산을 한다. left most에 carry가 발생하면 더해주는 방식으로.
+checksum에 들어가는거는 마지막의 one’s complement를 취해준다(not)
+IPv4기준으로 checksum은 optional. 0으로 넣어두면 검사를 안한다는 뜻으로 사용한다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1S7QTkE_I1AlromhK68esoQTHJ5upbAu8" alt="" /></p>
+
+<hr />
+
+<h3 id="rdtreliable-data-transfer--중요">RDT(Reliable data transfer)- 중요</h3>
+
+<p>Reliable data transfer은 좀 일반적인 의미로써의 프로토콜로 어떤 프로토콜이던 spec을 맞추면 
+rdt protocol이라 불릴 수 있음. 
+The requirements are <strong>retransmission</strong>, <strong>error detection</strong>, and acknowledgments.
+PPT상에서는 Unreliable data transfer send함수를 랩핑 해서 하는 식으로</p>
+
+<h3 id="rdt-10">rdt 1.0</h3>
+
+<p>그냥 안전한 채널(no loss, no bit error)에서 전송하면 그 자체로 안-전</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=19HT83cxO8S56K8YTP87o6FMra0FmoT6t" alt="" /></p>
+
+<h3 id="rdt-20">rdt 2.0</h3>
+
+<p>조건 : bit error 발생하는 상황. no loss. 
+→ checksum 추가. 
+    feedback 추가 : 체크섬이 이상할경우 NACK (Retransmission), 괜찮으면 ACK</p>
+
+<p>문제점 : ACK/NACK 가 corrupt되는 상황이 발생할수도 있음</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1J0gw4AXvtwJbjDsC97JHLV0NIUDuaAPf" alt="" /></p>
+
+<h3 id="rdt-21">rdt 2.1</h3>
+
+<p>해결책</p>
+<ul>
+  <li>ACK/NACK에 Checksum을 추가해서 error검출. corupt가 발생시 데이터 재전송</li>
+  <li>Sequence number를 추가해서 recv측에서 duplicated data를 검출해냄</li>
+</ul>
+
+<p>질문</p>
+
+<ul>
+  <li>과연 NAK가 필요한가? → 1번 State에서 corrupt가 일어났을 때 NAK대신 0번 ACK를 받는다면?
+ (실제로 여러 TCP Implementation에서 쓴 receipt “Triple duplicate ack” <br />
+→ TCP Fast retransmittion) : 2번 중복된 ACK가 오더라도 timeout 되기 전까지는 no retransmission
+   But 3번 중복된 ACK가 오게 되면 Fast retransmission. (SR ARQ)</li>
+  <li>이전보다 2배 늘어난 state</li>
+</ul>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1pxKseLNwrvLVycgX69qedQVif9B-8SXU" alt="" /></p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1QqH4i6bDwKA8czgrzcU3U635EvXkPDTB" alt="" /></p>
+
+<h3 id="rdt-22">rdt 2.2</h3>
+
+<p>NAK-free protocol : ACK만 쓰임. corrupt 발생시 이전 ACK를 보냄. → ACK에 sequence 필수 포함</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1sfIz3Nnn9_5BcEICz7DPKZiPC39aO3rn" alt="" /></p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1Zo_UfQ2wrVi34HaMXxYllYzwX8UZFl6R" alt="" /></p>
+
+<h3 id="rdt-30">rdt 3.0</h3>
+
+<p>조건 : bit error 발생, loss 발생.
+해결 : <strong>timeout</strong>을 둬서 시간안에 ACK가 안올경우 retransmission.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=11OhF73N281J2R2xlODZOTgN-XbPIXSLi" alt="" /></p>
+
+<p>Stop&amp;Wait 분석: 1 Gbps Link,  15ms propagation, 8kb packet</p>
+
+<p>→ Transmission Time = 8*10^3bit / 10^9 bit/sec = 8 / 10^6 sec = 8000 ms = 8usec (micro second)
+Utilization : 전송에 쓰인 시간 / (총 걸린 시간)
+→ Transmission Time / (RTT + Transmission Time) = 0.008 ms / (30.008) ms = 0.00027</p>
+
+<hr />
+
+<h3 id="pipelined-protocols">Pipelined protocols</h3>
+
+<p>문제 : 하나 보내고 time out을 기다리던가 하는건 솔직히 말이 안됨. 여러 개를 보낼 수 있는 방법을 생각.</p>
+
+<p>해결 : <strong>Pipelining</strong>을 사용해서 여러개를 한꺼번에 보내자
+→ 여러개를 보내기 위해서 <strong>Sequence number를 확장</strong>해야함. 각 패킷마다 unique한 number가 필요
+→ <strong>Buffer</strong>를 확장해야함. 이전에는 한개만 가지고 했지만 이제는 pipeline 할때 필요한 사이즈 만큼 필요</p>
+
+<p>효과 : 3개씩 보낸다고 하면 Utilization이 3배 확장!</p>
+
+<p>이제 밑에서 기술하는 protocol들에서는 <strong>Sliding window</strong>라는 개념이 들어간다. 위에서 얘기한 buffer와 
+같은 얘기로 0~10까지 보내야 할 패킷들이 있을 때 buffer size가 3이라면 (0, 2) ~ (8, 10) 이렇게 움직이며 
+처리를 한다.</p>
+
+<p>Pipelined protocols를 볼때는 세가지 event point를 중점적으로 봐야한다.</p>
+
+<ol>
+  <li>Send invocation : send함수가 호출 될 때 sequence number과 sliding window status</li>
+  <li>Receipt of an ACK : ACK를 받을 때 어떻게 처리 하는지</li>
+  <li>Timeout Event :  Timeout을 받을 때 어떻게 처리 하는지</li>
+</ol>
+
+<h3 id="gbn-go-back-n">GBN (Go-back-N)</h3>
+
+<p>처음 Send가 호출 됐을 때 window가 꽉 찼다면 거-절. 아니면 윈도우에 넣고 패킷 전송.</p>
+
+<p>N개의 패킷을 받을 때 마지막에 잘 수신된 패킷의 sequence number ack를 보냄. (<strong>cumulative ack)</strong></p>
+
+<p>→ 0~5 까지의 패킷을 보낸다고 했을때 0, 1, 2 ack를 보낼 수도 있지만 2 ack만 보내게 되면 2 이전의 것까지
+다 잘 도착한 상황이라고 가정</p>
+
+<p>Timeout의 기준은 제일 오래 ACK를 못받은 패킷(윈도우 맨 처음) 발생시 timeout된것 부터 전부 다시 전송
+→ timer은 가장 마지막 패킷 기준으로 한 개. 어차피 윈도우 전체를 다시 재전송 하는데..</p>
+
+<p>Error가 발생하거나 순서대로 오지 않을 경우 이전 sequence number를 포함한 ACK를 보냄.
+<strong>out-of-order discard</strong> : 2번까지 ACK를 보낸 후 3번을 못받고 4번이 먼저옴. 그러면 discard하고 2번 ACK를 보냄</p>
+
+<p>duplicated ack를 받게 될 경우 무시. sender은 해당 ACK가 오지 않을 경우 timeout이 날 때 까지 기다렸다가 retransmission.</p>
+
+<p>→ GBN은 rdt프로토콜들의 명세가 다 지켜지고 스펙이 좋기 때문에 후에 TCP에서 GBN Style을 많이 사용.
+그러나 segment가 순서대로 오지 않아도 buffer상에는 순서대로 들어감. + SR(Selective Repeat)</p>
+
+<h3 id="sr-selective-repeat">SR (Selective Repeat)</h3>
+
+<p>send가 호출 됐을 때 남아있는 Sequence number가 있는지 확인한다. 남은 sequence number가 현재 sender의 윈도우에 범위 안에 있다면 바로 보내고 아니라면 buffering하거나 다시 상위 레이어로 올린다.</p>
+
+<p>N개의 패킷을 받을 때 각각 패킷에 대해 모두 ACK를 보낸다.. (<strong>individual ACK</strong>)</p>
+
+<p>각각 ACK가 안와서 timeout된 패킷에 대해 다시 재전송.  → unACKed packet 갯수만큼 타이머 필요</p>
+
+<p>문제점 : sender와 receiver간의 <strong>sliding window synchronization</strong></p>
+
+<p>윈도우 사이즈가 3, Sequence Number범위가 0~3일 때 아래와 같이 ACK가 drop될 경우 synchronization이 깨지게됨. 슬라이딩 윈도우가 어떻게 움직이는지는 보이지 않고 Sequence number가 
+어떻게 오는지만 알 수 있기 때문에 이런 문제가 생김.
+이게 지금 윈도우의 못 받은 0인지 아님 이전 윈도우의 0인지를 구분할 수 없는 문제.</p>
+
+<p>최소 Sliding window size *2 ≤ Sequence number size가 돼야 이 문제를 해결 할 수 있다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1nhUksi0iIeoCCsqKJQ0X0iou5A0PpgDA" alt="" /></p>
+
+<hr />
+
+<h2 id="tcptransmission-control-protocol">TCP(Transmission Control Protocol)</h2>
+
+<p><strong>Connection-oriented</strong> : 맨 처음 서로 연결 할 때 <strong>establish</strong>과정이 필요함. → <strong>handshaking</strong>
+establish 함으로써 서로 state variables들을 초기화 한다.</p>
+
+<p><strong>Full duplex data</strong> : 양방향 통신으로 서로 데이터 통신을 할 수 있다.</p>
+
+<p><strong>Point to Point</strong> : 양 끝 단말기기간 둘이서만 통신을 한다. → multicasting은  TCP로 불가능</p>
+
+<p><strong>Flow controlled</strong> : sender가 receiver의 buffer를 과부화 시키지 않음</p>
+
+<h3 id="tcp-segment-structure">TCP segment structure</h3>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1GsFmE40p5OSWv5m3wmeatkPCv7Duwlml" alt="" /></p>
+
+<ul>
+  <li>Src, Dst port each 16bits</li>
+  <li>
+    <p>Sequence Number 32bits : 이 세그먼트의 첫번째 바이트의 순서
+→ SYN은 ISN(initial sequence number)를 뜻하고 맨 첨 데이터의 바이트는 ISN+1</p>
+
+    <p>If SYN is present the sequence number is the
+      initial sequence number (ISN) and the first data octet is ISN+1.</p>
+  </li>
+  <li>Acknowledgement Number 32bits : 이 다음 받을 세그먼트의 예상 sequence number</li>
+  <li>Data offset 4bits : 4byte 단위로 TCP 헤더의 길이 및 데이터 시작 offset을 알려준다.</li>
+  <li>Reserved 6bits : 예약석 0으로 셋팅</li>
+  <li>Control Bits 6bits</li>
+  <li>URG : Urgent Pointer 필드가 사용될 때.</li>
+  <li>ACK : Acknowledgment 필드가 사용될 때.</li>
+  <li>RST, SYN, FIN : connection establishment</li>
+  <li>PSH : Push Function 상위 레이어로 데이터를 바로 보냄</li>
+  <li>URG : 긴급한 데이터가 있다고 표현할 때? Urgent Pointer랑 같이 쓰임 (PSH랑 안중요)</li>
+  <li>Window 16bits : Flow control에 쓰이는 size. 
+그냥 간단하게 receiver가 받고싶어하는 세그먼트 크기라고 생각</li>
+  <li>Checksum 16bits : 데이터 체크섬. udp랑 방식이 같다.</li>
+</ul>
+
+<p>밑에는 안중요해서 패스</p>
+
+<hr />
+
+<h3 id="tcp-rtt">TCP RTT</h3>
+
+<p>RTT &lt; TimeOut 이여야 패킷이 정상적으로 도달 할 수 있는데 RTT가 워낙 많은 경우의 수가 있다.
+그러면 대략 측정을 어떻게 할 것 인가?</p>
+
+<p>→ <strong>Sample RTT :</strong> 데이터를 보낸 이후 ACK가 돌아오기 까지를 걸린시간을 체크. 
+근데 이 값은 network congestion에 따라 값이 많이 바뀐다. 그래서 이 값을 그냥 쓰진 않는다.
+<strong>Estimate RTT</strong> : (1 - a)<em>EstimateRTT + a * SampleRTT
+각각 SampleRTT를 지수이동평균 (Exponential Moving Average)를 구해준다.
+지수 이동 평균은 최근 값에 높은 가중치를 주고 이전 값 또한 영향을 미칠 수 있게 한다.
+위 식에서 가중치 a 는 일반적으로 0.125 라는 값을 많이 쓴다.
+근데 이 값은 평균이지  RTT보다 크다는 보장이 없다. 실제 그래프를 보게 되면 평균 정도라
+정반정도가 timeout이 날 수도 있다.
+<strong>DevRTT</strong> : (1-b)</em>DevRTT + B<em>|SampleRTT - EstimatedRTT| 
+이 값은 safety margin을 주기 위한 값으로 평균과 현재 값의 차를 계속해서 평균을 내 놓는다.
+여기서 가중치 b는 일반적으로 0.25 값을 사용한다.
+<strong>TimeoutInterval</strong> = EstimatedRTT + 4</em>DevRTT ( 최종 값 )</p>
+
+<hr />
+
+<h3 id="tcp-rdt">TCP RDT</h3>
+
+<p>TCP 또한 rdt를 하기 위해 기능들을 추가</p>
+
+<ol>
+  <li>Pipelined segments</li>
+  <li>Cumulative acks</li>
+  <li>single retransmission timer</li>
+</ol>
+
+<p>Retransmission Condition : timeout, duplicate ack
+Timeout : retransmit unacked 패킷중 sequence number가 제일 작은 것 부터</p>
+
+<p>Sender가 패킷을 보낼 때 Seq에 현재 Sequence Number 이랑 data size를 보내준다.
+Receiver은 잘 받았을 경우 ACK에 다음 받을껄로 예상대는 Sequence Number를 보낸다.
+위에 써놨다 싶이 Cumulative acks가 적용된다.</p>
+
+<p>Receiver은 out-of-order packet을 받았을 때 원래 받아야 할 Sequence number를 포함한 ack를 보내준다.</p>
+
+<p>이 과정 중 Timeout delay가 너무 길 경우 <strong>TCP fast retransmit</strong>을 이용한다.
+lost segment에 대한 ACK를 3 번 보낼 경우 sender는 timeout 때와 같은 행동을 한다.</p>
+
+<hr />
+
+<h3 id="flow-control">Flow Control</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>OS</td>
+      <td>TCP Code → TCP socket recv buffer  →</td>
+      <td>USER</td>
+      <td>Application Process</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>이런 방식으로 구조가 돼 있을 때 unordered segment를 처리 하지 않는다는 가정하에 ordered segment를 받았을 경우 recv buffer에 들어가게 된다. 그러면 Application Process에서 Recv를 통해 버퍼에 있는 데이터들을 가져간다.  그치만,,, Application Process가 처리할 양이 많다면 recv buffer가 꽉 차게될 수도 있다. 이렇게 되면 패킷이 drop되고 다시 전송 받아야한다.</p>
+
+<p>이러한 이유에서 <strong>flow control</strong>이 만들어졌다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1bkW1_oNCFEgzZIcKUmevWFLy2wdQLExC" alt="" /></p>
+
+<p>위 그림이 Receiver의 버퍼이다. 
+RecvBuffer : 전체 버퍼의 크기 일반적으로 4096bytes
+RecvWindow (rwnd) : buffer에 남은 공간으로 이 공간을 Window Size로 정해준다.</p>
+
+<p>Receiver : 자신이 남은 RcvWindow를 rwnd에 담아서 보내준다</p>
+
+<p>Sender : Rwnd 만큼 보내준다 했을 때 <strong>LastByteSent, LastByteAcked</strong> 이 두가지 변수를 고려해야 한다.  <code class="highlighter-rouge">LastByteAcked - LaskyteSent ≤ Rwnd</code> 여야 하기 때문에 이 값을 세션이 유지되는 동안 유지해야한다.</p>
+
+<p>이걸 지키면 overflow나지 않는 걸 보장 할 수 있음</p>
+
+<hr />
+
+<h3 id="three-way-handshaking-connection">Three-way Handshaking (Connection)</h3>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1LFefF1l7ANSPkA9tbl9sgOTXcip_90Yb" alt="" /></p>
+
+<p>여러 호스트를 받을 수 있는 UDP랑은 달라달라달라~ 
+TCP는 sender, receiver당 한개의 Connection이 만들어진다. 그래서 이 Connection을 맺기 위한 과정을 <strong>handshake</strong>이라고 한다.</p>
+
+<p>이 과정은 세 번에 걸쳐서 진행된다고 해서 <strong>Three-way handshaking</strong>이라고 불린다.</p>
+
+<p>TCP A &lt;——&gt; TCP B</p>
+
+<ol>
+  <li>
+    <p>———SEQ (ISN(initial Sequence Number) A) CTL<SYN> →</SYN></p>
+  </li>
+  <li>
+    <p>←———SEQ(ISN, B), ACK(ISN A + 1), CTL&lt;SYN, ACK&gt; -</p>
+  </li>
+  <li>
+    <p>———SEQ(ISN, A+1), ACK(ISN B + 1), CTL<ACK>—&gt;</ACK></p>
+  </li>
+</ol>
+
+<p>다음과 같은 과정으로 진행된다. 
+이렇게 3번에 걸쳐서 하는 이유는 서로의 <strong>ISN(Initial Sequence Number)</strong>를 동기화 시키기 위해서이다. 또한 2-way로 할 경우 서로의 state를 못 보게 된다. connection initiation 과정에서 네트워크 상황 때문에 오래된 Duplicate connection request는 <strong>half-open</strong> 상황이 일어나게 한다. 즉 한 쪽만 open되고 나머지 한쪽은 이미 timeout되서 커넥션이 일어나지 않을 수도 있는 상황을 뜻 한다.</p>
+
+<p>하지만 three-way hand shaking 은 SYN-ACK, ACK 이 과정에서 상대방에 state를 알 수 있어 <strong>Simultaneous Connection Synchronization</strong>과 <strong>duplicated initialization</strong> 등에 대해 대응할 수 있다.  잘못된 커넥션은 RST condition을 통해 끊어준다.
+자세한 내용은 <a href="https://tools.ietf.org/html/rfc793#page-31">https://tools.ietf.org/html/rfc793#page-31</a> 에서 볼 수 있다.</p>
+
+<p>Session Closing 과정은 <strong>Four-way handshaking</strong>이라 불린다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1XzYkdo9dp2bibD60L4d8d78s0xeIZfOL" alt="" /></p>
+
+<p>이 과정은 양쪽 모두 닫는걸 목적으로 하기 때문에 FIN, ACK 를 양쪽에서 한 번 씩 보내준 후 각 요청에 대해 ACK를 한 번 씩 보내준다.</p>
+
+<hr />
+
+<h2 id="congestion-control">Congestion Control</h2>
+
+<p>Flow Control이 Host의 buffer가 overflow될 수 있는 상황이였다면 <strong>Congestion</strong>은 Network 상황이 안좋다는 뜻이다. 여기서 Network의 상황이 안좋다는 것은 Router의 link buffer들이 꽉 찰 수 있다는 것을 뜻 한다.</p>
+
+<p>cwnd( Congestion Window ) : sender-slide limit, ack를 받기 전까지 얼마나 많은 양의 데이터를 보낼 수 있는지. 이 값은 알고리즘에 의해 정해지는 값이다.
+rwnd (Receiver’s advertised window) : receiver-side limit, 얼마나 많은 데이터를 감당 할 수 있는지
+SMSS(Sender Maximum Segment Size) : Sender가 전송할 수 있는 가장 큰 segment size. network의 MTU(Maximum Transmission Unit)에 따라 결정된다.
+RMSS(Receiver Maximum Segment Size) : Receiver가 받길 원하는 가장 큰 segment size.  Connection이 맺어질 때 이 정보를 MSS option에 같이 보낸다.</p>
+
+<p>ssthresh(Slow Start Threshold) : slow start를 할지 Congestion avoidance를 사용할지를 결정하는 변수.</p>
+
+<h3 id="slow-start--congestion-avoidance">Slow Start &amp; Congestion Avoidance</h3>
+
+<p>Slow Start와 Congestion Avoidance는 기본적으로  network에 capacity를 추측하는 알고리즘이다.
+이 알고리즘에 따라서 변화하는 두 변수 <strong>cwnd, ssthresh</strong>가 어떤 이벤트에 따라서 값이 변화하는지를 알아보자.</p>
+
+<p>먼저 현재 네트워크 상황을 모르기 때문에 데이터를 천천히 보내는 것 부터 시작한다. (Slow start) 그렇다면 처음에 아무것도 안 보내줄 수는 없기 때문에 cwnd에 초기값을 2*SMSS보다 작거나 같게 설정 해준다. ssthresh는 값이 조금 커야한다. <code class="highlighter-rouge">ssthresh = max (FlightSize / 2, 2*SMSS)</code> 이정도로 설정한다고 한다.</p>
+
+<p>이렇게 초기값이 잡히고 나면 ACK가 돌아올 때 마다 <code class="highlighter-rouge">cwnd = min(rwnd, 2*cwnd)</code> 로 설정을 해준다. 이 과정은 <code class="highlighter-rouge">cwnd &lt; ssthresh</code>일 때 까지 계속 증가한다. 이 과정을 <strong>Slow Start</strong> 라고 부른다.</p>
+
+<p>cwnd &gt; ssthresh인 상황이 오게 되면 <strong>Congestion Avoidance</strong>상황으로 가게 된다. 네트워크가 congestion되지 않도록 천천히 보내는 경우이다. 이 때 부터는 ACK가 올때 마다
+ <code class="highlighter-rouge">cwnd = cwnd + SMSS*(SMSS/cwnd)</code> 즉 ACK가 윈도우 갯수 만큼 올 때 1씩 증가한다. 이렇게 쬐끔씩 올라가는 과정을 <strong>Additive Increase</strong> 라고 부른다. 혼잡해지지 않게 조심 또 조심해주는 것 이다.</p>
+
+<p>그리고 Congestion Avoidance 에서 timeout이 일어나게 되면 congestion이 발생했다는걸 감지하고 <code class="highlighter-rouge">ssthresh = cwnd/2</code> , <code class="highlighter-rouge">cwnd = 1*SMSS</code> 다음과 같이 설정하고 slow start로 다시 돌아가게 된다. 즉 cwnd를 최솟값부터 해서 congestion 상태를 최소화하는것이다. 이렇게 window를 확 줄이는것을 <strong>Multiplicaive Decrease</strong> 라고 부른다. 그리고 이렇게 window를 제어하는 알고리즘을 <strong>Addictive Incerease &amp; Mulitplicative Decrease</strong> 라고 부른다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1qtmanmW7HYGx047ZaNmxOwEF8mbz5JpM" alt="" /></p>
+
+<h3 id="fast-retransmit--fast-recovery">Fast Retransmit &amp; Fast Recovery</h3>
+
+<p>이제 약간 입이 지겨울 정도로 얘기해서 여기서는 대략 설명한다. ACK가 중복돼서 3번 오게 되면 해당 segment만 loss가 일어났다고 판단을 해서 timeout을 기다리지 않고 바로 retransmit을 해준다. 이 과정을 <strong>Fast Retransmit</strong>이라고 한다. 왜 3 번 오는것만 빠르게 처리 해주냐면 해당 segment만 drop돼서 reordering 때문이라 전체 다 보내는 것 보다는 해당 segment를 빠르게 처리해 주는 것이 좋다.</p>
+
+<p>retransmit을 한 후에는 congestion이 약간 발생했다고 가정해서 일단 <code class="highlighter-rouge">ssthresh = cwnd / 2</code>, <code class="highlighter-rouge">cwnd = ssthresh + 3</code> 다음과 같이 값을 설정한다. 그리고 duplicate ACK들이 올때마다 <code class="highlighter-rouge">cwnd = cwnd + SMSS</code>를 해준다. 이과정을 <strong>Fast Recovery</strong>라고 부른다. Congestion을 피해야 하긴 하지만 다시 Slow Start까지는 아닌 정도라 이렇게 한다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1zSo08vDmOnrYlRnLkBOV8NqT6yeA4E6R" alt="" /></p>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://tools.ietf.org/html/rfc793#ref-3">RFC 793 - Transmission Control Protocol</a></p>
+
+<p><a href="http://www2.ic.uff.br/~michael/kr1999/3-transport/3_05-segment.html">Transmission Control Protocol</a></p>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    
+    <div class="wrapper" id="right">
+      <small>May 27, 2019 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2019/05/hi-kde-hi-gsoc2019.html">HI KDE, HI GSOC 2019 &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2019</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+</html>
