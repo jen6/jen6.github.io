@@ -48,11 +48,11 @@
     }
     @media(min-width: 1280px) {
       margin-right: 15%;
-      font-size:2.3rem;
+      font-size:1.8rem;
     }
     margin-bottom: 5rem; // 50px
     @include fs--body;
-    color: darkslategrey;
+    color: #222;
     font-family: 'Arita-dotum-Medium';
     word-break: keep-all;
     line-height: 1.6;
