@@ -26,6 +26,9 @@ kramdown:
 sass:
     style: compressed
 
+plugins:
+  - jekyll-gist
+
 exclude: [vendor]
 
 # deployment

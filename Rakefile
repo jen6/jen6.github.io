@@ -119,6 +119,11 @@ task :post do
       abort("rake aborted!") 
     end
   end
+
+  puts cyan "Creating new post: #{filename}"
+  open(filename, 'w') do |post|
+  end
+
   thumbnail = ""
   File.readlines(filename).each do |li|
     m = li.match /\!\[.*\]\((.*)\)/
@@ -128,9 +133,6 @@ task :post do
     end
   end
 
-    
-  
-  puts cyan "Creating new post: #{filename}"
   open(filename, 'w') do |post|
     post.puts "---"
     post.puts "layout: post"
@@ -148,18 +150,21 @@ end # task :post
 desc "Begin a new post in #{CONFIG['posts']}"
 task :addinfo do
   abort("rake aborted: '#{CONFIG['posts']}' directory not found.") unless FileTest.directory?(CONFIG['posts'])
+
   title = ENV["title"]
   filePath = ENV["file"]
   tags = ENV["tags"] || "[]"
   category = ENV["category"] || ""
   category = "\"#{category.gsub(/-/,' ')}\"" if !category.empty?
   slug = title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+
   begin
     date = (ENV['date'] ? Time.parse(ENV['date']) : Time.now).strftime('%Y-%m-%d')
   rescue => e
     puts red "Error - date format must be YYYY-MM-DD, please check you typed it correctly!"
     exit -1
   end
+
   filename = File.join(CONFIG['posts'], "#{date}-#{slug}.#{CONFIG['post_ext']}")
   if File.exist?(File.join(CONFIG['posts'], filePath))
     abort("rake aborted! #{filename}") 
