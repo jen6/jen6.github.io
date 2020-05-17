@@ -2,8 +2,9 @@
 layout: post
 title: "⚒︎Hammer spoon과 🍎Apple script를 사용해 <br>AWS 2FA OTP 인증 자동화 하기"
 description: ""
+comments: true
 category: 
-tags: ["자동화", "hammer spoon", "apple script", "aws", "2fa", "otp", "totp"]
+tags: ["자동화", "hammer spoon", "apple script"]
 thumbnail: https://drive.google.com/uc?export=view&id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB
 ---
 
@@ -53,7 +54,7 @@ thumbnail: https://drive.google.com/uc?export=view&id=1eE2RxRvJwa8radQT7B3VbNnmG
 
 ## Step 1. Authy에서 TOTP URI 뽑아내기
 
-Authy같은 authenticators에 새로운 인증을 등록 하려면 대부분 QR코드 혹은 secret key를 입력해줘야한다. 자동화를 하려면 콘솔 authenticator에 이 키를 등록해줘야하는데 대부분 안가지고 있는 경우가 대부분 이기 때문에 이 secret key를 포함하고 있는 TOTP URI를 Authy에서 뽑아줘야한다.
+Authy같은 authenticators에 새로운 인증을 등록 하려면 대부분 QR코드 혹은 secret key를 입력해줘야한다. 자동화를 하려면 콘솔 authenticator에 이 키를 등록해줘야하는데 안가지고 있는 경우가 대부분이라 secret key를 포함하고 있는 TOTP URI를 Authy에서 뽑아줘야한다.
 
 ![https://drive.google.com/uc?export=view&id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO](https://drive.google.com/uc?export=view&id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO)
 
@@ -65,7 +66,7 @@ Authy같은 authenticators에 새로운 인증을 등록 하려면 대부분 QR�
 
 먼저 Authy chrome app이 설치 돼 있다면 `chrome://extensions/?id=gaedmjdfmmahhbjefcbgaolhhanlaolb` 로 들어가서 Authy의 extension 정보 페이지로 들어가준다. 그 다음 Authy를 실행시켜 주면 '뷰 검사' 항목에 `main.html` 이라는 항목이 생긴다. 이걸 눌러줘서 Authy의 개발자 콘솔로 들어가자.
 
-{% gist a13ef83a5af57e45c4820c3da5ba0e31 authy_export-js %}
+{% gist a13ef83a5af57e45c4820c3da5ba0e31 authy_export.js %}
 
 위 스크립트를 개발자 콘솔에서 입력을 하게 되면 아래와 같이 authy에 등록 돼 있는 TOTP URI를 얻을 수 있다. 이 URI에서 아까 얘기했던 `secret` query parameter 값을 잘 저장해둔다.
 
