@@ -30,8 +30,6 @@
     nav {
         @include fs--meta;
     }
-    
-
 }
 
 #header-logo-link{
@@ -57,6 +55,9 @@
   }
 }
 
+.c-page__main {
+  width: 100%;
+}
 .c-header-nav-item {
   color: #000;
   @media (min-width: 1280px) {
@@ -69,6 +70,7 @@
 }
 
 .c-page__footer {
+    margin-right: 10%;
     margin-bottom: 10rem;
     display: -webkit-box;
     display: -webkit-flex;
