@@ -47,7 +47,7 @@ thumbnail: http://drive.google.com/uc?export=view&id=1djAUK5HM58mLzcza344_ZE4OmL
 
 > 출저 [https://en.wikipedia.org/wiki/Geohash](https://en.wikipedia.org/wiki/Geohash)
 
-정확히는 이진 탐색을 하듯이 위도와 경도의 범위를 점점 좁혀가며 이 과정을 비트를 표현한다. 이런 과정은 -90 ~ 90도부터 시작하며 중간 값 보다 클경우 1 작을 경우 0으로 표시하고 5자리를 모아 base32 대응표에 대입하면 아래 사진과 같이 지역을 해쉬화 해서 표현할 수 있다. 인접한 지역끼리는 해쉬가 유사하니 얼마나 인근 지역인지도 알 수 있고 탐색도 빠를 테니 괜찮은 방법 같다. 좀 더 자세한 내용은 [Wikipedia Geohash문서](https://en.wikipedia.org/wiki/Geohash) 혹은 [scvgeo 님의 블로그](https://scvgoe.github.io/2018-12-11-Geohash/)통해서 알아보는걸 추천한다.
+정확히는 이진 탐색을 하듯이 위도와 경도의 범위를 점점 좁혀가며 이 과정을 비트를 표현한다. 이런 과정은 -90 ~ 90도부터 시작하며 중간 값 보다 클경우 1 작을 경우 0으로 표시하고 5자리를 모아 base32 대응표에 대입하면 아래 사진과 같이 지역을 해쉬화 해서 표현할 수 있다. 인접한 지역끼리는 해쉬가 유사하니 얼마나 인근 지역인지도 알 수 있고 탐색도 빠를 테니 괜찮은 방법 같다. 좀 더 자세한 내용은 [Wikipedia Geohash문서](https://en.wikipedia.org/wiki/Geohash) 혹은 [scvgoe 님의 블로그](https://scvgoe.github.io/2018-12-11-Geohash/)통해서 알아보는걸 추천한다.
 
 ![http://drive.google.com/uc?export=view&id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn](http://drive.google.com/uc?export=view&id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn)
 
