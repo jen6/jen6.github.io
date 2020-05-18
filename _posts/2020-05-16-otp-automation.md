@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "⚒︎Hammer spoon과 🍎Apple script를 사용해 <br>AWS 2FA OTP 인증 자동화 하기"
+title: "아직도 손으로 OTP를 입력하세요? <br>⚒︎Hammer spoon으로 2FA OTP 인증 자동화 하기"
 description: ""
 comments: true
 category: 
