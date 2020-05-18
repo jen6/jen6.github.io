@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="http://static.airbridge.io/images/og_tags/404f13ef-9487-4e0b-980e-9af07205c3c9.png">
+  <title>바쁜 개발자가 집 알아보는 방법 🐌    방 정보 크롤링 및 필터링 하기 - make all</title>
+  <meta name="description" content="바쁜 개발자가 집 알아보는 방법 🐌  - 방 정보 크롤링 및 필터링 하기">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2019/12/find-house-for-me.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <div class="c-article__author_date">
+      <p class="c-article__time"><time datetime="2019-12-15T00:00:00+09:00" itemprop="datePublished">Dec 15, 2019</time></p>
+      <p class="c-article__name">By Geon Son</p>
+    </div>
+    <h1 class="c-article__title">바쁜 개발자가 집 알아보는 방법 🐌    방 정보 크롤링 및 필터링 하기</h1>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">crawling</li>
+    
+    <li class="c-tag">map</li>
+    
+    <li class="c-tag">geohash</li>
+    
+    <li class="c-tag">부동산</li>
+    
+    <li class="c-tag">직방 크롤링</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <h1 id="바쁜-개발자가-집-알아보는-방법-----방-정보-크롤링-및-필터링-하기">바쁜 개발자가 집 알아보는 방법 🐌  - 방 정보 크롤링 및 필터링 하기</h1>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1djAUK5HM58mLzcza344_ZE4OmLsUsed8" alt="http://drive.google.com/uc?export=view&amp;id=1djAUK5HM58mLzcza344_ZE4OmLsUsed8" /></p>
+
+<blockquote>
+  <p><a href="https://abr.ge/ng5dg">시각화 한 지도 바로보기</a></p>
+</blockquote>
+
+<p>올해 취업을 하고 집에서 독립을 해보고 싶어져서 방을 알아보기 시작했었다. <br />
+처음에는 월세를 살아야 하나 하다가 전세자금을 엄청 좋은 조건에 대출 받을수 있는 <em>중소기업 청년 전세자금 대출</em> 이있다는 걸 알게 되고 이거 완전 🍯이잔아 하고 찾기 시작했다.  <br />
+<br /></p>
+
+<p>역시나 남의 돈을 그렇게 쉽게 얻을 수는 없었다. 직방, 다방등 전세로 올라온 물건은 많았지만 <strong>전세자금 대출이 가능한 물건은 정말 정~~말 적기</strong>도 하고 같은 가격대에 대비해 방 크기도 안좋은 편이였다. 더 놀라운점은 <strong>전세 대출이 가능한 물건들은 올라온지 1 주일정도 됐다면 없을 확률이 99.99%</strong>였다… 그럼에도 불구하고 좋은 방을 구하고야 말지 하고 이를 악물기 시작하고 찾아보기를 30분 뒤 내가 뭘 봤는지도 모르겠고 슬슬 정신이 혼미해지기 시작했다.<br />
+<br /></p>
+
+<p>먼저 어플에서는 내가 <strong>원하는 조건의 필터링이 힘들었다</strong>. 대출이 가능한 물건인지 아니면 특정 텍스트가 들어가 있는지 구별할 수도 없었고 광고 물건이 먼저올라오기도 했다. 또 내가 어떤 물건을 봤는지 어떤 부동산걸 봤는지 일일히 기억하기도 힘들었다. 일단 부동산에 연락을 여러군데 넣어둬도 어떤데가 어떤 물건을 가지고 있는지도 기억이 안나 먼저 엑셀로 정리를 해야겠다는 생각을 했다. 근데 또 이것도 손으로 하려니 너~~무 귀찮다. 그래서 <strong>방 정보를 크롤링 하고 내가 원하는 집들만 필터링 해서 보고 정리</strong>하는 프로젝트를 시작했다.<br />
+<br /></p>
+
+<p>먼저 구현할 기능은 간단하게 3 개로 시작 하기로 했다.<br />
+<br /></p>
+
+<ol>
+  <li>원하는 지역의 방정보를 가져오기</li>
+  <li>특정 문구가 들어간, 내가 원하는 가격의 방 정보를 필터링 하기</li>
+  <li>부동산 별로 볼 수 있게 하기<br />
+<br /></li>
+</ol>
+
+<h2 id="방-정보-가져오기">방🏠 정보 가져오기</h2>
+
+<p>크롤링할 플랫폼은 api가 제일 깔끔해 보이는 직방으로 선택했다. 직방에서는 총 두 단계로 방 정보를 가져올 수 있었다.<br />
+<br /></p>
+
+<h3 id="1-파라미터를-이용해서-방-정보-id-들을-가져오기">1. 파라미터를 이용해서 방 정보 ID 들을 가져오기.</h3>
+
+<p>직방에서는 방 정보를 가져오기 위해 여러가지 파라미터를 제공한다. 지상층인지, 보증금의 범위 등등. 그 중에서 제일 눈에 띈건 geohash라는 파라미터였다. 위치정보를 이용한 개발은 한 번도 안 해봐서 구역별 정보를 어떻게 가져오는지 궁금했었는데 직방에서는 <em>geohash</em>를 이용해 지역 구분을 했다. geohash는 지구의 위치 정보를 사각형으로 나눠 표현하는 방식을 의미한다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1bXqE2D63osXNQoEIsaU19kNLyvardA6S" alt="http://drive.google.com/uc?export=view&amp;id=1bXqE2D63osXNQoEIsaU19kNLyvardA6S" /></p>
+
+<blockquote>
+  <p>출저 <a href="https://en.wikipedia.org/wiki/Geohash">https://en.wikipedia.org/wiki/Geohash</a></p>
+</blockquote>
+
+<p>정확히는 이진 탐색을 하듯이 위도와 경도의 범위를 점점 좁혀가며 이 과정을 비트를 표현한다. 이런 과정은 -90 ~ 90도부터 시작하며 중간 값 보다 클경우 1 작을 경우 0으로 표시하고 5자리를 모아 base32 대응표에 대입하면 아래 사진과 같이 지역을 해쉬화 해서 표현할 수 있다. 인접한 지역끼리는 해쉬가 유사하니 얼마나 인근 지역인지도 알 수 있고 탐색도 빠를 테니 괜찮은 방법 같다. 좀 더 자세한 내용은 <a href="https://en.wikipedia.org/wiki/Geohash">Wikipedia Geohash문서</a> 혹은 <a href="https://scvgoe.github.io/2018-12-11-Geohash/">scvgoe 님의 블로그</a>통해서 알아보는걸 추천한다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn" alt="http://drive.google.com/uc?export=view&amp;id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn" /></p>
+
+<p>회사가 사당에 있음으로 그와 인근 지역인 관악구와 동작구 위주로 알아봤다. 직접 geohash를 구해줘도 되지만 <a href="http://geohash.gofreerange.com/">http://geohash.gofreerange.com/</a> 이 사이트에서 지도 상 geohash에 따른 지역을 표시해준다. 내가 방 정보를 알아와야하는 지역은 <code class="highlighter-rouge">wydm0~wydm3</code>에 있는 지역이 된다. 이렇게 파라미터를 맞춰서 넣어주게 되면 해당 지역안에 있는 방 item 들의 id를 가져올 수 있다.<br />
+<br /></p>
+
+<h3 id="2-구체적인-방-정보-가져오기">2. 구체적인 방 정보 가져오기</h3>
+
+<p>위 작업을 통해 방 정보에 대한 id 를 가져왔다면 이제 해당 id에 대한 정보를 가져오면 된다. 처음에는 id 갯수가 꽤 돼서 이걸 한번 씩 다 보내야 했는데 다행이 벌크로 보낼 수 있었다. 추가로 이렇게 api를 이용해서 항상 적당한 갯수 조절과 타임아웃은 필수다. 내 실수로 서버가 아플수도 있으니 말이다.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1ugt3MmtKNXRR_1-DGcpmp3kzRl64Qa4Q" alt="http://drive.google.com/uc?export=view&amp;id=1ugt3MmtKNXRR_1-DGcpmp3kzRl64Qa4Q" /></p>
+
+<blockquote>
+  <p>출저 : ㅍㅍㅅㅅ</p>
+</blockquote>
+
+<p>왜 인지는 모르겠지만 방 정보를 가져올 때 꼭 id 갯수 대비 몇 개 씩은 줄어들어서 왔는데 일단 그냥 넘어갔다</p>
+
+<h2 id="방-정보-필터링-하기">방🏠 정보 필터링 하기</h2>
+<p><br /></p>
+
+<p>이제 모든 방 정보를 들고 왔으니 내가 원하는 조건에 해당하는 방을 걸러내면 된다.<br />
+방정보가 200개가 넘어가서 처음에는 행복회로🔥를 돌렸지만 이 과정에서 전세 매물 중5분의 1만 살아 남게 된다.<br />
+<br /></p>
+
+<h3 id="1-대출-가능한-방-찾기">1. 대출 가능한 방 찾기</h3>
+
+<p>대부분 전세자금 대출이 가능 한 방들은 제목이나 설명에 전세 자금 대출이 가능한 물건이라고 명시를 해놓는다. 명시를 해놓지 않는 경우 99.99% 대출이 안되는 생활근린시설 이거나 융자가 많아서 대출이 안된다. 그래서 제목이랑 본문 중 <strong>대출</strong> 이라는 단어가 들어간 집 들을 긁어왔다. 하지만 나중에 이 로직을 수정하게 된다. 본문 중에 전세자금대출 불가 라고 써놓은 곳도 있었기 때문이다…</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">wish</span> <span class="o">=</span> <span class="s">'대출'</span>
+    <span class="n">sad_words</span> <span class="o">=</span> <span class="p">[</span> <span class="s">'대출x'</span><span class="p">,</span> <span class="s">'대출불가'</span><span class="p">,</span> <span class="s">'전세 안됩'</span> <span class="p">]</span>
+    <span class="k">if</span> <span class="n">wish</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span> <span class="ow">or</span> <span class="n">wish</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s">'description'</span><span class="p">]:</span>
+        <span class="n">plz_flag</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">sad_words</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s">'description'</span><span class="p">]:</span>
+                <span class="n">plz_flag</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">break</span>
+</code></pre></div></div>
+<blockquote>
+  <p>출저 : 내 코드중 발최… 대출이 안되면 슬픕니다</p>
+</blockquote>
+
+<p>그리고 위에 써놓은 것 처럼 올린지 1주일이 넘은 매물같은 경우에는 이미 나갔을 확률이 매우 높기도 하고 관리가 잘 안되고 있는 물건 일 수도 있어서 최근 4일 이내에 업데이트가 있는 게시글만 가져오도록 했다.<br />
+<br /></p>
+
+<h3 id="2-주소-겹치는-곳-제거">2. 주소 겹치는 곳 제거</h3>
+
+<p>앱에 올라온 물건들을 보게 되면 같은 집인데 다른 부동산에서 중계를 하기 때문에 겹치는 물건들이 있다. 이런 데이터는 크게 필요하지 않음으로 제거를 해주면 좋다. api를 통해서 들어오는 데이터의 경우 <code class="highlighter-rouge">address1 ~ address3</code>  이런식으로 나뉘어서 온다. 시랑 동같은 정보들을 나눠서 저장해주기 때문인데 주소를 다 이어 준 다음 dictionary의 key 값으로 사용하면 손쉽게 중복된 집들을 묶어줄 수 있다. 이 글을 보면서 생각이 든 건데 같은 주소의 다른 물건의 경우 보증금이 제일 저렴한 집으로 보여줬으면 조금 더 좋았을 것 같다.<br />
+<br /></p>
+
+<h3 id="3-csv로-뽑고-구글-스프레드-시트에-업로드-하기">3. csv로 뽑고 구글 스프레드 시트에 업로드 하기</h3>
+
+<p>정말 이제 몇 안되는 물건들만 남았다. 그래도 약 40개 가량 되기 때문에 그냥 txt 파일로 관리하기에는 무리가 있을 것 같아 csv파일 형태로 만들고 구글 스프레드 시트에 올렸다. 구글 스프레드 시트에 올리게 되면 각 column 별로 필터링을 쉽게 걸 수 있다는 장점이 생기고 모바일이든 랩탑이든 어디서든 볼 수 있다. 집을 보러 다니게 되면 스프레드시트 앱을 통해 쉽게 볼 수 있었다.<br />
+<br /></p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1PGfML6VlZvjwriXB61hixEOfh7DSqBL-" alt="http://drive.google.com/uc?export=view&amp;id=1PGfML6VlZvjwriXB61hixEOfh7DSqBL-" /></p>
+
+<h3 id="4-구글-지도를-통해-위치-표시하기">4. 구글 지도를 통해 위치 표시하기</h3>
+
+<p>스프레드시트 만으로도 꽤 괜찮았지만 그냥 주소만 봐서는 위치를 모르겠어서 어떻게 하면 지도에서 보면 좋겠다는 생각을 했다. 찾아보니 구글 지도에 스프레드시트를 불러와서 볼 수 있는 기능이 있었다. 각 점을 누르면 설명도 나오고 위치도 볼 수 있기 때문에 집 보러다닐 때 꽤 편했다.<br />
+<br /></p>
+
+<p><a href="http://www.ciokorea.com/news/36646">google spreadsheet 기능설명</a></p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1TmthuYODoFuLoxiox5SKHXRX0wcUVpcl" alt="http://drive.google.com/uc?export=view&amp;id=1TmthuYODoFuLoxiox5SKHXRX0wcUVpcl" /></p>
+
+<p><br />
+더 자세한 내용과 실제 구현은 <a href="https://abr.ge/vrh7n9">소스코드를 참고</a> 하면 된다. 사실 개인적인 용도로 쓰는 거기 때문에 코드가 깔끔하지 않은점은… (변명)  <br />
+<br /></p>
+
+<h2 id="후기">후기</h2>
+
+<p>이렇게 만반의 준비를 하고 여러 부동산에 연락을 돌린 다음 💎<strong>귀중한 연차</strong>💎를 내고 집을 보러 다녔다. 그래도 저렇게 필터링 한 물건은 실제로 꽤 있었지만 부동산에서 직방 같은 플랫폼에다 안올려놓은 경우도 많았고 내가 이집 이집 보여주세요 라고 얘기를 할 수 없기 때문에 거의 부동산의 주도로 보는 일이 더 많았다. 그래도 부동산 몇군데 정도 들리고나니 본 물건을 또 보러 가려는 경우가 생기기도 했다. 갔던데를 또 안가기 위해 만들어둔 지도를 활용하는 일이 몇번 있었고 부동산 구분이나 메모도 할 수 있었기 때문에 의미가 완전 없지는 않았다. 그래도 집은 발품 팔으러 다니세요 여러분<br />
+<br /></p>
+
+<p>그래서 <strong>집을 구했냐고 물어보신다면 못구했다. 왜이렇게 비쌉니까…</strong> 그냥 본가에 더 붙어있기로 했다.<br />
+<br /></p>
+
+<p>사실 Github Action을 이용해서 batch job으로 돌면서 집 정보를 업데이트 해주고 리스트에 없는 내가 본 집들도 좀 더 쉽게 추가 할 수 있는 방법을 고민하다가 집 구하는걸 포기했다. 집 구할 정도로 돈이 많은 사람 중 이 글을 보는 분이 있다면 누군가가 내 코드를 수정해서 만들어 주시기를… <br />
+<br /></p>
+
+<p>정말 오래간만에 내 생활 중 필요에 의해 코딩을 했다. 나는 정리를 정말 못하는 성격이기 때문에 만약 이걸 내가 손으로 했더라면 아마 집을 보러가기도 전에 포기했을거다. 어떻게 보면 귀차니즘의 승리 아닐까. 앞으로도 종종 내 삶을 위한 프로젝트를 해봐야겠다.</p>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> Jul 30, 2019</small>
+      <br>
+      <a class="no-hov" href="/2019/07/aws-aws-s3-athena-quicksihtiaws.html">&laquo; AWS에서 데이터처리 맛보기 AWS S3 , Athena , Quicksight</a>
+    </div>
+    
+    
+    <div class="wrapper" id="right">
+      <small>May 16, 2020 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2020/05/otp-automation.html">아직도 손으로 OTP를 입력하세요? <br>⚒︎Hammer spoon으로 2FA OTP 인증 자동화 하기 &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2020</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+</html>

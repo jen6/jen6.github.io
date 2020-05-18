@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="http://static.airbridge.io/images/og_tags/404f13ef-9487-4e0b-980e-9af07205c3c9.png">
+  <title>First week of GSOC, Piece Table Implement - make all</title>
+  <meta name="description" content="">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2019/06/first-week-of-gsoc-piece-table-implement.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <div class="c-article__author_date">
+      <p class="c-article__time"><time datetime="2019-06-11T00:00:00+09:00" itemprop="datePublished">Jun 11, 2019</time></p>
+      <p class="c-article__name">By Geon Son</p>
+    </div>
+    <h1 class="c-article__title">First week of GSOC, Piece Table Implement</h1>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">GSOC</li>
+    
+    <li class="c-tag">KDE</li>
+    
+    <li class="c-tag">markdown</li>
+    
+    <li class="c-tag">piece table</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <p><img src="http://drive.google.com/uc?export=view&amp;id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7" alt="" width="50%" height="50%" /></p>
+
+<p>Hi! 
+Last week was start of the GSOC coding period.  So I started my project.
+Also I opened my code on the KDE git.
+ <a href="https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/">https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/</a></p>
+
+<p>If you are interested in my project feel free to look and give me some advices.</p>
+
+<h2 id="parser-using-spiritx3">Parser using Spirit::x3</h2>
+
+<p>First, I started to make the markdown parser using the Boost Spirit X3.</p>
+
+<p>Spirit makes easy to express grammar using the PEG.
+But it’s templet based library so it was hard to find out which part is wrong.
+Also documentation of spirit was limited.</p>
+
+<p>So I had a lots of trial and error to get compilable source code.</p>
+
+<p><a href="http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf">http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf</a></p>
+
+<p><a href="https://ciere.com/cppnow15/using_x3.pdf">https://ciere.com/cppnow15/using_x3.pdf</a></p>
+
+<p>this two slides was really helpful for me.</p>
+
+<h2 id="markdown-ast-structure">Markdown AST Structure</h2>
+
+<p>if we type markdown document like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># hello
+&gt; &gt; 1. - **sadf** - 
+&gt; &gt; 
+&gt; &gt; sadf
+&gt; 
+&gt; asdf
+</code></pre></div></div>
+
+<p>we will get result like this.</p>
+
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj" alt="" /></p>
+
+<p>Markdown document’s can be splited in each <strong>lines</strong>. line is the smallest unit of the markdown document. Also line can be expressed <strong>attributes,</strong> <strong>string, emphasizes</strong>.</p>
+
+<ul>
+  <li>attributes : Line’s attribute that change the block style. There are two types of attribute.</li>
+  <li>Single Attribute : # header. Style applied only once.</li>
+  <li>Multiple Attributes : &gt; BlockQuote, Lists. Sytle applied recursively.</li>
+  <li>String : Content of the document. It contains only string.</li>
+  <li>Emphasize : Bold, Cancleline, Underline… It contains index of string to be emphasized</li>
+</ul>
+
+<p>All line can be parsed in parallel on multiple threads. Because each line is independent from other lines. After parsing seperatly it can be reassembled after parsing phase.</p>
+
+<p>So we can express this grammar with the Spirit grammar like this</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">auto</span> <span class="k">const</span> <span class="n">Line_def</span><span class="o">=</span> 
+        <span class="n">Header</span><span class="p">[</span><span class="n">pushFunc</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">String</span><span class="p">[</span><span class="n">setContent</span><span class="p">]</span>
+        <span class="o">|</span> <span class="p">(</span><span class="n">MultipleAttribute</span><span class="p">)</span><span class="o">*</span> <span class="o">&gt;&gt;</span> <span class="n">EmphasizeString</span><span class="p">[</span><span class="n">getEmphStr</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h2 id="piece-table">Piece Table</h2>
+
+<p>I had a hard time to implementing the Emphasize String.</p>
+
+<p>All String Emphasize token should be paired. If tokens not paired it should be inserted in original points</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    **this is paired example**
+    
+    **This token -&gt; -- is not paired**
+</code></pre></div></div>
+<p>Like this exampled <code class="highlighter-rouge">--</code> should be inserted in middle of the string as the normal character.</p>
+
+<p>We can simply using insert method but it has performance issue.</p>
+
+<p>If there is a original string length N and another string length M to be inserted in position P.</p>
+
+<p>First split the original string at position P and shift the splited string as mush as M.</p>
+
+<p>Then put the string length M in position P. It takes almost O(N).</p>
+
+<p>If there are alot of non-paired tokens, It will consume more time.</p>
+
+<hr />
+<p>So I found the VSCode team’s article about reimplementing text buffer using the <strong>Piece Table</strong>.</p>
+
+<p><a href="https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation">https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation</a></p>
+
+<p>The main idea of the Piece Table is seperate the original buffer and added buffer.</p>
+
+<p>And split the strings in a small pieces containing position to insert and the string length.</p>
+
+<p>Make a table about how to make new string using each pieces.</p>
+
+<p>So I applied this structure in appending non-paired emphasize tokens.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">const</span> <span class="k">auto</span> <span class="n">EmphasizeString_def</span> <span class="o">=</span> 
+      <span class="o">+</span><span class="p">(</span><span class="n">omit</span><span class="p">[</span><span class="n">Emphasize</span><span class="p">[</span><span class="n">setEmp</span><span class="p">]]</span> <span class="o">|</span> <span class="n">Content</span><span class="p">[</span><span class="n">setEmpText</span><span class="p">]);</span> 
+</code></pre></div></div>
+
+<p>In my grammar definition, it do not check the pairness of Emphasize token.</p>
+
+<p>Basically Emphasize token are temporary stored in Emphasize Stack to check pairness.</p>
+
+<p>First If there is token can be paired, add token in Emphasize vector and clean the non-paired tokens.</p>
+
+<p>Or there are not tokens can be paired just push the token in the Emphasize Stack and push token’s string value in the buffer vector.</p>
+
+<hr />
+
+<p>Strings are also added in the buffer vector and inserted in the <strong>Piece Map.</strong></p>
+
+<p>Piece Map works same as Piece table but effective on find the piece on some position.</p>
+
+<p>Piece Map is multimap that use Piece’s index and Piece as key value.</p>
+
+<p>So we can iterate whole pieces and make new string with non-paired tokens.</p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">namespace</span> <span class="n">AST</span> <span class="p">{</span>
+      <span class="k">struct</span> <span class="n">Piece</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">bufIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="p">};</span>
+    
+      <span class="k">struct</span> <span class="n">Emphasize</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">bufIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">EmphasizeType</span> <span class="n">empType</span> <span class="o">=</span> <span class="n">EmphasizeType</span><span class="o">::</span><span class="n">DEFAULT</span><span class="p">;</span>
+      <span class="p">};</span>
+    
+      <span class="k">using</span> <span class="n">PieceMap</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">multimap</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Piece</span><span class="o">&gt;</span><span class="p">;</span>
+      <span class="k">using</span> <span class="n">PieceMapIter</span> <span class="o">=</span> <span class="n">PieceMap</span><span class="o">::</span><span class="n">iterator</span><span class="p">;</span>
+    
+      <span class="k">class</span> <span class="nc">EmphasizeString</span> <span class="p">{</span>
+        <span class="k">private</span><span class="o">:</span>
+          <span class="kt">int</span> <span class="n">currPos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">addedTokenLen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">buffer</span><span class="p">;</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Emphasize</span><span class="o">&gt;</span>  <span class="n">empSt</span><span class="p">,</span> <span class="n">emps</span><span class="p">;</span>
+          <span class="n">PieceMap</span> <span class="n">pieceMap</span><span class="p">;</span>
+    
+        <span class="k">private</span><span class="o">:</span>
+          <span class="kt">int</span> <span class="n">clearNonComplete</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Emphasize</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="p">);</span>
+        <span class="k">public</span><span class="o">:</span>
+          <span class="n">EmphasizeString</span><span class="p">();</span>
+          <span class="kt">void</span> <span class="n">addEmphToken</span><span class="p">(</span><span class="n">EmphasizeType</span> <span class="n">empt</span><span class="p">);</span>
+          <span class="kt">void</span> <span class="n">appendText</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">text</span><span class="p">);</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getString</span><span class="p">();</span>
+          <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Emphasize</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">getEmphasizes</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+      <span class="p">};</span>
+    <span class="p">};</span>
+</code></pre></div></div>
+<p>You can check my whole code on KDE git.</p>
+
+<hr />
+
+<h2 id="after-first-week">After first week</h2>
+
+<p>I think it was good starting for me.  But this week and next week is my final exam in the school.</p>
+
+<p>So me and my mentors Eike and SungJae planned to refactor the code and make view of markdown.</p>
+
+<p>They also mentioned adding the licensing policy and following the KDE’s codding convention.</p>
+
+<p>Thank you for reading my article and I’ll write next article after my final finish.</p>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> May 27, 2019</small>
+      <br>
+      <a class="no-hov" href="/2019/05/hi-kde-hi-gsoc2019.html">&laquo; HI KDE, HI GSOC 2019</a>
+    </div>
+    
+    
+    <div class="wrapper" id="right">
+      <small>Jul 30, 2019 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2019/07/aws-aws-s3-athena-quicksihtiaws.html">AWS에서 데이터처리 맛보기 AWS S3 , Athena , Quicksight &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2020</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+</html>
