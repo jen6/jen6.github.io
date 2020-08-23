@@ -6,6 +6,8 @@ gem "rb-fsevent", "0.9.8"
 gem "actionview", ">= 5.1.6.2"
 gem "nokogiri", ">= 1.10.8"
 gem "rake", ">= 12.3.3"
+gem "rouge"
+gem "redcarpet"
 
 group :jekyll_plugins do
       gem 'jekyll-livereload'
