@@ -2,6 +2,10 @@ function is_youtubelink(url) {
     var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     return (url.match(p)) ? RegExp.$1 : false;
 }
+function is_drive_view(url) {
+  var p = /^https:\/\/drive\.google\.com\/uc\?export=view&id=[a-zA-Z0-9_-]*$/;
+  return (url.match(p)) ? true : false;
+}
 function is_imagelink(url) {
     var p = /([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i;
     return (url.match(p)) ? true : false;
@@ -95,13 +99,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 element.classList.add('lightbox-youtube');
                 element.setAttribute('data-id',is_youtubelink(url));
             }
-            if(is_imagelink(url) && !element.classList.contains('no-lightbox')) {
+            if(is_drive_view(url) && !element.classList.contains('no-lightbox')) {
                 element.classList.add('lightbox-image');
                 var href = element.getAttribute('href');
                 var filename = href.split('/').pop();
                 var split = filename.split(".");
                 var name = split[0];
                 element.setAttribute('title',name);
+            }
+            if(is_imagelink(url) && !element.classList.contains('no-lightbox')) {
+                element.classList.add('lightbox-image');
+                element.setAttribute('title','');
             }
         }
     });

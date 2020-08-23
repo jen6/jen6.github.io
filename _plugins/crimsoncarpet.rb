@@ -9,7 +9,7 @@ class Crimsoncarpet < Redcarpet::Render::HTML
         img = "<img src=\"#{link}\" alt=\"#{alt}\" title=\"#{title}\">"
         figure = "<a href=\"#{link}\" data-lightbox=\"#{name}\" data-title=\"#{alt}\">#{img}</a>"
         caption = title ? "<figcaption>#{title}</figcaption>" : ""
-        return "<figure>#{figure}#{caption}</figure>"
+        return "#{figure}#{caption}"
     end
 end
 
