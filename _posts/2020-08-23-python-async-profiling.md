@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "python async profiling을 통해 병목지점 찾기"
+title: "Profiling을 통해 python async web application 병목지점 찾기 ⛑"
 description: ""
 category: 
-tags: []
+tags: ["profiling", "yappy", "python", "성능개선", "프로파일링", "performance"]
 comments: true
 thumbnail: https://drive.google.com/uc?export=view&id=13QI6d3R7xxsK011j35Lj0fJ26wlUJbup
 ---
@@ -78,8 +78,11 @@ pyprof2calltree -k -i ./callgrind.profile
 pyprof2calltree는 python profiling 결과 형태인 pstat을 qcachegrind가 읽을 수 있는 형태인 callgrind 형태로 변환시켜주는 역할을 한다. yappi가 callgrind 형태로 저장을 할 수 있긴 한데 그래프가 이 방법이 더 보기 좋게 나왔던걸로 기억한다.
 
 qcachegrind 창이 켜지면 가장 왼쪽에 보이는 창이 프로파일링 된 함수들 리스트다. 항목중에서 설명이 필요한 것만 설명을 하자면 
+
 - Self : Callee들의 실행시간을 포함하지 않은 현재 메소드의 실행시간
-- Incl : Callee들의 실행시간을 포함한 실행 시간
+
+- Incl : Callee들의 실행시간을 포함한 실행 시간 
+
 - Called : 이 메소드의 호출 횟수
 
 ![https://drive.google.com/uc?export=view&id=1muPOdDh_rcrbzNohWlujTTmizYpu9Qgo](https://drive.google.com/uc?export=view&id=1muPOdDh_rcrbzNohWlujTTmizYpu9Qgo)
