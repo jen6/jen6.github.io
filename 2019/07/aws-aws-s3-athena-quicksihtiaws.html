@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="http://static.airbridge.io/images/og_tags/404f13ef-9487-4e0b-980e-9af07205c3c9.png">
+  <title>AWS에서 데이터처리 맛보기 AWS S3 , Athena , Quicksight - make all</title>
+    <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WLM8LQ2');</script>
+  <!-- End Google Tag Manager -->
+
+    <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2679022832321753');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2679022832321753&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
+  <meta name="description" content="Prologue">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2019/07/aws-aws-s3-athena-quicksihtiaws.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/lightbox.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/lightbox.js"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <div class="c-article__author_date">
+      <p class="c-article__time"><time datetime="2019-07-30T00:00:00+09:00" itemprop="datePublished">Jul 30, 2019</time></p>
+      <p class="c-article__name">By Geon Son</p>
+    </div>
+    <h1 class="c-article__title">AWS에서 데이터처리 맛보기 AWS S3 , Athena , Quicksight</h1>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">AWS</li>
+    
+    <li class="c-tag">데이터처리</li>
+    
+    <li class="c-tag">athena</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <h3>Prologue</h3>
+
+<p>이번 여름방학은 연세대 HCI랩에서 진행하는 드림아카데미 프로그램에 참여 중이다.</p>
+
+<p>드림아카데미는 UX를 고려한 서비스 디자인 방법을 공부하고 실제 기획하는 프로그램이라 </p>
+
+<p>팀원들과 빡🔥세🔥게🔥 구르고 있다 </p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=174IXJAhTyb9E0OwuYDyjLGqfHZ5xJ92F" data-lightbox="uc?export=view&id=174IXJAhTyb9E0OwuYDyjLGqfHZ5xJ92F" data-title=""><img src="http://drive.google.com/uc?export=view&id=174IXJAhTyb9E0OwuYDyjLGqfHZ5xJ92F" alt="" title=""></a></p>
+
+<p>이 프로그램을 운영하시는 김진우 교수님께서 올해는 Connected AI라는 프로젝트 주제를 정해주셨다. </p>
+
+<p>그래서 데이터를 이용한 서비스를 결국 기획하긴 했는데,,  AI도 데이터도 모르고 서버 개발이랑 언어 위주로 한 </p>
+
+<p>개발자 나부랭이지만 일단 팀에 유일한 개발자라 일단 데이터 처리 과정을 만들어 볼 수 밖에 없었다.</p>
+
+<hr>
+
+<h3>데이터 선정</h3>
+
+<p>아직 서비스를 만든게 아니기 때문에 먼저 기존에 있는 데이터셋을 가지고 시작!</p>
+
+<p>데이터셋은 <a href="https://www.yelp.com/dataset">https://www.yelp.com/dataset</a> 음식 리뷰 어플인 Yelp의 Dataset을 이용했다.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>{
+   "review_id": "zdSx_SD6obEhz9VrW9uAWA",
+   "user_id": "Ha3iJu77CxlrFm-vQRs_8g",
+   "business_id": "tnhfDv5Il8EaGSXZGiuQGg",
+   "stars": 4,
+   "date": "2016-03-09",
+   "text": "Great place to hang out after ...",
+   "useful": 0,
+   "funny": 0,
+   "cool": 0
+}
+</code></pre></div>
+<p>Yelp Dataset은 위와 같이 JSON 형식으로 총 8Gb크기의 데이터셋을 제공한다.</p>
+
+<p>서비스에 대한 리뷰, 가게명, 유저 정보등이 들어가 있는데 이걸 직접 읽어서 처리하는걸 하려면 할 수는 있는데,,, </p>
+
+<p>매번 새로운 분석을 하려면 코딩을 또 해야하고 귀찮아 질 것 같아서... 최대한 일을 안할 수 있는 방법으로...</p>
+
+<p>&nbsp;</p>
+
+<p>어떻게 하지 고민하다가 전에 친구랑 밥 먹으면서 AWS를 이용해서 데이터 분석을 할 수 있다는 말을 얼핏 들었던것 같아서 찾아보니 <strong><a href="https://aws.amazon.com/ko/athena/">AWS Athena</a></strong> 라는 서비스를 찾았다.</p>
+
+<p>써본 AWS 서비스라곤 ec2 인스턴스, 도메인 적용하기 위한 route53 딱 두 개 뿐이지만... (심지어 S3도 따로 안써봄) </p>
+
+<p>그래도 서버 쪽 하려면 AWS공부도 한 번 해봐야 할 것 같아서 도전해봤다..</p>
+
+<hr>
+
+<h3>AWS 아이쇼핑</h3>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1iI4DerfABaiUPCltu8TgIaByv76jzGhM" data-lightbox="uc?export=view&id=1iI4DerfABaiUPCltu8TgIaByv76jzGhM" data-title=""><img src="http://drive.google.com/uc?export=view&id=1iI4DerfABaiUPCltu8TgIaByv76jzGhM" alt="" title=""></a></p>
+
+<blockquote>
+<p>AWS 서비스를 이용한 아키텍처 - 출저 <a href="https://aws.amazon.com/ko/blogs/korea/serverless-architecture-by-korean-developers/">https://aws.amazon.com/ko/blogs/korea/serverless-architecture-by-korean-developers/</a></p>
+</blockquote>
+
+<p>데이터 파이프라인은 유저로 부터 들어오는 데이터를 <strong>수집.</strong> 전처리 과정을 거쳐 필요한 데이터만 <strong>정리</strong>. </p>
+
+<p>데이터베이스에 <strong>저장</strong>. 저장된 데이터를 다시 <strong>분석 및</strong> <strong>이용</strong>하는 과정을 말한다.</p>
+
+<p>&nbsp;</p>
+
+<p>AWS에서는 이렇게 데이터 파이프라인을 쉽게 만들 수 있도록 다양한 서비스들을 제공하는데 대충 찾아보니 요즘 자주쓰는 것들은</p>
+
+<ul>
+<li>Kinesis - 들어오는 데이터들을 여러 포맷으로 실시간으로 변환해서 스트리밍</li>
+<li>S3 - 데이터 저장소. 여러 AWS 서비스들에서 주소만 주면 땡겨 쓸 수 있다.</li>
+<li>DynamoDB - 풀옵션 NoSql Database. 클러스터링, 백업 등등 다 해준다.</li>
+<li>Athena - SQL을 이용해서 S3에 저장된 데이터를 질의 할 수 있다.</li>
+<li>QuickSight - 여러 AWS 서비스에 저장된 데이터를 이용해서 시각화를 간단하게 할 수 있다.</li>
+</ul>
+
+<p>등등... 많은게 있지만 공간이 부족해서 생략한다.</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1Aw3mrWdyarelDv0F-3hDL4sIPm3o4oMQ" data-lightbox="uc?export=view&id=1Aw3mrWdyarelDv0F-3hDL4sIPm3o4oMQ" data-title=""><img src="http://drive.google.com/uc?export=view&id=1Aw3mrWdyarelDv0F-3hDL4sIPm3o4oMQ" alt="" title=""></a></p>
+
+<p>나는 이번에 맛보기로 간단하게 하는 거기 때문에 데이터를 <code>S3</code>에 저장 <code>Athena</code>에서 불러와서 <code>QuickSight</code>로 시각화 하는 것만 테스트 해봤다. </p>
+
+<p>데이터를 데이터 베이스에 밀어넣을 수도 있지만 NoSql을 쓸 정도로 큰 데이터 양은 아닌 것 같고 Athena 설명대로 따로 테이블 같은걸 안만들고 바로 JSON을 질의 넣을 수 있고 시각화까지 해준다면 완전 편할 것 같아 Athena와 QuickSight를 이용했다.</p>
+
+<p>아마 내가 NoSql에 넣을 만큼 데이터를 직접 많이 모을 수 있는 방법은 별로 없을 것 같으니 내 노트북과 스마트폰 네트워크 트래픽을 분석 할 수 있는 서비스를 만든다던가 해봐도 괜찮을 것 같다.(떡밥)</p>
+
+<hr>
+
+<h3>구성 하기</h3>
+
+<p>자세한 서비스 구축방법은 나보다 <a href="https://www.youtube.com/watch?v=mxLm-mC-n54">이 아조씨</a>가 더 친절이 잘 설명 해주신다. 저는 간단하게 소개만 하는 거라..</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1iSLLGQ_3H44xlljEHKRNmKVf86bRwNh-" data-lightbox="uc?export=view&id=1iSLLGQ_3H44xlljEHKRNmKVf86bRwNh-" data-title=""><img src="http://drive.google.com/uc?export=view&id=1iSLLGQ_3H44xlljEHKRNmKVf86bRwNh-" alt="" title=""></a></p>
+
+<p>먼저 <code>S3</code>에 데이터 셋을 업로드 해준다. 원래 데이터는 business.json, review.json, user.json 등 몇개의 json파일이 있다. </p>
+
+<p>이때 각 파일별로 폴더를 구성해서 만들어준다.</p>
+
+<p>Athena에서 S3의 데이터를 불러올 때 트래픽을 최소화 하게 하려면 필요한 데이터만 스캔하게 해야 한다.</p>
+
+<p>그래서 로그 데이터를 Athena를 이용해 분석할 때 날자별로 폴더를 만들어서 불러오게 한다거나 하는 방식을 이용 한다고도 한다.</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1LyrsYYLzgYC7u1FK6r7_iZ5NjAWZ-ek3" data-lightbox="uc?export=view&id=1LyrsYYLzgYC7u1FK6r7_iZ5NjAWZ-ek3" data-title=""><img src="http://drive.google.com/uc?export=view&id=1LyrsYYLzgYC7u1FK6r7_iZ5NjAWZ-ek3" alt="" title=""></a></p>
+
+<p>이후 <code>Athena</code>에서 데이터베이스를 만들어준다. 처음 써보는거라 S3 주소를 넣으라길래 어디 있는지 한참 찾았는데 &#39;s3://&#39; + &#39;bucket 이름/&#39; + &#39;폴더명/&#39; 이렇게 써주면 된다.</p>
+
+<p>&nbsp;</p>
+
+<p><strong>QuickSight를 사용할 꺼라면 반드시 Athena를 QuickSight를 사용하는 리젼으로 맞춰야한다.</strong> </p>
+
+<p>안그러면 QuickSight에서 데이터를 불러오지 못한다. 권한을 다 줬는데도 Athena에 접근을 못 하길래 한참 삽질했었다.. 한 시간 정도...</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1sI4Qc6XOEPKqAP7cMnF6B9WJF3JKLyQg" data-lightbox="uc?export=view&id=1sI4Qc6XOEPKqAP7cMnF6B9WJF3JKLyQg" data-title=""><img src="http://drive.google.com/uc?export=view&id=1sI4Qc6XOEPKqAP7cMnF6B9WJF3JKLyQg" alt="" title=""></a></p>
+
+<p>그렇게 하다보면 컬럼을 지정해야 한다고 한다. 뭐야 결국 스키마 다 지정해줘야하고 RDBMS 쓰는 것 만큼 귀찮잔아 라고 생각했지만 이미 물릴 수 없기 때문에 울며 겨자 먹기로 컬럼을 일일히 다 지정해줬다 🤯</p>
+
+<p>&nbsp;</p>
+
+<p>그리고 후에 Athena 리젼을 잘못 설정 했다는 걸 알게 된 후에 다시 할 때 <code>Glue</code> 라는게 있다는 걸 알게 됐다.</p>
+
+<p>이 서비스는 S3에 저장된 데이터를 Athena에서 쓸 수 있게끔 크롤러를 돌려서 알아서 테이블을 만들어준다.</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=16ZQ2dXVNjVfnSdmbdcKdBwqi3isZkEJq" data-lightbox="uc?export=view&id=16ZQ2dXVNjVfnSdmbdcKdBwqi3isZkEJq" data-title=""><img src="http://drive.google.com/uc?export=view&id=16ZQ2dXVNjVfnSdmbdcKdBwqi3isZkEJq" alt="" title=""></a></p>
+
+<p>사람들이 왜 AWS, AWS하는지 알것같은 부분이였다.</p>
+
+<p>또 Glue를 써야 좋은점은 JSON을 컬럼 형식으로 변환시켜 모든 컬럼에 대한 풀 스캔을 피하게 할 수 있다.</p>
+
+<p>이렇게 될 경우 JSON 스키마가 바뀌더라도 Athena 스키마를 따로 변경 시켜줄 필요없이 Glue가 알아서</p>
+
+<p>스키마를 만들어 준다는 이점도 존재한다.</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1qPKDwIpBYHEKehUWaEfxDyvXJAQBShEt" data-lightbox="uc?export=view&id=1qPKDwIpBYHEKehUWaEfxDyvXJAQBShEt" data-title=""><img src="http://drive.google.com/uc?export=view&id=1qPKDwIpBYHEKehUWaEfxDyvXJAQBShEt" alt="" title=""></a></p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1dfN5oB2301ULoybU2wd9e0XlFOLDcxkq" data-lightbox="uc?export=view&id=1dfN5oB2301ULoybU2wd9e0XlFOLDcxkq" data-title=""><img src="http://drive.google.com/uc?export=view&id=1dfN5oB2301ULoybU2wd9e0XlFOLDcxkq" alt="" title=""></a></p>
+
+<p>데이터베이스를 만들고 나면 SQL을 이용해서 조회할 수 있다. 몇 초가 걸리는지 얼마나 데이터를 스캔했는지를 다 보여준다(다 돈이야 돈). 확실히 Standard SQL을 쓰기 때문에 쿼리문 작성은 매우 편했다.</p>
+
+<p>이렇게 간단하게 데이터에서 리뷰 수 50 이상인 사업장 중 평균 별점이 높은 집들을 찾아볼 수 있다.</p>
+
+<p>이제 마지막으로 <code>QuickSight</code> 를 이용해서 시각화만 하면 된다.</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=19AKQLa424jS4Q6m6P9Bs0nNyBKOXMR_D" data-lightbox="uc?export=view&id=19AKQLa424jS4Q6m6P9Bs0nNyBKOXMR_D" data-title=""><img src="http://drive.google.com/uc?export=view&id=19AKQLa424jS4Q6m6P9Bs0nNyBKOXMR_D" alt="" title=""></a></p>
+
+<p>QuickSight는 매우 간단한 UI로 구성돼 있다. </p>
+
+<p>원하는 차트 모양을 선택하고 x, y축에 해당하는 컬럼을 선택해 그래프를 바로 뽑아준다.</p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1qXr6i7Cjyxz1-wucBK9tya83KR621S1y" data-lightbox="uc?export=view&id=1qXr6i7Cjyxz1-wucBK9tya83KR621S1y" data-title=""><img src="http://drive.google.com/uc?export=view&id=1qXr6i7Cjyxz1-wucBK9tya83KR621S1y" alt="" title=""></a></p>
+
+<p>그래프 종류도 꽤 많아서 적절한걸 고르면 편하게 분석 할 수 있을 것 같다는 생각이 들었다.</p>
+
+<hr>
+
+<h3>후기</h3>
+
+<p>이 과정은 AWS 서비스를 처음 써보낸 내가 총 3시간 가량 걸렸다.</p>
+
+<p>물론 내가 AWS를 전에도 써봤었다면 아마 한 시간도 안 걸렸을 것 같이 쓰기 쉬운 구조였다.</p>
+
+<p>왜 많은 곳에서 AWS기반 서비스를 택하는지 알 수 있을것 같다..</p>
+
+<p>&nbsp;</p>
+
+<p>QuickSight는 정말 간단한 시각화에 쓸만할것 같고, 눈이 조금 더 가는건 Athena다. </p>
+
+<p>S3에 로그 백업 해놓고 추가적으로 더 설정할 것 없이 분석 하거나 실 서비스 DB에 부담 주지 않고</p>
+
+<p>분석하거나, DB에 넣기 전 전처리용으로 등등.. 활용처가 많은 것 같다.</p>
+
+<p>평소 쓰던 기술들만 쓰곤 했었는데 가끔 이렇게 다른걸 써보는것도 꽤 재미있었다.</p>
+
+<hr>
+
+<h3>광고</h3>
+
+<p>혹시 회사에 보충역 산업기능요원이 필요하신가요? 2년간 저와 함께 성장할 회사를 찾습니다! </p>
+
+<p>자동화, 백엔드 쪽에 관심이 많고 여러 분야에 대해 공부 중입니다.</p>
+
+<p>&nbsp; </p>
+
+<p>여러 분야를 경험 해 보면서 언어나 프레임워크 상관 없이 빠르게 배울 수 있습니다.</p>
+
+<p>제 <a href="https://jen6.github.io/move/resume">이력서</a>를 읽어보시고 관심이 생기신다면 work.jen6@gmail.com 으로 연락주세요 😁</p>
+
+<p><a href="https://jen6.github.io/move/resume">https://jen6.github.io/move/resume</a></p>
+
+<hr>
+
+<h3>참고자료</h3>
+
+<p><strong>[버즈빌의 누구나 궁금해하는 개발 이야기] 데이터 파이프라인(pipes data) 구축 방법</strong></p>
+
+<p><a href="https://www.mobiinside.com/kr/2018/08/01/buzzvill-pipesdata/">https://www.mobiinside.com/kr/2018/08/01/buzzvill-pipesdata/</a></p>
+
+<p><strong>[뱅크샐러드]Analyze Data in MongoDB with AWS</strong></p>
+
+<p><a href="https://medium.com/rainist-engineering/analyze-data-in-mongodb-with-aws-43c25ef0592f">https://medium.com/rainist-engineering/analyze-data-in-mongodb-with-aws-43c25ef0592f</a></p>
+
+<p><strong>Amazon Athena 및 Amazon QuickSight를 활용한 2백년간 글로벌 기후 데이터 시각화</strong></p>
+
+<p><a href="https://aws.amazon.com/ko/blogs/korea/visualize-over-200-years-of-global-climate-data-using-amazon-athena-and-amazon-quicksight/">https://aws.amazon.com/ko/blogs/korea/visualize-over-200-years-of-global-climate-data-using-amazon-athena-and-amazon-quicksight/</a></p>
+
+<p><strong>DynamoDB에 대해서 알아보자 - 1</strong></p>
+
+<p><a href="https://velog.io/@drakejin/DynamoDB%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90-1">https://velog.io/@drakejin/DynamoDB에-대해서-알아보자-1</a></p>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> Jun 11, 2019</small>
+      <br>
+      <a class="no-hov" href="/2019/06/first-week-of-gsoc-piece-table-implement.html">&laquo; First week of GSOC, Piece Table Implement</a>
+    </div>
+    
+    
+    <div class="wrapper" id="right">
+      <small>Dec 15, 2019 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2019/12/find-house-for-me.html">바쁜 개발자가 집 알아보는 방법 🐌    방 정보 크롤링 및 필터링 하기 &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2020</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+    <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLM8LQ2"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+</html>
