@@ -10,7 +10,7 @@ thumbnail: https://drive.google.com/uc?export=view&id=13QI6d3R7xxsK011j35Lj0fJ26
 ## Prologue
 이번에 회사내에서 병목 지점이라고 여겨지던 db문제를 개선하기 위해 async db 라이브러리 사용하는 작업을 했었다. 하지만 async db를 사용하더라도 큰 성능 향상이 없어서 이게 내가 짠 코드의 문제인지 아니면 라이브러리가 병목인건지를 밝혀내고 싶어서 프로파일링을 해봤다.
 
-회사에서는 APM으로 newrelic을 사용하는데 flask 기반의 WAS를 async로 동작하는 sanic으로 바꾼 후 함수가 안나온다거나 정확히 profiling 되지 않는 문제들이 존재했다. 왜인지는 모르겠지만 python code profiling을 할 때 가장 많이 쓰는 이건 cProfiler에서도 같은 문제가 발생하고 있었고 다른 대안이 필요했다. 
+회사에서는 APM으로 newrelic을 사용하는데 flask 기반의 WAS를 async로 동작하는 sanic으로 바꾼 후 함수가 안나온다거나 정확히 profiling 되지 않는 문제들이 존재했다. 왜인지는 모르겠지만 python code profiling을 할 때 가장 많이 쓰는 cProfiler에서도 같은 문제가 발생하고 있었고 다른 대안이 필요했다. 
 
 1. Asyncio profiling을잘 지원해야한다.
 2. 디버거를 붙이더라도 속도가 빨라야한다.
@@ -120,6 +120,8 @@ db에 접근하는 부분인 `get_first_from_cache`가 크게 두가지 갈래�
 
 ![https://drive.google.com/uc?export=view&id=177XawCsVUSBCrAS-aRoTf2cytB5gycBO](https://drive.google.com/uc?export=view&id=177XawCsVUSBCrAS-aRoTf2cytB5gycBO)
 
-CallGraph는 일정 시간 이상 소비되지 않은 노드들은 제외되기 때문에 노드가 몇 안남은걸 보면 실행시간이 많이 개선된걸 알 수 있다. 결과적으로는 이번에 개선한 async함수의 성능이 sync 함수랑 비슷한 수준까지 올라왔지만 약간 더 나쁜상태라 적용할 수가 없었다.. 나중에 asyncio 관련된 글을 적을 때 좀 더 자세히 적을 생각이지만 짧은 실행시간을 가진 함수를 비동기로 할 때 오히려 context switching에 대한 overhead가 더 큰 것 같다고 생각한다.
+CallGraph는 일정 시간 이상 소비되지 않은 노드들은 제외되기 때문에 노드가 몇 안남은걸 보면 실행시간이 많이 개선된걸 알 수 있다. 결과적으로는 이번에 개선한 async함수의 성능이 sync 함수랑 비슷한 수준까지 올라왔지만 약간 더 나쁜상태라 적용할 수가 없었다.. 
+
+나중에 asyncio 관련된 글을 적을 때 좀 더 자세히 적을 생각이지만 짧은 실행시간을 가진 함수를 비동기로 할 때 오히려 context switching에 대한 overhead가 더 크기때문에 오히려 성능 하락이로 이어진것 같다.
 
 그래도 프로파일링을 통해 알 수 있는점은 내 잘못인가? 라이브러리 탓인가? 이 부분이 더 개선 가능한가?  와 같은 어려운 질문들에 대한 대답을 어느정도는 구할 수 있다는 것 이다. 그냥 성능이 안 나왔을 때 라이브러리 탓이겠거니 했던걸 callgraph나 profiling상에서는 이전에 있던 함수랑 거의 유사해진걸 봐서 더 이상 내가 손댈 수 있는 부분이 없겠구나 하고 스스로 결론을 내릴 수 있었다. 물론 더 개선하면 좋아질 수 있겠지만... 아직 나의 한계는 여기까지...
