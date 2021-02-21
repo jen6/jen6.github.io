@@ -1,0 +1,1534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>make all</title>
+    <description>Write a description of your website here.
+</description>
+    <link>https://jen6.github.io/</link>
+    <atom:link href="https://jen6.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 22 Feb 2021 00:04:33 +0900</pubDate>
+    <lastBuildDate>Mon, 22 Feb 2021 00:04:33 +0900</lastBuildDate>
+    <generator>Jekyll v3.6.3</generator>
+    
+      <item>
+        <title>📱iOS 14 이야기 - 1. ATT,SKAdNetwork에 대비하는 전략</title>
+        <description>&lt;h2&gt;iOS 14와 App Tracking Transparency framework&lt;/h2&gt;
+
+&lt;p&gt;지난 2020년 10년 16일 애플은 iOS 14를 릴리즈 하면서 유저들을 구별 가능한 고유값 즉 IDFA(ID for Advertisers) 수집을 어렵게 하는 ATT(App Tracking Transparency framework)을 출시했습니다. IDFA를 이전과 같이 수집하고 싶다면 앱설치시 일 회만 뜨게되는 팝업에서 유저가 Allow Tracking을 눌러야만 얻을 수 있고 허용하지 않는다면 수집할 수 없도록 변경됐습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb&quot; data-lightbox=&quot;uc?export=view&amp;id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;기존에는 Facebook같은 앱 광고 지면에서 광고를 보고 설치하는 상황에서(App-to-App 광고) IDFA를 이용해 지면앱에서 광고를 누른 유저와 앱스토어를 통해 앱을 설치한 유저의 동일성을 Mobile Measurement Partner(MMP)를 에서  확인해주는 방식을 통해 파악할 수 있었습니다. 따라서 유저의 동일성을 바탕으로 어떤 광고 채널의 광고 성과가 좋은지도 측정 할 수 있었습니다. &lt;/p&gt;
+
+&lt;p&gt;하지만 ATT가 도입되게 따라 유저가 지면앱과 광고주앱 양쪽 모두의 동의없인 다른 앱간의 연결고리를 해주던 IDFA를 못 얻기 때문에 서로 다른 앱간 유저의 동일성을 파악할수 없게됐고 채널별 광고성과 또한 측정할 수 없게 됐습니다. &lt;/p&gt;
+
+&lt;p&gt;이런 문제 때문에 여러 회사들에서는 ATT의 허용 비율을 높이기 위해 아래와 같은 팝업의 문구 그리고 유저에게 어느 시점에 Tracking 허용을 물어볼지에 대한 다양한 &lt;a href=&quot;https://www.adjust.com/blog/opt-in-design-for-apple-app-tracking-transparency-att-ios14/&quot;&gt;연구&lt;/a&gt;가 진행되고 있으나 확실한점은 허용을 안하는 유저의 비율은 높을 것이고 App to App 광고 성과 측정이 쉬워지지 않을꺼라는 점입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F&quot; data-lightbox=&quot;uc?export=view&amp;id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;위에 까지는 전지적 MMP 개발자 시점이였고 서비스를 하는곳에서 조금 더 고민해 봐야할 점은 이게 단순히 IDFA를 얻고 못얻고의 문제가 아니라는 점 입니다. 애플에서 내린 앱의 &lt;strong&gt;추적&lt;/strong&gt; 이라는것의 정의는 상당히 넓은 범위를 포함하고 있습니다.. &lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;추적이란 맞춤형 광고 또는 광고 측정 목적으로 앱에서 수집된 사용자 또는 기기 데이터와 다른 회사의 앱, 웹 사이트 또는 오프라인 속성에서 수집된 사용자 또는 기기 데이터를 연결하는 행위를 말합니다. 또한 추적은 사용자 또는 기기 데이터를 데이터 브로커와 공유하는 것을 의미하기도 합니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;애플에서는 사기 탐지 행위, 사기 방지 목적으로만 데이터를 타사로 공유 할 수 있다고 얘기하고 이 외의 경우에는 모두 어떤 유저가 어떤행동을 했는지 모르도록 비식별화를 해야한다고 말합니다. 하면 안되는 행동들의 예로는&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;사용자가 다른 앱, 웹을 돌아다니며 얻은 데이터를 받아서 해당 유저가 관심있어 하는 맞춤형 광고를 제공하는것 (리타게팅 광고)&lt;/li&gt;
+&lt;li&gt;유저 정보를 매체랑 공유하여 유사한 사용자 그룹을 찾는것 (유사 잠재고객 타게팅 광고)&lt;/li&gt;
+&lt;li&gt;구글 혹은 페이스북 계정으로 여러 서비스에 로그인할 수 있는 SSO를 사용해서 유저가 추적 대상이 되는것&lt;/li&gt;
+&lt;li&gt;직접적인 유저 식별데이터는 아니지만 간접적인 방식(웹브라우저, IP, 위치)으로 유저를 식별하는것 (finger printing)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;등등 갑자기 앱스토어에서 앱이 내려가지 않으려면 확인해야할 것 들이 늘었습니다. 개발을 편하게 하기 위해서 쓴 Third-party SDK에서 금지된 행동을 했다 하더라도 책임은 앱을 배포한 사람에게 있다고 하니 SDK개발사의 iOS14정책도 확인해볼 필요가 있습니다. 더 자세한건 애플의 &lt;a href=&quot;https://developer.apple.com/kr/app-store/user-privacy-and-data-use/&quot;&gt;사용자 개인정보 보호 및 데이터 사용&lt;/a&gt; 문서를 참고하면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;만약 우리 나라 회사가 이렇게 했다고 하면 온라인 광고 종사자들이 광화문에 모여서 규탄시위를 벌였을듯 싶은데 애플의 힘이 쌔서인지 코로나 때문인지 그렇게 하지는 않고 가장 많은 피해를 입을듯한 페이스북이 위 정책에 &lt;a href=&quot;https://www.cnbc.com/2021/02/01/facebook-strikes-back-against-apple-ios-14-idfa-privacy-change.html&quot;&gt;반대하는 성명&lt;/a&gt;을 온라인으로 내고 있습니다.&lt;/p&gt;
+
+&lt;p&gt;iOS14 자체는 2020년 말에 출시 됐지만 바로 적용하게 될 경우 광고 시장 전반의 임팩트가 너무 클 수밖에 없어서 각 회사들에서 대응 할 수 있도록 2021년 상반기로 밀렸습니다. 정확한 릴리즈 일자는 아직 나오지 않았지만 iOS 14.5 부터 애플은 ATT를 적용하겠다고 &lt;a href=&quot;https://developer.apple.com/kr/app-store/user-privacy-and-data-use/&quot;&gt;공식 페이지&lt;/a&gt;에 적어놨고, 이전 릴리즈 주기를 봤을때 약 2월 말 그리고 3월 초 사이에 릴리즈 될것으로 예상 하고 있습니다.&lt;/p&gt;
+
+&lt;h2&gt;Apple의 대안책 SKAdNetwork&lt;/h2&gt;
+
+&lt;p&gt;그럼 앞으로 iOS상에서는 유저의 허락없이는 광고 채널별로 성과가 어떻게 되는지 전혀 알 수 없는걸까요? 애플도 이런 부분에 있어 어려움을 예상하고 애플의 꿩대신 닭인 &lt;a href=&quot;https://developer.apple.com/documentation/storekit/skadnetwork&quot;&gt;SKAdNetwork&lt;/a&gt; 2.0 버전도 함께 발표 했습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs&quot; data-lightbox=&quot;uc?export=view&amp;id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;SKAdNetwork는 기존에 MMP에서 해주던 유저가 어느 채널을 통해 들어왔는지에 대한 분석을(Attribution) 애플이 대신 해주는 프레임워크 입니다. 어떤 채널로 들어하지만 기존처럼 모든 데이터를 받을 수 있는게 아니라 애플의 개인정보보호 대 전제인 &lt;code&gt;어떤 유저가 무슨 행동을 했는지 허락 없이는 알수 없다&lt;/code&gt;를 지킨 데이터만 받을 수 있습니다. 위 대전재를 지키기 위한 많은 제약사항 들이 있는데 대표적인 제약 3개만 말해보자면&lt;/p&gt;
+
+&lt;h3&gt;1. 앱 한 개당 광고 지면에서 구분할 수 있는 캠페인의 숫자는 총 100개 입니다.&lt;/h3&gt;
+
+&lt;p&gt;일반적으로 광고가 나간다고 할 때 한 개의 광고만 돌리는게 아니라 높은 수익을 가져올 (예를 들자면 우리 앱을 설치하고 구매를 많이 할만한 유저) 유저를 타게팅 하기 위해 정말 많은 정보들을 사용하고 있었습니다. 위치, 연령, 성별, 관심사 등등 많은 정보를 수집하고 해당 정보들을 통해 유저그룹을 세분화 시켜 수많은 광고 캠페인을 돌리게 됩니다. 하지만 SKAdNetwork에서는 캠페인의 세분화를 통해 특정 유저를 유추 할 수 없도록 100개의 캠페인만 쓰도록 제한했습니다.&lt;/p&gt;
+
+&lt;p&gt;페이스북의 경우 100개 안에서도 광고 최적화를 하기위해 캠페인 9개와 한 캠페인 안에서 최적화를 하기위한 유형 5개 세트로 제한했다고 합니다. (&lt;a href=&quot;https://developers.facebook.com/blog/post/2020/10/29/preparing-our-partners-ios-14-latest-guidance-on-skadnetwork/&quot;&gt;facebook iOS 14 대비 문서&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h3&gt;2. 유저가 지면 앱에서 광고를 보고 앱을 설치 할 경우 설치된 앱 안에서는 애플이 제공하는 api를 통해 유저에 대한 정보(Conversion Value)를 6Bit 즉 64가지로만 표현해서 보낼 수 있게끔 해줍니다.&lt;/h3&gt;
+
+&lt;p&gt;애플은 유저가 앱을 설치한 다음 해당 채널에서 들어온 유저가 어떤 특성을 가지는지를 표현할수 있지만 유저를 식별할 수 없게끔 0~63 까지의 숫자를 앱내에서 설정하고 보낼수 있게끔 해줍니다. 이 숫자는 conversion value라고 부르고 매체에 conversion value가 전달되는건 postback 이라고 부릅니다. &lt;/p&gt;
+
+&lt;p&gt;conversion value는 여러번 설정 할 수 있는데 0 → 3 → 64 와 같이 커지는 값으로만 설정 할 수 있고 0 → 5 → 2 와 같은 식으로 작아지게끔 설정하는건 무시되게 됩니다. conversion value는 설치된 시간 혹은 값이 마지막으로 update된 시간 기준 24시간 뒤에 더이상 업데이트 하지 못하고 postback이 전송되게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;conversion value를 어떤식으로 설정해서 유저 정보를 최적화시켜 보낼수 있는게 앞으로 SKAdNetwork 광고 성과의 핵심일꺼라고 많은 사람들이 얘기하고 있습니다. 그럼 어떤 방식을 통해 conversion value를 통해 최적화 할 수 있는지는 다음 글에서 설명드리도록 하겠습니다.&lt;/p&gt;
+
+&lt;h3&gt;3. Attribution에 대한 정보를 최소 25시간 이후에만 받을 수 있습니다.&lt;/h3&gt;
+
+&lt;p&gt;유저가 앱을 설치 하자마자 혹은 conversion value의 마지막 업데이트 이후 정확히 24시간 뒤에 postback을 받을 수 있다면 설치한 시간을 통해 어떤 광고 채널을 통해 유저가 유입 했는지 유추해 볼 수 있기 때문에 conversion value timer가 만료된 이후 1시간~24시간 이내의 시간 중 랜덤하게 포스트백을 매체쪽으로 보내주게 됩니다.&lt;/p&gt;
+
+&lt;h2&gt;그래서 SKAdNetwork를 통해 달라지는 점과 전략적으로 준비해야할 것은🤔?&lt;/h2&gt;
+
+&lt;p&gt;아마 글을 읽으시는 분들은 뭔진 모르겠지만 엄청 복잡하고 이걸 어떻게 해야하나 싶으실듯 합니다. SKAdNetwork가 나온 후로 관련된 내용을 쭉 보는 저도 가끔 기존 방식과 햇갈려서 안되는걸 된다고 생각하는 경우도 있으니까요. 위와 같은 기술적인 변경사항 대신 앞으로 격게될 점들을 얘기해보도록 하겠습니다.&lt;/p&gt;
+
+&lt;h3&gt;1. 채널 기여결과와 In-app Event간의 간극&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI&quot; data-lightbox=&quot;uc?export=view&amp;id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Adjust, Airbridge, AppsFlyer, Branch, Singular등등 MMP를 기존에 사용하시던 곳이 SKAdNetwork광고를 돌리게 된다면 postback을 통해 어떤 광고 지면으로 부터 설치가 얼마나 됐는지를 볼수 있고, 기존에 수집하던 In-app Event들도 계속 들어오게 됩니다. 다만 In-app Event들의 대다수가 광고를 거치지 않은 유저 즉 organic 유저로 구분이 됩니다. organic 유저로 잡히는 이유는 SKAdNetwork의 결과와 In-app Event의 결과를 묶어서 볼 수 있는 방법이 없어 SKAdNetwork의 attribution 정보를 In-app Event를 볼때 사용할 수 없기 때문입니다.&lt;/p&gt;
+
+&lt;p&gt;두 데이터를 따로 보게 되면 유저가 앱 안에서 어떤 이벤트를 일으키나 알수는 있지만 어떤 광고 채널을 통해 들어온 유저가 평균 수익이 높은지 혹은 광고비 지출대비 수입 즉 ROAS(Return of Ad Spending)을 분석하기 힘들어져 광고비 계획 세우는게 힘들어질거라 예상해봅니다.&lt;/p&gt;
+
+&lt;p&gt;결국 이런 간극을 매울 수 있는 유일한 도구는 결국 conversion value라고 생각 됩니다. 이 글 후에 conversion value에 대한 글을 따로 작성하겠지만 먼저 조금만 얘기해보자면 64가지 경우의 수 안에서 얻을 수 있는 정보의 양을 최대화 하는게 중요하다고 생각됩니다. 게임이라면 어떻게 퍼널을  conversion value에 최적화 시킬지, 커머스라면 구매액을 conversion value에서  어떤 방식으로 표현할건지, 내가 원하는 기간동안 postback이 발송되지 않고 트래킹 할 수 있도록 적절한 주기로 발생하는 이벤트는 어떤건지를 고민하고 실험해봐야할듯 합니다.&lt;/p&gt;
+
+&lt;h3&gt;2. 광고 성과를 바로바로 볼 수 없음&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF&quot; data-lightbox=&quot;uc?export=view&amp;id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;SKAdNetwork를 사용하게되면 위에서 얘기했던 것 처럼 conversion value 타이머 : 24시간 + postback 타이머 : 1~24시간 이기때문에 최소 25시간 이후에나 광고 성과를 볼 수 있습니다. 라면 물 끓는 시간도 길게 느껴  찬물에 스프와 라면을 같이 넣고 끓여도 괜찮다는걸 연구하는 민족에게 최소 25시간 이후 광고성과를 볼 수 있다는건 매우 가혹합니다. 특히 게임 같이 출시 초기에 광고 데이터를 빠르게 봐야하는 곳 같은 경우 더 답답할 수 있겠죠.&lt;/p&gt;
+
+&lt;p&gt;답답한것도 있지만 다른것보다 주의해야할 점은 conversion value가 계속해서 업데이트 되면 postback이 나가는 시간도 점점 밀린다는 것 입니다. conversion value를 하루에 1씩만 오르게 한다면 최대 65일 후에나 postback이 보내지는 경우가 생길 수도 있습니다. 이는 광고비 정산 관련해 문제가 생길 수도 있기 때문에 MMP혹은 매체와 잘 얘기해서 최대로 conversion value를 업데이트 할 수 있는 기간을 확인 후 조정할 필요가 있을꺼라 예상합니다. &lt;/p&gt;
+
+&lt;p&gt;또한 conversion value 값에 대한 전략을 바꾸게 될 경우 이전 설정으로 업데이트 해주던 conversion value 값이 현재 설정으로 해석하게 되면서 값들이 이상하게 보일 수 있습니다.  이런 값의 해석 차이 문제 때문에 facebook은 conversion value 설정을 바꾸게 되면 3일간 광고를 못돌리게 되니 이 문제 역시 신경쓰셔야 합니다.&lt;/p&gt;
+
+&lt;h3&gt;3. 정확한 데이터란 없음&lt;/h3&gt;
+
+&lt;p&gt;리포트를 열어 1원 단위의 광고 채널 별 매출액을 보던건 이제 옛날 얘기가 돼갑니다. 0~64 까지의 값만 지정가능한 conversion value로는 정확한 값을 알수가 없겠죠. 이런 문제에 대해서 대다수의 MMP 들은 구매액을 범위로 표현하는 방식을 사용합니다. 0원인 경우 1~5천원 사이 5천원~만원 사이 와 같은 구간으로 유저가 산 구매액을 측정해서 데이터의 해상도가 낮아지는 문제가 발생합니다.&lt;/p&gt;
+
+&lt;p&gt;conversion value를 설정해주는 기간도 원하는 대로 할 수 없습니다. 7일간 새로운 값으로 설정해주고 싶다고 해도 유저가 하루라도 앱을 안들어오면 7일이 되기도 전에 postback이 나가버리는 경우도 있기 때문입니다.이런 문제 때문에 기존에 계산하던 N일 동안의 광고 지출대비 수익(ROAS)을 계산하는 새로운 방법이 필요할수도 있습니다.&lt;/p&gt;
+
+&lt;p&gt;앞으로는 비지니스 특성과 중요도에 따라 포기할 점은 포기하고 트래킹 하고 싶은 부분을 확실하게 해서 주어진 환경에서 데이터의 해상도를 올리는 작업이 가장 중요할거라 생각해봅니다.&lt;/p&gt;
+
+&lt;h3&gt;4. 가격적 측면&lt;/h3&gt;
+
+&lt;p&gt;최근 몰로코에서 &lt;a href=&quot;https://www.youtube.com/watch?v=ofKCQ3aeNX4&quot;&gt;발표한 자료&lt;/a&gt;를 보면 IDFA를 허용한 광고 트래픽과 허용 안한 광고 트래픽의 비용 차이가 약 4배정도 된다고 합니다. IDFA를 허용한 트래픽에 더 비싼 비용을 내고 더 높은 수익을 안겨줄 유저를 타게팅 하는것도 전략이 될 수 있고 아니면 conversion value를 정교화 시켜 저렴한 가격의 IDFA 허용 안한 광고 비중을 늘려 광고 볼륨을 늘리는것도 전략이 될 수 있을 듯 합니다.&lt;/p&gt;
+
+&lt;h2&gt;글을 마치며&lt;/h2&gt;
+
+&lt;p&gt;이 글에서 많은 걸 적었지만 사실 대부분이 가정이고 SKAdNetwork를 통한 광고들이 어떻게 될지는 돌려보기 전까지 어떻게 될지 아무도 모른다고 생각합니다. 다만 시장이 변해가는 중간에 서로 정보공유를 통해 조금이나마 대비를 하고 연구를 통해 IDFA가 없어진 이후를 견딜 수 있는 더 나은 방법들이 나오지 않을까 싶습니다. &lt;/p&gt;
+
+&lt;p&gt;추가적으로 궁금한 점이나 글에 오류가 있다면 언제든 댓글 혹은 work.jen6@gmail.com 으로 메일 주시면 답변해드리도록 하겠습니다. 긴 글 읽어주셔서 감사합니다.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 21 Feb 2021 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2021/02/ios14-att-skadnetwork.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2021/02/ios14-att-skadnetwork.html</guid>
+        
+        <category>ios</category>
+        
+        <category>adtech</category>
+        
+        <category>skadnetwork</category>
+        
+        <category>privacy</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Profiling을 통해 python async web application 병목지점 찾기 ⛑</title>
+        <description>&lt;h2&gt;Prologue&lt;/h2&gt;
+
+&lt;p&gt;이번에 회사내에서 병목 지점이라고 여겨지던 db문제를 개선하기 위해 async db 라이브러리 사용하는 작업을 했었다. 하지만 async db를 사용하더라도 큰 성능 향상이 없어서 이게 내가 짠 코드의 문제인지 아니면 라이브러리가 병목인건지를 밝혀내고 싶어서 프로파일링을 해봤다.&lt;/p&gt;
+
+&lt;p&gt;회사에서는 APM으로 newrelic을 사용하는데 flask 기반의 WAS를 async로 동작하는 sanic으로 바꾼 후 함수가 안나온다거나 정확히 profiling 되지 않는 문제들이 존재했다. 왜인지는 모르겠지만 python code profiling을 할 때 가장 많이 쓰는 cProfiler에서도 같은 문제가 발생하고 있었고 다른 대안이 필요했다. &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Asyncio profiling을잘 지원해야한다.&lt;/li&gt;
+&lt;li&gt;디버거를 붙이더라도 속도가 빨라야한다.&lt;/li&gt;
+&lt;li&gt;결과를 보기 쉬워야한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;내가 찾아본것 중 위 세개의 조건을 만족하는 프로파일러는 “yappi”라는 프로파일러가 유일했다. C로 짜여져 있어 속도가 빠를 뿐더러 asyncio를 profiling도 잘 했고 여러 file-format으로 저장 가능해서 시각화 툴에서 결과를 보기도 좋았다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/sumerc/yappi&quot;&gt;https://github.com/sumerc/yappi&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;이 글에서는 profiling을 yappi로 어떻게 하는지 병목지점을 찾고 개선하는 프로세스를 다룬다. &lt;/p&gt;
+
+&lt;h2&gt;💿설치&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight shell&quot;&gt;&lt;code&gt;pip install yappi pyprof2calltree
+brew install qcachegrind
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;yappi는 위에서 말했다 싶이 프로파일러 이고 qcachegrind와 pyprof2calltree는 python profiling 결과를 시각화 해서 좀 더 보기 좋게 만들어 주는 툴 이다. 프로파일링 결과를 터미널에서 텍스트로 봐도 되긴 하지만  단순히 숫자로 보는 것 보다는 qcachegrind에서 지원하는 call graph를 보면서 하면 좀 더 분석하기 수월하다.&lt;/p&gt;
+
+&lt;h2&gt;📊yappi를 이용해 프로파일링 하기&lt;/h2&gt;
+
+&lt;p&gt;yappi에서 다양한 프로파일링 옵션을 지원하고 해당 옵션들은 깃헙에 있는 example에 잘 설명 되어있으니 
+이 글에서는 다양한 옵션들 보다는 어떻게 프로파일링을 하는 과정에 대해 설명할거다.&lt;/p&gt;
+
+&lt;p&gt;아래는 web server를 local에서 돌리는 코드에 yappi profiling을 하는 코드를 넣어봤다. 이렇게 하고 실행을 끝내게 되면 실행시킨 폴더에 callgrind.profiled라는 파일 명으로 분석결과가 나온다.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight python&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;os&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create_app&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;yappi&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;__main__&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;sanic_app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create_app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;yappi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sanic_app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0.0.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;workers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;access_log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;backlog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;yappi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;yappi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_func_stats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;callgrind.profiled&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;pstat&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;saved!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;테스트를 할 때 병목 지점이 좀 더 명확하게 보이게 하기 위해 로컬에서 ngrinder를 써서 스트레스 테스트 진행했다. &lt;/p&gt;
+
+&lt;h2&gt;🔍프로파일링 결과 보기&lt;/h2&gt;
+
+&lt;p&gt;이제 qcachegrind를 통해 시각화된 결과를 보자!&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight shell&quot;&gt;&lt;code&gt;pyprof2calltree &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; ./callgrind.profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;pyprof2calltree는 python profiling 결과 형태인 pstat을 qcachegrind가 읽을 수 있는 형태인 callgrind 형태로 변환시켜주는 역할을 한다. yappi가 callgrind 형태로 저장을 할 수 있긴 한데 그래프가 이 방법이 더 보기 좋게 나왔던걸로 기억한다.&lt;/p&gt;
+
+&lt;p&gt;qcachegrind 창이 켜지면 가장 왼쪽에 보이는 창이 프로파일링 된 함수들 리스트다. 항목중에서 설명이 필요한 것만 설명을 하자면 &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Self : Callee들의 실행시간을 포함하지 않은 현재 메소드의 실행시간&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Incl : Callee들의 실행시간을 포함한 실행 시간 &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Called : 이 메소드의 호출 횟수&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1muPOdDh_rcrbzNohWlujTTmizYpu9Qgo&quot; data-lightbox=&quot;uc?export=view&amp;id=1muPOdDh_rcrbzNohWlujTTmizYpu9Qgo&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1muPOdDh_rcrbzNohWlujTTmizYpu9Qgo&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1muPOdDh_rcrbzNohWlujTTmizYpu9Qgo&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1muPOdDh_rcrbzNohWlujTTmizYpu9Qgo&quot; title=&quot;&quot;&gt;&lt;/a&gt;
+이 항목에서 분석 원하는 함수를 누르게 되면 오른쪽 화면에서 call graph 혹은 callee들이 어떤게 있는지를 볼 수 있다&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1VPEJHVkaPu1XuRyNgz6DYPCy44pK2AVM&quot; data-lightbox=&quot;uc?export=view&amp;id=1VPEJHVkaPu1XuRyNgz6DYPCy44pK2AVM&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1VPEJHVkaPu1XuRyNgz6DYPCy44pK2AVM&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1VPEJHVkaPu1XuRyNgz6DYPCy44pK2AVM&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1VPEJHVkaPu1XuRyNgz6DYPCy44pK2AVM&quot; title=&quot;&quot;&gt;&lt;/a&gt;
+상단에 리스트에도 어떤 함수가 몇번 호출 됐는지 등 텍스트로 여러 정보를 볼 수 있지만 분석할 때 보기 편하다고 생각하는건 하단에 그래프로 돼있는 &amp;#39;Call Graph&amp;#39;였다.&lt;/p&gt;
+
+&lt;h2&gt;🍾병목 지점 찾아내기&lt;/h2&gt;
+
+&lt;p&gt;성능 개선을 해볼 타겟은 TrackingLinkRepository이고 Database에 접근하는 역할을 한다. sanic으로 바꾼 후 request는 concurrent하게 처리 할 수 있게 됐지만 mysql client는 sync client였기 때문에 다른 request들을 blocking 할 수 있을 것 같아 async db client로 바꾸는 시도를 했었다. 하지만 예상 외로 성능은 sync db client 보다 더 한참 안나왔다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=17tb0dhJho0Ctl5VHW-FrX2dYmF8ToZCN&quot; data-lightbox=&quot;uc?export=view&amp;id=17tb0dhJho0Ctl5VHW-FrX2dYmF8ToZCN&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=17tb0dhJho0Ctl5VHW-FrX2dYmF8ToZCN&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=17tb0dhJho0Ctl5VHW-FrX2dYmF8ToZCN&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=17tb0dhJho0Ctl5VHW-FrX2dYmF8ToZCN&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;db에 접근하는 부분인 &lt;code&gt;get_first_from_cache&lt;/code&gt;가 크게 두가지 갈래가 있는데 connection을 맺는 
+&lt;code&gt;FlaskDB.aio_engine&lt;/code&gt;이란 함수는 크게 오버헤드가 없어보이고 커넥션에서 실제로 쿼리를 보내 &lt;code&gt;SAConnection._execute&lt;/code&gt; 부분에 오버헤드가 있어보였다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1J5kXY0ir6wYRG-w9JqPLikuwwJdMKKWw&quot; data-lightbox=&quot;uc?export=view&amp;id=1J5kXY0ir6wYRG-w9JqPLikuwwJdMKKWw&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1J5kXY0ir6wYRG-w9JqPLikuwwJdMKKWw&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1J5kXY0ir6wYRG-w9JqPLikuwwJdMKKWw&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1J5kXY0ir6wYRG-w9JqPLikuwwJdMKKWw&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1boAVsRGXf5ypul8SUIM0Cn37wt8H3BkG&quot; data-lightbox=&quot;uc?export=view&amp;id=1boAVsRGXf5ypul8SUIM0Cn37wt8H3BkG&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1boAVsRGXf5ypul8SUIM0Cn37wt8H3BkG&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1boAVsRGXf5ypul8SUIM0Cn37wt8H3BkG&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1boAVsRGXf5ypul8SUIM0Cn37wt8H3BkG&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;코드를 다시 한 번 보니 쿼리를 빌드 할 때 캐싱을 안하고 매번 빌드하고 있었다. 찾아보니 mysql client에서 쿼리 빌드에 대한 캐시를 남길 수 있는 옵션이 있어서 적용했다. 이거 외에도 statement를 빌드 할 때 where절 조건 중 bind parameter를 이용해서 캐싱할 수 있는 statement를 만들어서 쿼리 빌드를 다시 하지않도록 코드를 수정했다.&lt;/p&gt;
+
+&lt;h2&gt;🧰1 차 성능 개선 결과&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1ZRwc-MMsFXv-mKoLfs3Sm8y1-UzLKa_l&quot; data-lightbox=&quot;uc?export=view&amp;id=1ZRwc-MMsFXv-mKoLfs3Sm8y1-UzLKa_l&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1ZRwc-MMsFXv-mKoLfs3Sm8y1-UzLKa_l&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1ZRwc-MMsFXv-mKoLfs3Sm8y1-UzLKa_l&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1ZRwc-MMsFXv-mKoLfs3Sm8y1-UzLKa_l&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;쿼리를 빌드하는 부분은 개선 돼서 이제 calltree에서 안보인다!  하지만 여전히 성능은 안나왔고 자세히 보니 call count가 다른 db치는 함수들에 비해 높았다. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1qzhUABa7tJnG0V5vkX76yGRx791Oz31g&quot; data-lightbox=&quot;uc?export=view&amp;id=1qzhUABa7tJnG0V5vkX76yGRx791Oz31g&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1qzhUABa7tJnG0V5vkX76yGRx791Oz31g&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1qzhUABa7tJnG0V5vkX76yGRx791Oz31g&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1qzhUABa7tJnG0V5vkX76yGRx791Oz31g&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;코드를 읽어보니 함수 결과를 캐싱하는 부분에 문제가 있어 매번 db를 치고있었다. 기존에는 캐싱할 때 key에 session객체를 같이 넣어서 매번 다른 key 값이 나왔었고 where절에 넣을 조건들로만 캐싱을 하니 정상적으로 됐다.&lt;/p&gt;
+
+&lt;h2&gt;📈최종 결과&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=177XawCsVUSBCrAS-aRoTf2cytB5gycBO&quot; data-lightbox=&quot;uc?export=view&amp;id=177XawCsVUSBCrAS-aRoTf2cytB5gycBO&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=177XawCsVUSBCrAS-aRoTf2cytB5gycBO&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=177XawCsVUSBCrAS-aRoTf2cytB5gycBO&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=177XawCsVUSBCrAS-aRoTf2cytB5gycBO&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;CallGraph는 일정 시간 이상 소비되지 않은 노드들은 제외되기 때문에 노드가 몇 안남은걸 보면 실행시간이 많이 개선된걸 알 수 있다. 결과적으로는 이번에 개선한 async함수의 성능이 sync 함수랑 비슷한 수준까지 올라왔지만 약간 더 나쁜상태라 적용할 수가 없었다.. &lt;/p&gt;
+
+&lt;p&gt;나중에 asyncio 관련된 글을 적을 때 좀 더 자세히 적을 생각이지만 짧은 실행시간을 가진 함수를 비동기로 할 때 오히려 context switching에 대한 overhead가 더 크기때문에 오히려 성능 하락이로 이어진것 같다.&lt;/p&gt;
+
+&lt;p&gt;그래도 프로파일링을 통해 알 수 있는점은 내 잘못인가? 라이브러리 탓인가? 이 부분이 더 개선 가능한가?  와 같은 어려운 질문들에 대한 대답을 어느정도는 구할 수 있다는 것 이다. 그냥 성능이 안 나왔을 때 라이브러리 탓이겠거니 했던걸 callgraph나 profiling상에서는 이전에 있던 함수랑 거의 유사해진걸 봐서 더 이상 내가 손댈 수 있는 부분이 없겠구나 하고 스스로 결론을 내릴 수 있었다. 물론 더 개선하면 좋아질 수 있겠지만... 아직 나의 한계는 여기까지...&lt;/p&gt;
+</description>
+        <pubDate>Sun, 23 Aug 2020 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2020/08/python-async-profiling.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2020/08/python-async-profiling.html</guid>
+        
+        <category>profiling</category>
+        
+        <category>yappy</category>
+        
+        <category>python</category>
+        
+        <category>성능개선</category>
+        
+        <category>프로파일링</category>
+        
+        <category>performance</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>아직도 손으로 OTP를 입력하세요? &lt;br&gt;⚒︎Hammer spoon으로 2FA OTP 인증 자동화 하기</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB&quot; data-lightbox=&quot;uc?export=view&amp;id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;회사 vpn이나 aws console에 접근 하려면 TOTP(Time-based One-time password)를 이용한 2FA를 반드시 사용해야한다. 출근하자마자 매일 쓰게되는 이 두 가지를 로그인 하는 일은 어~~ㅁ청 귀찮다... &lt;/p&gt;
+
+&lt;p&gt;대부분의 서비스는 자동 로그인이 가능하지만 OTP 코드만은 2FA authenticator인 &lt;a href=&quot;https://authy.com/&quot;&gt;authy&lt;/a&gt; 를 켜고 복사하고 붙여 넣어야 한다. 문제는 이걸 켜놓게 되면 Command-Tab으로 작업 전환시 크롬대신 authy창이 포커스가 된다. Vimnium을 써서 가능한 키보드만 이용해서 작업 하려는 내 작업 방식에 큰 방해가 되는 요소 였다.&lt;/p&gt;
+
+&lt;p&gt;이 귀찮은 일을 자동화 하게 된 계기는 최근 즐겨보는 블로그 중 한 개인 John Grib님의 블로그에 맥에서 이런저런 자동화를 시킬 수 있는 &lt;a href=&quot;https://johngrib.github.io/wiki/hammerspoon/&quot;&gt;hammerspoon툴 시리즈&lt;/a&gt; 글을 보고 내 매일 아침을 30초 정도 단축할 수 있겠다 싶어서 시작했다.&lt;/p&gt;
+
+&lt;h2&gt;이 글을 10분 동안 따라하면 할 수 있는 것&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1Z5I2xkIoJeex3klP9eTIu9pnYZnhomyc&quot; data-lightbox=&quot;uc?export=view&amp;id=1Z5I2xkIoJeex3klP9eTIu9pnYZnhomyc&quot; data-title=&quot;aws console&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1Z5I2xkIoJeex3klP9eTIu9pnYZnhomyc&quot; alt=&quot;aws console&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;위 두 영상처럼 aws console, tunnelblick등 OTP를 입력해야하는 곳을 자동화 할 수 있다.&lt;/p&gt;
+
+&lt;h2&gt;준비물&lt;/h2&gt;
+
+&lt;p&gt;맥, 그리고 Hammer spoon&lt;/p&gt;
+
+&lt;h2&gt;Hammer spoon과 AppleScript&lt;/h2&gt;
+
+&lt;p&gt;먼저 &lt;a href=&quot;https://www.hammerspoon.org/&quot;&gt;Hammer spoon&lt;/a&gt;은 운영체제 단에서 일어나는 wifi, process, file-system등의 event들을 받고 lua를 통해 매크로를 실행시킬 수 있는 툴이다. 설명을 빌려오자면&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Esc&lt;/code&gt; 키를 누를 때마다 input source를 영문으로 전환하게 한다. Vim 사용자에게 너무 좋은 기능.&lt;/li&gt;
+&lt;li&gt;현재 실행 중인 애플리케이션의 윈도우를 특정 위치로 움직이게 하거나 사이즈를 조절한다.&lt;/li&gt;
+&lt;li&gt;특정 애플리케이션(파인더라던가)이 실행될 때마다 무언가 다른 작업을 수행하게 한다.&lt;/li&gt;
+&lt;li&gt;맥북이 회사 와이파이에 연결되면(출근하면) 맥북의 사운드 볼륨을 0으로 조정한다.&lt;/li&gt;
+&lt;li&gt;애플스크립트를 실행한다.&lt;/li&gt;
+&lt;li&gt;iMessage를 전송한다.&lt;/li&gt;
+&lt;li&gt;터미널 명령어를 실행한다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;출저 : &lt;a href=&quot;https://johngrib.github.io/wiki/hammerspoon-tutorial-00/&quot;&gt;https://johngrib.github.io/wiki/hammerspoon-tutorial-00/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;이외에도 특정 기능을 url에 바인딩 시켜 해당 url이 호출 되면 특정 매크로를 실행 시키는 등 편리한 기능들이 많다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;AppleScript&lt;/strong&gt;는 Mac 환경에서 UI 요소들을 통해 자동화를 할 수 있는 도구이다. Apple에서 직접 제공하는거라 상당히 강력한 기능들이 많이 있고 hammer spoon에서는 화면에서 text를 가져온다거나 하는 일을 할 수 없는데 AppleScript에서는 가능하다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;iTunes에서 가사를 추가 한다&lt;/li&gt;
+&lt;li&gt;이미지를 선택했을 때 포맷을 바꿔주거나 리사이징을 해준다.&lt;/li&gt;
+&lt;li&gt;iMessage로 주소록에 있는 모든 유저에게 메세지 보낸다.&lt;/li&gt;
+&lt;li&gt;pdf를 열었을 때 구글 번역을 통해 번역된 상태로 보게 한다.&lt;/li&gt;
+&lt;li&gt;크롬에서 특정 페이지 열렸을 때 매크로를 실행시킨다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;출저 : &lt;a href=&quot;https://www.macscripter.net/&quot;&gt;https://www.macscripter.net/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;Step 1. Authy에서 TOTP URI 뽑아내기&lt;/h2&gt;
+
+&lt;p&gt;Authy같은 authenticators에 새로운 인증을 등록 하려면 대부분 QR코드 혹은 secret key를 입력해줘야한다. 자동화를 하려면 콘솔 authenticator에 이 키를 등록해줘야하는데 안가지고 있는 경우가 대부분이라 secret key를 포함하고 있는 TOTP URI를 Authy에서 뽑아줘야한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO&quot; data-lightbox=&quot;uc?export=view&amp;id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;이미지 출저 : &lt;a href=&quot;https://www.allthingsauth.com/2018/04/20/a-medium-dive-on-the-totp-spec/&quot;&gt;https://www.allthingsauth.com/2018/04/20/a-medium-dive-on-the-totp-spec/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;위 그림에서 보이는 것처럼 URI format이 있고 query parameter로 들어가는 secret부분이 필요하다. 이 글에서는 내가 쓰는 authy기준으로 URI를 뽑는 방법을 설명한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e&quot; data-lightbox=&quot;uc?export=view&amp;id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;먼저 Authy chrome app이 설치 돼 있다면 &lt;code&gt;chrome://extensions/?id=gaedmjdfmmahhbjefcbgaolhhanlaolb&lt;/code&gt; 로 들어가서 Authy의 extension 정보 페이지로 들어가준다. 그 다음 Authy를 실행시켜 주면 &amp;#39;뷰 검사&amp;#39; 항목에 &lt;code&gt;main.html&lt;/code&gt; 이라는 항목이 생긴다. 이걸 눌러줘서 Authy의 개발자 콘솔로 들어가자.&lt;/p&gt;
+
+&lt;p&gt;&lt;noscript&gt;&lt;pre&gt;400: Invalid request&lt;/pre&gt;&lt;/noscript&gt;&lt;script src=&quot;https://gist.github.com/a13ef83a5af57e45c4820c3da5ba0e31.js?file=authy_export.js&quot;&gt; &lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;위 스크립트를 개발자 콘솔에서 입력을 하게 되면 아래와 같이 authy에 등록 돼 있는 TOTP URI를 얻을 수 있다. 이 URI에서 아까 얘기했던 &lt;code&gt;secret&lt;/code&gt; query parameter 값을 잘 저장해둔다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue&quot; data-lightbox=&quot;uc?export=view&amp;id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Step 2. Console authenticator에 키 등록하기&lt;/h2&gt;
+
+&lt;p&gt;먼저 console에서 OTP 기능을 쓸 수 있게 해주는 oath-toolkit을 설치해준다&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight shell&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;brew install oath-toolkit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;oath-toolkit은 OTP 기능을 사용할 수 있게 해주지만 키를 관리해주거나 하는 등의 역할은 해주지 않는다. 간단한 shellscript로 OTP 키를 등록, 삭제를 할 수 있도록 &lt;code&gt;.bash_profile&lt;/code&gt; 혹은 &lt;code&gt;.zshrc&lt;/code&gt; 에 아래 스크립트를 추가 해 준다.&lt;/p&gt;
+
+&lt;p&gt;&lt;noscript&gt;&lt;pre&gt;400: Invalid request&lt;/pre&gt;&lt;/noscript&gt;&lt;script src=&quot;https://gist.github.com/a13ef83a5af57e45c4820c3da5ba0e31.js?file=otp_console.sh&quot;&gt; &lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;위 스크립트를 제대로 추가했는지 확인 해주기 위해 아까 authy에서 뽑아놓은 TOTP secret key를 등록하고 제대로 나오는지 확인해 보자&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight shell&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# OTP Secret 키를 등록한다 mfa_add {서비스 이름} {TOTP secret key}&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mfa_add aws XVWXDMXZZXJIXA3XIOHX46VXXKQEXXXI73D6SX7VXXXNVFXXIOYF5F74BYHTI7FK
+Secret added to keychain
+
+&lt;span class=&quot;c&quot;&gt;# OTP 토큰을 가져온다. mfa {등록한 서비스 이름}. 토큰은 클립보드에 저장 돼 있어서 붙여넣기를 하면된다.&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mfa aws
+19:49:58 822269
+
+&lt;span class=&quot;c&quot;&gt;# 등록한 서비스를 삭제한다. mfa_delete {서비스 이름}&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mfa_delete aws
+password has been deleted.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Step 3. VPN Client OTP 입력 자동화 하기&lt;/h2&gt;
+
+&lt;p&gt;Tunnelblick은 회사에서 쓰는 VPN client인데 역시 OTP를 사용해야한다. VPN Client OTP 입력은 Hammer spoon의 &lt;code&gt;Application Watcher&lt;/code&gt; 기능을 이용해서 만들거다.&lt;/p&gt;
+
+&lt;p&gt;로직은 간단하게 Tunnelblick이라는 application이 activated 즉 창이 선택 됐을 경우 특정 루틴을 실행시켜주는 역할을 한다. 아까 만들어둔 console authenticator을 실행시켜줘서 OTP 토큰을 복붙한다음 엔터를 쳐주는 매크로이다.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight lua&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;hs.ipc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ipc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cliStatus&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ipc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cliInstall&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;cli Installed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;appwatcher&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;watcher&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;appwatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;appName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eventType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;appObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eventType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;watcher&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;activated&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;appName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Tunnelblick&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mfa openvpn&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;launchOrFocus&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tunnelblick'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eventtap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyStrokes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pasteboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getContents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eventtap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyStroke&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({},&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;return&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;위 스크립트를 Hammer Spoon Config에 추가한 다음 reload를 해주자. 이제 VPN Client에다가 OTP를 입력해야하는 반복 노동에서 벗어날 수 있다 🎉.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=10GRUg-yVfQAN6Ji1Z_H3wpAdCxxwPE8a&quot; data-lightbox=&quot;uc?export=view&amp;id=10GRUg-yVfQAN6Ji1Z_H3wpAdCxxwPE8a&quot; data-title=&quot;vpn&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=10GRUg-yVfQAN6Ji1Z_H3wpAdCxxwPE8a&quot; alt=&quot;vpn&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Known Issue :  Tunnelblick의 다른 창이 뜰 경우에도 위 루틴이 동작하기 때문에 종종 이상한 창이 뜨는 경우가 있다. 그래도 매번 authy를 안 켤 수 있는게 귀찮음이 더 적다&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2&gt;Step 4. AWS Console Login OTP 입력 자동화 하기&lt;/h2&gt;
+
+&lt;p&gt;위에 Step 3에서 한 방식대로 AWS console 도 해결할 수 있으면 좋겠지만 바로 입력화면이 뜨는 VPN client 와 달리 크롬에서 특정 페이지가 열렸는지를 알아내는건 Hammer spoon로는 해결 할 수 없다. 대신 Apple Script를 이용해서 크롬에서 aws login 페이지가 열렸는지를 확인하고 Hammer spoon의 &lt;code&gt;url event&lt;/code&gt; 기능을 이용해서 지정해놓은 매크로를 호출하는 방식으로 했다.&lt;/p&gt;
+
+&lt;p&gt;나는 기본적으로 chrome의 자동 로그인 기능을 사용해서 id, password까지는 자동 완성이 된다. 엔터 눌러주고 OTP를 자동입력하는 스크립트를 작성해보자.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight lua&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;hs.ipc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; 
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ipc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cliStatus&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ipc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cliInstall&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;cli Installed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- 위에서 추가 했으면 꼭 추가해주지 않아도 됨&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;-- urlevent 등록: awsTotp&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urlevent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;awsTotp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eventName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mfa aws&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;application&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;launchOrFocus&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Google Chrome'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eventtap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyStrokes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pasteboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getContents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eventtap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyStroke&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({},&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;return&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;🎉login🎉&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;위에 코드를 Hammer Spoon config에 추가 하게 되면 &lt;code&gt;hammerspoon://awsTotp&lt;/code&gt; url 로 GET 요청을 날리게 되면 지정한 기능을 실행시켜준다. 이번에는 로그인하면 축하해주기 위해서 성공 문구도 추가해뒀다. &lt;/p&gt;
+
+&lt;p&gt;&lt;noscript&gt;&lt;pre&gt;400: Invalid request&lt;/pre&gt;&lt;/noscript&gt;&lt;script src=&quot;https://gist.github.com/a13ef83a5af57e45c4820c3da5ba0e31.js?file=chrome_tracking.applescript&quot;&gt; &lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Apple Script에서는 hammerspoon에서 지정해놓은 매크로를 호출하는 조건을 다음과 같이 설정한다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Chrome이 제일 최상단이고&lt;/li&gt;
+&lt;li&gt; 현재 탭의 URL이 AWS 일본리전(ap-northeast-1)의 로그인 페이지 &lt;a href=&quot;https://ap-northeast-1.signin.aws.amazon.com/&quot;&gt;&lt;code&gt;https://ap-northeast-1.signin.aws.amazon.com/&lt;/code&gt;&lt;/a&gt; 로 시작 하는 경우&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Apple Script에서도 shell script를 실행 할 수 있지만 bashrc같은 곳에 적용 해놓은 env등이 적용이 안되기 때문에 해당 기능은 hammerspoon으로 분리해서 관리 했다. 만약 분리하고 싶지 않다면 위에서 bashrc에 적용해 둔 각 function을 shellscript로 만든 후 PATH에 추가 해주면 될 것 같다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB&quot; data-lightbox=&quot;uc?export=view&amp;id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;기본적으로 apple script는 일 회 실행되고 종료되게 돼 있지만 idle 구문을 통해서 백그라운드에서 계속 실행되게 할 수 있다. 스크립트를 실행 파일로 만들려면 Mac의 &lt;code&gt;스크립트 편집기&lt;/code&gt; 를 열고 붙여 넣은 다음 &lt;code&gt;파일&lt;/code&gt; → &lt;code&gt;내보내기&lt;/code&gt; 에서 파일 포맷을 &lt;code&gt;응용 프로그램&lt;/code&gt;으로 설정 후 저장 해주면 된다. 그리고 옵션에서 반드시 &lt;code&gt;처리기 실행 후에 열어놓기&lt;/code&gt;를 체크해야한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/uc?export=view&amp;id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E&quot; data-lightbox=&quot;uc?export=view&amp;id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E&quot; data-title=&quot;https://drive.google.com/uc?export=view&amp;id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E&quot;&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E&quot; alt=&quot;https://drive.google.com/uc?export=view&amp;id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;그리고 스크립트 자제가 UI elements 들에 접근하고 제어를 하기 때문에 손쉬운 사용에서 응용 프로그램 화 시킨 스크립트를 추가 해 줘야한다. &lt;code&gt;시스템 환경설정&lt;/code&gt; → &lt;code&gt;보안 및 개인정보 보호&lt;/code&gt; → &lt;code&gt;개인 정보 보호&lt;/code&gt; → &lt;code&gt;손쉬운 사용&lt;/code&gt; 에서 &lt;code&gt;+&lt;/code&gt; 버튼을 눌러서 추가해주자.&lt;/p&gt;
+
+&lt;p&gt;이렇게 스크립트를 잘 저장해줬다면 Hammer spoon config에서 chrome_tracking을 실행 시킬 수 있도록 추가 해 주면 부팅 시 스크립트가 실행되도록 할 수 있다.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight lua&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;open /Applications/chrome_tracking.app&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Known Issue : 다른 리전의 로그인 창이 뜬 경우는 안된다. contain을 이용해 해결 할 수 있지만 나는 일본 리전만 사용하고 있기 때문에 그냥 strats with으로 해결했다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;작업에 필요한 소스코드들은 여기에 모아두었다. &lt;a href=&quot;https://abr.ge/odw1td&quot;&gt;https://abr.ge/odw1td&lt;/a&gt; &lt;/p&gt;
+
+&lt;h2&gt;후기&lt;/h2&gt;
+
+&lt;p&gt;간단한 자동화지만 아침에 AWS 자동으로 로그인 될 때 마다 스스로 뿌듯함을 느낀다.
+미루지 말고 한 번 시도해보자.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;참고자료&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Generating Authy passwords on other authenticators&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gist.github.com/gboudreau/94bb0c11a6209c82418d01a59d958c93&quot;&gt;https://gist.github.com/gboudreau/94bb0c11a6209c82418d01a59d958c93&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;mac-oath-mfa&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/alanplatt/mac-oath-mfa&quot;&gt;https://github.com/alanplatt/mac-oath-mfa&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 16 May 2020 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2020/05/otp-automation.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2020/05/otp-automation.html</guid>
+        
+        <category>자동화</category>
+        
+        <category>hammer spoon</category>
+        
+        <category>apple script</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>바쁜 개발자가 집 알아보는 방법 🐌    방 정보 크롤링 및 필터링 하기</title>
+        <description>&lt;h1&gt;바쁜 개발자가 집 알아보는 방법 🐌  - 방 정보 크롤링 및 필터링 하기&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1djAUK5HM58mLzcza344_ZE4OmLsUsed8&quot; data-lightbox=&quot;uc?export=view&amp;id=1djAUK5HM58mLzcza344_ZE4OmLsUsed8&quot; data-title=&quot;http://drive.google.com/uc?export=view&amp;id=1djAUK5HM58mLzcza344_ZE4OmLsUsed8&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1djAUK5HM58mLzcza344_ZE4OmLsUsed8&quot; alt=&quot;http://drive.google.com/uc?export=view&amp;id=1djAUK5HM58mLzcza344_ZE4OmLsUsed8&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://abr.ge/ng5dg&quot;&gt;시각화 한 지도 바로보기&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;올해 취업을 하고 집에서 독립을 해보고 싶어져서 방을 알아보기 시작했었다.&lt;br&gt;
+처음에는 월세를 살아야 하나 하다가 전세자금을 엄청 좋은 조건에 대출 받을수 있는 &lt;em&gt;중소기업 청년 전세자금 대출&lt;/em&gt; 이있다는 걸 알게 되고 이거 완전 🍯이잔아 하고 찾기 시작했다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;역시나 남의 돈을 그렇게 쉽게 얻을 수는 없었다. 직방, 다방등 전세로 올라온 물건은 많았지만 &lt;strong&gt;전세자금 대출이 가능한 물건은 정말 정~~말 적기&lt;/strong&gt;도 하고 같은 가격대에 대비해 방 크기도 안좋은 편이였다. 더 놀라운점은 &lt;strong&gt;전세 대출이 가능한 물건들은 올라온지 1 주일정도 됐다면 없을 확률이 99.99%&lt;/strong&gt;였다... 그럼에도 불구하고 좋은 방을 구하고야 말지 하고 이를 악물기 시작하고 찾아보기를 30분 뒤 내가 뭘 봤는지도 모르겠고 슬슬 정신이 혼미해지기 시작했다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;먼저 어플에서는 내가 &lt;strong&gt;원하는 조건의 필터링이 힘들었다&lt;/strong&gt;. 대출이 가능한 물건인지 아니면 특정 텍스트가 들어가 있는지 구별할 수도 없었고 광고 물건이 먼저올라오기도 했다. 또 내가 어떤 물건을 봤는지 어떤 부동산걸 봤는지 일일히 기억하기도 힘들었다. 일단 부동산에 연락을 여러군데 넣어둬도 어떤데가 어떤 물건을 가지고 있는지도 기억이 안나 먼저 엑셀로 정리를 해야겠다는 생각을 했다. 근데 또 이것도 손으로 하려니 너~~무 귀찮다. 그래서 &lt;strong&gt;방 정보를 크롤링 하고 내가 원하는 집들만 필터링 해서 보고 정리&lt;/strong&gt;하는 프로젝트를 시작했다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;먼저 구현할 기능은 간단하게 3 개로 시작 하기로 했다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;원하는 지역의 방정보를 가져오기&lt;/li&gt;
+&lt;li&gt;특정 문구가 들어간, 내가 원하는 가격의 방 정보를 필터링 하기&lt;/li&gt;
+&lt;li&gt;부동산 별로 볼 수 있게 하기&lt;br&gt;
+&lt;br&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2&gt;방🏠 정보 가져오기&lt;/h2&gt;
+
+&lt;p&gt;크롤링할 플랫폼은 api가 제일 깔끔해 보이는 직방으로 선택했다. 직방에서는 총 두 단계로 방 정보를 가져올 수 있었다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;h3&gt;1. 파라미터를 이용해서 방 정보 ID 들을 가져오기.&lt;/h3&gt;
+
+&lt;p&gt;직방에서는 방 정보를 가져오기 위해 여러가지 파라미터를 제공한다. 지상층인지, 보증금의 범위 등등. 그 중에서 제일 눈에 띈건 geohash라는 파라미터였다. 위치정보를 이용한 개발은 한 번도 안 해봐서 구역별 정보를 어떻게 가져오는지 궁금했었는데 직방에서는 &lt;em&gt;geohash&lt;/em&gt;를 이용해 지역 구분을 했다. geohash는 지구의 위치 정보를 사각형으로 나눠 표현하는 방식을 의미한다.  &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1bXqE2D63osXNQoEIsaU19kNLyvardA6S&quot; data-lightbox=&quot;uc?export=view&amp;id=1bXqE2D63osXNQoEIsaU19kNLyvardA6S&quot; data-title=&quot;http://drive.google.com/uc?export=view&amp;id=1bXqE2D63osXNQoEIsaU19kNLyvardA6S&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1bXqE2D63osXNQoEIsaU19kNLyvardA6S&quot; alt=&quot;http://drive.google.com/uc?export=view&amp;id=1bXqE2D63osXNQoEIsaU19kNLyvardA6S&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;출저 &lt;a href=&quot;https://en.wikipedia.org/wiki/Geohash&quot;&gt;https://en.wikipedia.org/wiki/Geohash&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;정확히는 이진 탐색을 하듯이 위도와 경도의 범위를 점점 좁혀가며 이 과정을 비트를 표현한다. 이런 과정은 -90 ~ 90도부터 시작하며 중간 값 보다 클경우 1 작을 경우 0으로 표시하고 5자리를 모아 base32 대응표에 대입하면 아래 사진과 같이 지역을 해쉬화 해서 표현할 수 있다. 인접한 지역끼리는 해쉬가 유사하니 얼마나 인근 지역인지도 알 수 있고 탐색도 빠를 테니 괜찮은 방법 같다. 좀 더 자세한 내용은 &lt;a href=&quot;https://en.wikipedia.org/wiki/Geohash&quot;&gt;Wikipedia Geohash문서&lt;/a&gt; 혹은 &lt;a href=&quot;https://scvgoe.github.io/2018-12-11-Geohash/&quot;&gt;scvgoe 님의 블로그&lt;/a&gt;통해서 알아보는걸 추천한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn&quot; data-lightbox=&quot;uc?export=view&amp;id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn&quot; data-title=&quot;http://drive.google.com/uc?export=view&amp;id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn&quot; alt=&quot;http://drive.google.com/uc?export=view&amp;id=1XCtQhss86KuplI5C1BnYyJAkCbQvCxDn&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;회사가 사당에 있음으로 그와 인근 지역인 관악구와 동작구 위주로 알아봤다. 직접 geohash를 구해줘도 되지만 &lt;a href=&quot;http://geohash.gofreerange.com/&quot;&gt;http://geohash.gofreerange.com/&lt;/a&gt; 이 사이트에서 지도 상 geohash에 따른 지역을 표시해준다. 내가 방 정보를 알아와야하는 지역은 &lt;code&gt;wydm0~wydm3&lt;/code&gt;에 있는 지역이 된다. 이렇게 파라미터를 맞춰서 넣어주게 되면 해당 지역안에 있는 방 item 들의 id를 가져올 수 있다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;h3&gt;2. 구체적인 방 정보 가져오기&lt;/h3&gt;
+
+&lt;p&gt;위 작업을 통해 방 정보에 대한 id 를 가져왔다면 이제 해당 id에 대한 정보를 가져오면 된다. 처음에는 id 갯수가 꽤 돼서 이걸 한번 씩 다 보내야 했는데 다행이 벌크로 보낼 수 있었다. 추가로 이렇게 api를 이용해서 항상 적당한 갯수 조절과 타임아웃은 필수다. 내 실수로 서버가 아플수도 있으니 말이다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1ugt3MmtKNXRR_1-DGcpmp3kzRl64Qa4Q&quot; data-lightbox=&quot;uc?export=view&amp;id=1ugt3MmtKNXRR_1-DGcpmp3kzRl64Qa4Q&quot; data-title=&quot;http://drive.google.com/uc?export=view&amp;id=1ugt3MmtKNXRR_1-DGcpmp3kzRl64Qa4Q&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1ugt3MmtKNXRR_1-DGcpmp3kzRl64Qa4Q&quot; alt=&quot;http://drive.google.com/uc?export=view&amp;id=1ugt3MmtKNXRR_1-DGcpmp3kzRl64Qa4Q&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;출저 : ㅍㅍㅅㅅ&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;왜 인지는 모르겠지만 방 정보를 가져올 때 꼭 id 갯수 대비 몇 개 씩은 줄어들어서 왔는데 일단 그냥 넘어갔다&lt;/p&gt;
+
+&lt;h2&gt;방🏠 정보 필터링 하기&lt;/h2&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;이제 모든 방 정보를 들고 왔으니 내가 원하는 조건에 해당하는 방을 걸러내면 된다.&lt;br&gt;
+방정보가 200개가 넘어가서 처음에는 행복회로🔥를 돌렸지만 이 과정에서 전세 매물 중5분의 1만 살아 남게 된다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;h3&gt;1. 대출 가능한 방 찾기&lt;/h3&gt;
+
+&lt;p&gt;대부분 전세자금 대출이 가능 한 방들은 제목이나 설명에 전세 자금 대출이 가능한 물건이라고 명시를 해놓는다. 명시를 해놓지 않는 경우 99.99% 대출이 안되는 생활근린시설 이거나 융자가 많아서 대출이 안된다. 그래서 제목이랑 본문 중 &lt;strong&gt;대출&lt;/strong&gt; 이라는 단어가 들어간 집 들을 긁어왔다. 하지만 나중에 이 로직을 수정하게 된다. 본문 중에 전세자금대출 불가 라고 써놓은 곳도 있었기 때문이다... 
+&lt;code&gt;python
+    wish = &amp;#39;대출&amp;#39;
+    sad_words = [ &amp;#39;대출x&amp;#39;, &amp;#39;대출불가&amp;#39;, &amp;#39;전세 안됩&amp;#39; ]
+    if wish in item[&amp;#39;title&amp;#39;] or wish in item[&amp;#39;description&amp;#39;]:
+        plz_flag = True
+        for word in sad_words:
+            if word in item[&amp;#39;description&amp;#39;]:
+                plz_flag = False
+                break
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;출저 : 내 코드중 발최... 대출이 안되면 슬픕니다&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;그리고 위에 써놓은 것 처럼 올린지 1주일이 넘은 매물같은 경우에는 이미 나갔을 확률이 매우 높기도 하고 관리가 잘 안되고 있는 물건 일 수도 있어서 최근 4일 이내에 업데이트가 있는 게시글만 가져오도록 했다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;h3&gt;2. 주소 겹치는 곳 제거&lt;/h3&gt;
+
+&lt;p&gt;앱에 올라온 물건들을 보게 되면 같은 집인데 다른 부동산에서 중계를 하기 때문에 겹치는 물건들이 있다. 이런 데이터는 크게 필요하지 않음으로 제거를 해주면 좋다. api를 통해서 들어오는 데이터의 경우 &lt;code&gt;address1 ~ address3&lt;/code&gt;  이런식으로 나뉘어서 온다. 시랑 동같은 정보들을 나눠서 저장해주기 때문인데 주소를 다 이어 준 다음 dictionary의 key 값으로 사용하면 손쉽게 중복된 집들을 묶어줄 수 있다. 이 글을 보면서 생각이 든 건데 같은 주소의 다른 물건의 경우 보증금이 제일 저렴한 집으로 보여줬으면 조금 더 좋았을 것 같다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;h3&gt;3. csv로 뽑고 구글 스프레드 시트에 업로드 하기&lt;/h3&gt;
+
+&lt;p&gt;정말 이제 몇 안되는 물건들만 남았다. 그래도 약 40개 가량 되기 때문에 그냥 txt 파일로 관리하기에는 무리가 있을 것 같아 csv파일 형태로 만들고 구글 스프레드 시트에 올렸다. 구글 스프레드 시트에 올리게 되면 각 column 별로 필터링을 쉽게 걸 수 있다는 장점이 생기고 모바일이든 랩탑이든 어디서든 볼 수 있다. 집을 보러 다니게 되면 스프레드시트 앱을 통해 쉽게 볼 수 있었다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1PGfML6VlZvjwriXB61hixEOfh7DSqBL-&quot; data-lightbox=&quot;uc?export=view&amp;id=1PGfML6VlZvjwriXB61hixEOfh7DSqBL-&quot; data-title=&quot;http://drive.google.com/uc?export=view&amp;id=1PGfML6VlZvjwriXB61hixEOfh7DSqBL-&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1PGfML6VlZvjwriXB61hixEOfh7DSqBL-&quot; alt=&quot;http://drive.google.com/uc?export=view&amp;id=1PGfML6VlZvjwriXB61hixEOfh7DSqBL-&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;4. 구글 지도를 통해 위치 표시하기&lt;/h3&gt;
+
+&lt;p&gt;스프레드시트 만으로도 꽤 괜찮았지만 그냥 주소만 봐서는 위치를 모르겠어서 어떻게 하면 지도에서 보면 좋겠다는 생각을 했다. 찾아보니 구글 지도에 스프레드시트를 불러와서 볼 수 있는 기능이 있었다. 각 점을 누르면 설명도 나오고 위치도 볼 수 있기 때문에 집 보러다닐 때 꽤 편했다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.ciokorea.com/news/36646&quot;&gt;google spreadsheet 기능설명&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1TmthuYODoFuLoxiox5SKHXRX0wcUVpcl&quot; data-lightbox=&quot;uc?export=view&amp;id=1TmthuYODoFuLoxiox5SKHXRX0wcUVpcl&quot; data-title=&quot;http://drive.google.com/uc?export=view&amp;id=1TmthuYODoFuLoxiox5SKHXRX0wcUVpcl&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1TmthuYODoFuLoxiox5SKHXRX0wcUVpcl&quot; alt=&quot;http://drive.google.com/uc?export=view&amp;id=1TmthuYODoFuLoxiox5SKHXRX0wcUVpcl&quot; title=&quot;&quot;&gt;&lt;/a&gt;  &lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;
+더 자세한 내용과 실제 구현은 &lt;a href=&quot;https://abr.ge/vrh7n9&quot;&gt;소스코드를 참고&lt;/a&gt; 하면 된다. 사실 개인적인 용도로 쓰는 거기 때문에 코드가 깔끔하지 않은점은... (변명)&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;h2&gt;후기&lt;/h2&gt;
+
+&lt;p&gt;이렇게 만반의 준비를 하고 여러 부동산에 연락을 돌린 다음 💎&lt;strong&gt;귀중한 연차&lt;/strong&gt;💎를 내고 집을 보러 다녔다. 그래도 저렇게 필터링 한 물건은 실제로 꽤 있었지만 부동산에서 직방 같은 플랫폼에다 안올려놓은 경우도 많았고 내가 이집 이집 보여주세요 라고 얘기를 할 수 없기 때문에 거의 부동산의 주도로 보는 일이 더 많았다. 그래도 부동산 몇군데 정도 들리고나니 본 물건을 또 보러 가려는 경우가 생기기도 했다. 갔던데를 또 안가기 위해 만들어둔 지도를 활용하는 일이 몇번 있었고 부동산 구분이나 메모도 할 수 있었기 때문에 의미가 완전 없지는 않았다. 그래도 집은 발품 팔으러 다니세요 여러분&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;그래서 &lt;strong&gt;집을 구했냐고 물어보신다면 못구했다. 왜이렇게 비쌉니까...&lt;/strong&gt; 그냥 본가에 더 붙어있기로 했다.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;사실 Github Action을 이용해서 batch job으로 돌면서 집 정보를 업데이트 해주고 리스트에 없는 내가 본 집들도 좀 더 쉽게 추가 할 수 있는 방법을 고민하다가 집 구하는걸 포기했다. 집 구할 정도로 돈이 많은 사람 중 이 글을 보는 분이 있다면 누군가가 내 코드를 수정해서 만들어 주시기를...&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;정말 오래간만에 내 생활 중 필요에 의해 코딩을 했다. 나는 정리를 정말 못하는 성격이기 때문에 만약 이걸 내가 손으로 했더라면 아마 집을 보러가기도 전에 포기했을거다. 어떻게 보면 귀차니즘의 승리 아닐까. 앞으로도 종종 내 삶을 위한 프로젝트를 해봐야겠다.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 15 Dec 2019 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2019/12/find-house-for-me.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2019/12/find-house-for-me.html</guid>
+        
+        <category>crawling</category>
+        
+        <category>map</category>
+        
+        <category>geohash</category>
+        
+        <category>부동산</category>
+        
+        <category>직방 크롤링</category>
+        
+        
+        <category>dev</category>
+        
+      </item>
+    
+      <item>
+        <title>AWS에서 데이터처리 맛보기 AWS S3 , Athena , Quicksight</title>
+        <description>&lt;h3&gt;Prologue&lt;/h3&gt;
+
+&lt;p&gt;이번 여름방학은 연세대 HCI랩에서 진행하는 드림아카데미 프로그램에 참여 중이다.&lt;/p&gt;
+
+&lt;p&gt;드림아카데미는 UX를 고려한 서비스 디자인 방법을 공부하고 실제 기획하는 프로그램이라 &lt;/p&gt;
+
+&lt;p&gt;팀원들과 빡🔥세🔥게🔥 구르고 있다 &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=174IXJAhTyb9E0OwuYDyjLGqfHZ5xJ92F&quot; data-lightbox=&quot;uc?export=view&amp;id=174IXJAhTyb9E0OwuYDyjLGqfHZ5xJ92F&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=174IXJAhTyb9E0OwuYDyjLGqfHZ5xJ92F&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;이 프로그램을 운영하시는 김진우 교수님께서 올해는 Connected AI라는 프로젝트 주제를 정해주셨다. &lt;/p&gt;
+
+&lt;p&gt;그래서 데이터를 이용한 서비스를 결국 기획하긴 했는데,,  AI도 데이터도 모르고 서버 개발이랑 언어 위주로 한 &lt;/p&gt;
+
+&lt;p&gt;개발자 나부랭이지만 일단 팀에 유일한 개발자라 일단 데이터 처리 과정을 만들어 볼 수 밖에 없었다.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;데이터 선정&lt;/h3&gt;
+
+&lt;p&gt;아직 서비스를 만든게 아니기 때문에 먼저 기존에 있는 데이터셋을 가지고 시작!&lt;/p&gt;
+
+&lt;p&gt;데이터셋은 &lt;a href=&quot;https://www.yelp.com/dataset&quot;&gt;https://www.yelp.com/dataset&lt;/a&gt; 음식 리뷰 어플인 Yelp의 Dataset을 이용했다.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;{
+   &quot;review_id&quot;: &quot;zdSx_SD6obEhz9VrW9uAWA&quot;,
+   &quot;user_id&quot;: &quot;Ha3iJu77CxlrFm-vQRs_8g&quot;,
+   &quot;business_id&quot;: &quot;tnhfDv5Il8EaGSXZGiuQGg&quot;,
+   &quot;stars&quot;: 4,
+   &quot;date&quot;: &quot;2016-03-09&quot;,
+   &quot;text&quot;: &quot;Great place to hang out after ...&quot;,
+   &quot;useful&quot;: 0,
+   &quot;funny&quot;: 0,
+   &quot;cool&quot;: 0
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Yelp Dataset은 위와 같이 JSON 형식으로 총 8Gb크기의 데이터셋을 제공한다.&lt;/p&gt;
+
+&lt;p&gt;서비스에 대한 리뷰, 가게명, 유저 정보등이 들어가 있는데 이걸 직접 읽어서 처리하는걸 하려면 할 수는 있는데,,, &lt;/p&gt;
+
+&lt;p&gt;매번 새로운 분석을 하려면 코딩을 또 해야하고 귀찮아 질 것 같아서... 최대한 일을 안할 수 있는 방법으로...&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;어떻게 하지 고민하다가 전에 친구랑 밥 먹으면서 AWS를 이용해서 데이터 분석을 할 수 있다는 말을 얼핏 들었던것 같아서 찾아보니 &lt;strong&gt;&lt;a href=&quot;https://aws.amazon.com/ko/athena/&quot;&gt;AWS Athena&lt;/a&gt;&lt;/strong&gt; 라는 서비스를 찾았다.&lt;/p&gt;
+
+&lt;p&gt;써본 AWS 서비스라곤 ec2 인스턴스, 도메인 적용하기 위한 route53 딱 두 개 뿐이지만... (심지어 S3도 따로 안써봄) &lt;/p&gt;
+
+&lt;p&gt;그래도 서버 쪽 하려면 AWS공부도 한 번 해봐야 할 것 같아서 도전해봤다..&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;AWS 아이쇼핑&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1iI4DerfABaiUPCltu8TgIaByv76jzGhM&quot; data-lightbox=&quot;uc?export=view&amp;id=1iI4DerfABaiUPCltu8TgIaByv76jzGhM&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1iI4DerfABaiUPCltu8TgIaByv76jzGhM&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;AWS 서비스를 이용한 아키텍처 - 출저 &lt;a href=&quot;https://aws.amazon.com/ko/blogs/korea/serverless-architecture-by-korean-developers/&quot;&gt;https://aws.amazon.com/ko/blogs/korea/serverless-architecture-by-korean-developers/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;데이터 파이프라인은 유저로 부터 들어오는 데이터를 &lt;strong&gt;수집.&lt;/strong&gt; 전처리 과정을 거쳐 필요한 데이터만 &lt;strong&gt;정리&lt;/strong&gt;. &lt;/p&gt;
+
+&lt;p&gt;데이터베이스에 &lt;strong&gt;저장&lt;/strong&gt;. 저장된 데이터를 다시 &lt;strong&gt;분석 및&lt;/strong&gt; &lt;strong&gt;이용&lt;/strong&gt;하는 과정을 말한다.&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;AWS에서는 이렇게 데이터 파이프라인을 쉽게 만들 수 있도록 다양한 서비스들을 제공하는데 대충 찾아보니 요즘 자주쓰는 것들은&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Kinesis - 들어오는 데이터들을 여러 포맷으로 실시간으로 변환해서 스트리밍&lt;/li&gt;
+&lt;li&gt;S3 - 데이터 저장소. 여러 AWS 서비스들에서 주소만 주면 땡겨 쓸 수 있다.&lt;/li&gt;
+&lt;li&gt;DynamoDB - 풀옵션 NoSql Database. 클러스터링, 백업 등등 다 해준다.&lt;/li&gt;
+&lt;li&gt;Athena - SQL을 이용해서 S3에 저장된 데이터를 질의 할 수 있다.&lt;/li&gt;
+&lt;li&gt;QuickSight - 여러 AWS 서비스에 저장된 데이터를 이용해서 시각화를 간단하게 할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;등등... 많은게 있지만 공간이 부족해서 생략한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1Aw3mrWdyarelDv0F-3hDL4sIPm3o4oMQ&quot; data-lightbox=&quot;uc?export=view&amp;id=1Aw3mrWdyarelDv0F-3hDL4sIPm3o4oMQ&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1Aw3mrWdyarelDv0F-3hDL4sIPm3o4oMQ&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;나는 이번에 맛보기로 간단하게 하는 거기 때문에 데이터를 &lt;code&gt;S3&lt;/code&gt;에 저장 &lt;code&gt;Athena&lt;/code&gt;에서 불러와서 &lt;code&gt;QuickSight&lt;/code&gt;로 시각화 하는 것만 테스트 해봤다. &lt;/p&gt;
+
+&lt;p&gt;데이터를 데이터 베이스에 밀어넣을 수도 있지만 NoSql을 쓸 정도로 큰 데이터 양은 아닌 것 같고 Athena 설명대로 따로 테이블 같은걸 안만들고 바로 JSON을 질의 넣을 수 있고 시각화까지 해준다면 완전 편할 것 같아 Athena와 QuickSight를 이용했다.&lt;/p&gt;
+
+&lt;p&gt;아마 내가 NoSql에 넣을 만큼 데이터를 직접 많이 모을 수 있는 방법은 별로 없을 것 같으니 내 노트북과 스마트폰 네트워크 트래픽을 분석 할 수 있는 서비스를 만든다던가 해봐도 괜찮을 것 같다.(떡밥)&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;구성 하기&lt;/h3&gt;
+
+&lt;p&gt;자세한 서비스 구축방법은 나보다 &lt;a href=&quot;https://www.youtube.com/watch?v=mxLm-mC-n54&quot;&gt;이 아조씨&lt;/a&gt;가 더 친절이 잘 설명 해주신다. 저는 간단하게 소개만 하는 거라..&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1iSLLGQ_3H44xlljEHKRNmKVf86bRwNh-&quot; data-lightbox=&quot;uc?export=view&amp;id=1iSLLGQ_3H44xlljEHKRNmKVf86bRwNh-&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1iSLLGQ_3H44xlljEHKRNmKVf86bRwNh-&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;먼저 &lt;code&gt;S3&lt;/code&gt;에 데이터 셋을 업로드 해준다. 원래 데이터는 business.json, review.json, user.json 등 몇개의 json파일이 있다. &lt;/p&gt;
+
+&lt;p&gt;이때 각 파일별로 폴더를 구성해서 만들어준다.&lt;/p&gt;
+
+&lt;p&gt;Athena에서 S3의 데이터를 불러올 때 트래픽을 최소화 하게 하려면 필요한 데이터만 스캔하게 해야 한다.&lt;/p&gt;
+
+&lt;p&gt;그래서 로그 데이터를 Athena를 이용해 분석할 때 날자별로 폴더를 만들어서 불러오게 한다거나 하는 방식을 이용 한다고도 한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1LyrsYYLzgYC7u1FK6r7_iZ5NjAWZ-ek3&quot; data-lightbox=&quot;uc?export=view&amp;id=1LyrsYYLzgYC7u1FK6r7_iZ5NjAWZ-ek3&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1LyrsYYLzgYC7u1FK6r7_iZ5NjAWZ-ek3&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;이후 &lt;code&gt;Athena&lt;/code&gt;에서 데이터베이스를 만들어준다. 처음 써보는거라 S3 주소를 넣으라길래 어디 있는지 한참 찾았는데 &amp;#39;s3://&amp;#39; + &amp;#39;bucket 이름/&amp;#39; + &amp;#39;폴더명/&amp;#39; 이렇게 써주면 된다.&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;QuickSight를 사용할 꺼라면 반드시 Athena를 QuickSight를 사용하는 리젼으로 맞춰야한다.&lt;/strong&gt; &lt;/p&gt;
+
+&lt;p&gt;안그러면 QuickSight에서 데이터를 불러오지 못한다. 권한을 다 줬는데도 Athena에 접근을 못 하길래 한참 삽질했었다.. 한 시간 정도...&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1sI4Qc6XOEPKqAP7cMnF6B9WJF3JKLyQg&quot; data-lightbox=&quot;uc?export=view&amp;id=1sI4Qc6XOEPKqAP7cMnF6B9WJF3JKLyQg&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1sI4Qc6XOEPKqAP7cMnF6B9WJF3JKLyQg&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;그렇게 하다보면 컬럼을 지정해야 한다고 한다. 뭐야 결국 스키마 다 지정해줘야하고 RDBMS 쓰는 것 만큼 귀찮잔아 라고 생각했지만 이미 물릴 수 없기 때문에 울며 겨자 먹기로 컬럼을 일일히 다 지정해줬다 🤯&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;그리고 후에 Athena 리젼을 잘못 설정 했다는 걸 알게 된 후에 다시 할 때 &lt;code&gt;Glue&lt;/code&gt; 라는게 있다는 걸 알게 됐다.&lt;/p&gt;
+
+&lt;p&gt;이 서비스는 S3에 저장된 데이터를 Athena에서 쓸 수 있게끔 크롤러를 돌려서 알아서 테이블을 만들어준다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=16ZQ2dXVNjVfnSdmbdcKdBwqi3isZkEJq&quot; data-lightbox=&quot;uc?export=view&amp;id=16ZQ2dXVNjVfnSdmbdcKdBwqi3isZkEJq&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=16ZQ2dXVNjVfnSdmbdcKdBwqi3isZkEJq&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;사람들이 왜 AWS, AWS하는지 알것같은 부분이였다.&lt;/p&gt;
+
+&lt;p&gt;또 Glue를 써야 좋은점은 JSON을 컬럼 형식으로 변환시켜 모든 컬럼에 대한 풀 스캔을 피하게 할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;이렇게 될 경우 JSON 스키마가 바뀌더라도 Athena 스키마를 따로 변경 시켜줄 필요없이 Glue가 알아서&lt;/p&gt;
+
+&lt;p&gt;스키마를 만들어 준다는 이점도 존재한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1qPKDwIpBYHEKehUWaEfxDyvXJAQBShEt&quot; data-lightbox=&quot;uc?export=view&amp;id=1qPKDwIpBYHEKehUWaEfxDyvXJAQBShEt&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1qPKDwIpBYHEKehUWaEfxDyvXJAQBShEt&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1dfN5oB2301ULoybU2wd9e0XlFOLDcxkq&quot; data-lightbox=&quot;uc?export=view&amp;id=1dfN5oB2301ULoybU2wd9e0XlFOLDcxkq&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1dfN5oB2301ULoybU2wd9e0XlFOLDcxkq&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;데이터베이스를 만들고 나면 SQL을 이용해서 조회할 수 있다. 몇 초가 걸리는지 얼마나 데이터를 스캔했는지를 다 보여준다(다 돈이야 돈). 확실히 Standard SQL을 쓰기 때문에 쿼리문 작성은 매우 편했다.&lt;/p&gt;
+
+&lt;p&gt;이렇게 간단하게 데이터에서 리뷰 수 50 이상인 사업장 중 평균 별점이 높은 집들을 찾아볼 수 있다.&lt;/p&gt;
+
+&lt;p&gt;이제 마지막으로 &lt;code&gt;QuickSight&lt;/code&gt; 를 이용해서 시각화만 하면 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=19AKQLa424jS4Q6m6P9Bs0nNyBKOXMR_D&quot; data-lightbox=&quot;uc?export=view&amp;id=19AKQLa424jS4Q6m6P9Bs0nNyBKOXMR_D&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=19AKQLa424jS4Q6m6P9Bs0nNyBKOXMR_D&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;QuickSight는 매우 간단한 UI로 구성돼 있다. &lt;/p&gt;
+
+&lt;p&gt;원하는 차트 모양을 선택하고 x, y축에 해당하는 컬럼을 선택해 그래프를 바로 뽑아준다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1qXr6i7Cjyxz1-wucBK9tya83KR621S1y&quot; data-lightbox=&quot;uc?export=view&amp;id=1qXr6i7Cjyxz1-wucBK9tya83KR621S1y&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1qXr6i7Cjyxz1-wucBK9tya83KR621S1y&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;그래프 종류도 꽤 많아서 적절한걸 고르면 편하게 분석 할 수 있을 것 같다는 생각이 들었다.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;후기&lt;/h3&gt;
+
+&lt;p&gt;이 과정은 AWS 서비스를 처음 써보낸 내가 총 3시간 가량 걸렸다.&lt;/p&gt;
+
+&lt;p&gt;물론 내가 AWS를 전에도 써봤었다면 아마 한 시간도 안 걸렸을 것 같이 쓰기 쉬운 구조였다.&lt;/p&gt;
+
+&lt;p&gt;왜 많은 곳에서 AWS기반 서비스를 택하는지 알 수 있을것 같다..&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;QuickSight는 정말 간단한 시각화에 쓸만할것 같고, 눈이 조금 더 가는건 Athena다. &lt;/p&gt;
+
+&lt;p&gt;S3에 로그 백업 해놓고 추가적으로 더 설정할 것 없이 분석 하거나 실 서비스 DB에 부담 주지 않고&lt;/p&gt;
+
+&lt;p&gt;분석하거나, DB에 넣기 전 전처리용으로 등등.. 활용처가 많은 것 같다.&lt;/p&gt;
+
+&lt;p&gt;평소 쓰던 기술들만 쓰곤 했었는데 가끔 이렇게 다른걸 써보는것도 꽤 재미있었다.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;광고&lt;/h3&gt;
+
+&lt;p&gt;혹시 회사에 보충역 산업기능요원이 필요하신가요? 2년간 저와 함께 성장할 회사를 찾습니다! &lt;/p&gt;
+
+&lt;p&gt;자동화, 백엔드 쪽에 관심이 많고 여러 분야에 대해 공부 중입니다.&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp; &lt;/p&gt;
+
+&lt;p&gt;여러 분야를 경험 해 보면서 언어나 프레임워크 상관 없이 빠르게 배울 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;제 &lt;a href=&quot;https://jen6.github.io/move/resume&quot;&gt;이력서&lt;/a&gt;를 읽어보시고 관심이 생기신다면 work.jen6@gmail.com 으로 연락주세요 😁&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://jen6.github.io/move/resume&quot;&gt;https://jen6.github.io/move/resume&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;참고자료&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;[버즈빌의 누구나 궁금해하는 개발 이야기] 데이터 파이프라인(pipes data) 구축 방법&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.mobiinside.com/kr/2018/08/01/buzzvill-pipesdata/&quot;&gt;https://www.mobiinside.com/kr/2018/08/01/buzzvill-pipesdata/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;[뱅크샐러드]Analyze Data in MongoDB with AWS&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://medium.com/rainist-engineering/analyze-data-in-mongodb-with-aws-43c25ef0592f&quot;&gt;https://medium.com/rainist-engineering/analyze-data-in-mongodb-with-aws-43c25ef0592f&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Amazon Athena 및 Amazon QuickSight를 활용한 2백년간 글로벌 기후 데이터 시각화&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://aws.amazon.com/ko/blogs/korea/visualize-over-200-years-of-global-climate-data-using-amazon-athena-and-amazon-quicksight/&quot;&gt;https://aws.amazon.com/ko/blogs/korea/visualize-over-200-years-of-global-climate-data-using-amazon-athena-and-amazon-quicksight/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;DynamoDB에 대해서 알아보자 - 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://velog.io/@drakejin/DynamoDB%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90-1&quot;&gt;https://velog.io/@drakejin/DynamoDB에-대해서-알아보자-1&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 30 Jul 2019 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2019/07/aws-aws-s3-athena-quicksihtiaws.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2019/07/aws-aws-s3-athena-quicksihtiaws.html</guid>
+        
+        <category>AWS</category>
+        
+        <category>데이터처리</category>
+        
+        <category>athena</category>
+        
+        
+        <category>dev</category>
+        
+      </item>
+    
+      <item>
+        <title>First week of GSOC, Piece Table Implement</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7&quot; data-lightbox=&quot;uc?export=view&amp;id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;{: width=&amp;quot;50%&amp;quot; height=&amp;quot;50%&amp;quot;}&lt;/p&gt;
+
+&lt;p&gt;Hi! 
+Last week was start of the GSOC coding period.  So I started my project.
+Also I opened my code on the KDE git.
+ &lt;a href=&quot;https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/&quot;&gt;https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you are interested in my project feel free to look and give me some advices.&lt;/p&gt;
+
+&lt;h2&gt;Parser using Spirit::x3&lt;/h2&gt;
+
+&lt;p&gt;First, I started to make the markdown parser using the Boost Spirit X3.&lt;/p&gt;
+
+&lt;p&gt;Spirit makes easy to express grammar using the PEG.
+But it&amp;#39;s templet based library so it was hard to find out which part is wrong.
+Also documentation of spirit was limited. &lt;/p&gt;
+
+&lt;p&gt;So I had a lots of trial and error to get compilable source code.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf&quot;&gt;http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://ciere.com/cppnow15/using_x3.pdf&quot;&gt;https://ciere.com/cppnow15/using_x3.pdf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;this two slides was really helpful for me.&lt;/p&gt;
+
+&lt;h2&gt;Markdown AST Structure&lt;/h2&gt;
+
+&lt;p&gt;if we type markdown document like this&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;# hello
+&amp;gt; &amp;gt; 1. - **sadf** - 
+&amp;gt; &amp;gt; 
+&amp;gt; &amp;gt; sadf
+&amp;gt; 
+&amp;gt; asdf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;we will get result like this. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj&quot; data-lightbox=&quot;uc?export=view&amp;id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Markdown document&amp;#39;s can be splited in each &lt;strong&gt;lines&lt;/strong&gt;. line is the smallest unit of the markdown document. Also line can be expressed &lt;strong&gt;attributes,&lt;/strong&gt; &lt;strong&gt;string, emphasizes&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;attributes : Line&amp;#39;s attribute that change the block style. There are two types of attribute. &lt;/li&gt;
+&lt;li&gt;Single Attribute : # header. Style applied only once.&lt;/li&gt;
+&lt;li&gt;Multiple Attributes : &amp;gt; BlockQuote, Lists. Sytle applied recursively.&lt;/li&gt;
+&lt;li&gt;String : Content of the document. It contains only string.&lt;/li&gt;
+&lt;li&gt;Emphasize : Bold, Cancleline, Underline... It contains index of string to be emphasized&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All line can be parsed in parallel on multiple threads. Because each line is independent from other lines. After parsing seperatly it can be reassembled after parsing phase.&lt;/p&gt;
+
+&lt;p&gt;So we can express this grammar with the Spirit grammar like this
+&lt;code&gt;cpp
+    auto const Line_def= 
+        Header[pushFunc] &amp;gt;&amp;gt; String[setContent]
+        | (MultipleAttribute)* &amp;gt;&amp;gt; EmphasizeString[getEmphStr];
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2&gt;Piece Table&lt;/h2&gt;
+
+&lt;p&gt;I had a hard time to implementing the Emphasize String.&lt;/p&gt;
+
+&lt;p&gt;All String Emphasize token should be paired. If tokens not paired it should be inserted in original points
+```
+    &lt;strong&gt;this is paired example&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;**This token -&amp;gt; -- is not paired**
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;Like this exampled `--` should be inserted in middle of the string as the normal character.
+
+We can simply using insert method but it has performance issue. 
+
+If there is a original string length N and another string length M to be inserted in position P.
+
+First split the original string at position P and shift the splited string as mush as M.
+
+Then put the string length M in position P. It takes almost O(N). 
+
+If there are alot of non-paired tokens, It will consume more time.
+
+---
+So I found the VSCode team's article about reimplementing text buffer using the **Piece Table**.
+
+[https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation](https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation)
+
+
+
+The main idea of the Piece Table is seperate the original buffer and added buffer. 
+
+And split the strings in a small pieces containing position to insert and the string length.  
+
+Make a table about how to make new string using each pieces.
+
+So I applied this structure in appending non-paired emphasize tokens.
+```cpp
+    const auto EmphasizeString_def = 
+      +(omit[Emphasize[setEmp]] | Content[setEmpText]); 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In my grammar definition, it do not check the pairness of Emphasize token.&lt;/p&gt;
+
+&lt;p&gt;Basically Emphasize token are temporary stored in Emphasize Stack to check pairness.&lt;/p&gt;
+
+&lt;p&gt;First If there is token can be paired, add token in Emphasize vector and clean the non-paired tokens. &lt;/p&gt;
+
+&lt;p&gt;Or there are not tokens can be paired just push the token in the Emphasize Stack and push token&amp;#39;s string value in the buffer vector.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Strings are also added in the buffer vector and inserted in the &lt;strong&gt;Piece Map.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Piece Map works same as Piece table but effective on find the piece on some position.&lt;/p&gt;
+
+&lt;p&gt;Piece Map is multimap that use Piece&amp;#39;s index and Piece as key value. &lt;/p&gt;
+
+&lt;p&gt;So we can iterate whole pieces and make new string with non-paired tokens.
+```cpp
+    namespace AST {
+      struct Piece {
+        int start = 0, len = 0;
+        int bufIdx = 0;
+      };&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;  struct Emphasize {
+    int start = 0, end = 0, bufIdx = 0;
+    EmphasizeType empType = EmphasizeType::DEFAULT;
+  };
+
+  using PieceMap = std::multimap&amp;lt;int, Piece&amp;gt;;
+  using PieceMapIter = PieceMap::iterator;
+
+  class EmphasizeString {
+    private:
+      int currPos = 0, addedTokenLen = 0;
+      std::vector&amp;lt;std::string&amp;gt; buffer;
+      std::vector&amp;lt;Emphasize&amp;gt;  empSt, emps;
+      PieceMap pieceMap;
+
+    private:
+      int clearNonComplete(std::vector&amp;lt;Emphasize&amp;gt;::iterator );
+    public:
+      EmphasizeString();
+      void addEmphToken(EmphasizeType empt);
+      void appendText(const std::string&amp;amp; text);
+      std::string getString();
+      const std::vector&amp;lt;Emphasize&amp;gt; &amp;amp;getEmphasizes() const;
+  };
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;You can check my whole code on KDE git.
+
+---
+
+## After first week
+
+I think it was good starting for me.  But this week and next week is my final exam in the school.
+
+So me and my mentors Eike and SungJae planned to refactor the code and make view of markdown.
+
+They also mentioned adding the licensing policy and following the KDE's codding convention.
+
+Thank you for reading my article and I'll write next article after my final finish.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Tue, 11 Jun 2019 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2019/06/first-week-of-gsoc-piece-table-implement.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2019/06/first-week-of-gsoc-piece-table-implement.html</guid>
+        
+        <category>GSOC</category>
+        
+        <category>KDE</category>
+        
+        <category>markdown</category>
+        
+        <category>piece table</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>HI KDE, HI GSOC 2019</title>
+        <description>&lt;h1&gt;HI KDE, HI GSOC2019&lt;/h1&gt;
+
+&lt;p&gt;Hi I&amp;#39;m SonGeon live in Seoul, South Korea.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1MVbLu69UDVpp8vpAM_fVzDDUReFdHHnv&quot; data-lightbox=&quot;uc?export=view&amp;id=1MVbLu69UDVpp8vpAM_fVzDDUReFdHHnv&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1MVbLu69UDVpp8vpAM_fVzDDUReFdHHnv&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;On this summer I&amp;#39;m working with the KDE community by participating the &amp;quot;Google Summer of Code&amp;quot; Program. &lt;/p&gt;
+
+&lt;p&gt;My main goal during GSOC period is making a &lt;strong&gt;markdown view, WYSIWIG editor&lt;/strong&gt; using C++ and Qt. &lt;/p&gt;
+
+&lt;p&gt;There were two reasons that I started to make a new markdown view.&lt;/p&gt;
+
+&lt;p&gt;First, most markdown editors are using webview based renderer. But webview based editors have the lack of printing options. Because Markdown is aiming to make a good looking document with simple text notations on the web environment. In a single webpage, It doesn’t have pagination for printing. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1fhRBHuVDkfqELUKJ9Auuum4MSm5IDGEW&quot; data-lightbox=&quot;uc?export=view&amp;id=1fhRBHuVDkfqELUKJ9Auuum4MSm5IDGEW&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1fhRBHuVDkfqELUKJ9Auuum4MSm5IDGEW&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So webview based renders have the same problems. For example, document elements are printed across multiple pages and the document’s paragraphs, word spacing, and line spacing are slightly different compared to the screen. If the markdown editor support the preview of the paging,  better text rendering with the layout of printing, It will be more powerfull like word processors.&lt;/p&gt;
+
+&lt;p&gt;Second, the KDE project already has the markdown renderer kmarkdownWebview. Currently, It has a forked third-party javascript library for markdown rendering. I want to minimize the dependencies. And It use the Qt’s QWebEngine and QWebChannel. Those are used to run a JS library and It brings a lot of overhead.&lt;/p&gt;
+
+&lt;p&gt;I think writing new renderer using Qt API and C++ without a third-party library is a lighter approach. So I choose to make parser with the &lt;strong&gt;Boost Spirit&lt;/strong&gt;. It&amp;#39;s the PEG parser generator implemented in the boost library and It&amp;#39;s &lt;a href=&quot;https://www.boost.org/doc/libs/1_66_0/libs/spirit/doc/html/spirit/karma/performance_measurements/numeric_performance/int_performance.html&quot;&gt;super fast&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I want to contribute many way not only makaing my own markdown editor. One of the main goal in this summer is make as a KDE part to reuse it. It can be markdown preivew module in Okular. &lt;/p&gt;
+
+&lt;p&gt;If you interested in this project please feel free to contact me. I&amp;#39;ll check KDevelop, kde-soc telegram group (I joined in irc but it&amp;#39;s hard to check) . Or you can use my email kde.jen6@gmail.com.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 27 May 2019 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2019/05/hi-kde-hi-gsoc2019.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2019/05/hi-kde-hi-gsoc2019.html</guid>
+        
+        <category>GSOC</category>
+        
+        <category>KDE</category>
+        
+        <category>markdown</category>
+        
+        
+        <category>GSOC</category>
+        
+      </item>
+    
+      <item>
+        <title>Transport Layer Note</title>
+        <description>&lt;h1&gt;Network&lt;/h1&gt;
+
+&lt;h1&gt;Chapter 1&lt;/h1&gt;
+
+&lt;h3&gt;Network protocols&lt;/h3&gt;
+
+&lt;p&gt;define format, order of messages sent, received entities, actions token on transmission 
+(token ring같은 경우를 말하는듯)&lt;/p&gt;
+
+&lt;h3&gt;Network structure&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Network Edge : hosts client and servers&lt;/li&gt;
+&lt;li&gt;On DSL(Digital Subscriber Line) using frequency division multiplexing
+(음성, 데이타 주파수 분리)&lt;/li&gt;
+&lt;li&gt;Host sending packet : packet : L bits, link transmission rate(게bandwidth) : R (bit/sec)
+&amp;lt;!--break--&amp;gt;
+                                    packet transmission delay = L/R&lt;/li&gt;
+&lt;li&gt;Network Core : interconnected routers, network of networks&lt;/li&gt;
+&lt;li&gt;packet-switching : application layer 메서지를 패킷단위로 쪼개 다음 라우터에게 보내줌&lt;/li&gt;
+&lt;li&gt;store and forward : 패킷 전체가 수신되기 전까지는 forward할 수 없음.&lt;/li&gt;
+&lt;li&gt;end-end delay : 2L/R&lt;/li&gt;
+&lt;li&gt;arrival rate가 transmission rate를 넘어가게 되면 패킷이 큐에 들어가서 기다림. (queueing delay)
+라우터 메모리가 꽉차게 되면 packet dropped. (loss)&lt;/li&gt;
+&lt;li&gt;Circuit switching(Alternative core)&lt;/li&gt;
+&lt;li&gt;src/dest 간의 경로가 보내기전에 결정되고 모든 리소스를 사용함. 안쓰이면 idle 공유따윈 없음&lt;/li&gt;
+&lt;li&gt;FDM(주파수 별로 다른 유저가 사용), TDM(시간을 쪼개서 유저간 공유)&lt;/li&gt;
+&lt;li&gt;Packet Switching vs Circuit Switching&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://gaia.cs.umass.edu/kurose_ross/interactive/ps_versus_cs.php&quot;&gt;http://gaia.cs.umass.edu/kurose_ross/interactive/ps_versus_cs.php&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;35명 전체 유저 중 전체 유저가 각각 한번에 시간을 10%씩 점유할 때 10명 이상의 사람이 동시 접속 할 확률&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://math.stackexchange.com/questions/918861/probability-problem-in-networking&quot;&gt;Probability problem in networking.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://icawww1.epfl.ch/sc250_2004/lecture_notes/sc250_exo2.pdf&quot;&gt;http://icawww1.epfl.ch/sc250_2004/lecture_notes/sc250_exo2.pdf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=16HdP_F4x1C6U-ZJ5rKqSri40C-4DpD5z&quot; data-lightbox=&quot;uc?export=view&amp;id=16HdP_F4x1C6U-ZJ5rKqSri40C-4DpD5z&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=16HdP_F4x1C6U-ZJ5rKqSri40C-4DpD5z&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;circuit switching은 큰 데이터(video)같은걸 전송할 때 좋음. packet switching은 대역폭 보장&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Internet Structure&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Network evolution was driven by &lt;strong&gt;economics&lt;/strong&gt; and &lt;strong&gt;national policies&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;소규모의 Network는 &lt;strong&gt;ISP&lt;/strong&gt;를 통해 연결됨. ISP는 상호간의 연결이 필요함&lt;/li&gt;
+&lt;li&gt;Access ISP는 호텔, 회사, 대학에서 제공하는 네트워크를 의미&lt;/li&gt;
+&lt;li&gt;N개의 &lt;strong&gt;Access ISP&lt;/strong&gt;(Node)가 있을 때 Interconnect 하려면 n(n-3)/2 + n O(n^2) scale&lt;/li&gt;
+&lt;li&gt;그래서 &lt;strong&gt;Global ISP&lt;/strong&gt;가 출현해서 ISP간을 연결해주는 Network를 만듬.&lt;/li&gt;
+&lt;li&gt;Global ISP가 여러개 출현하면서 Global ISP간을 이어주는 &lt;strong&gt;IXP&lt;/strong&gt;(Internet Exchange Point)가 나옴.&lt;/li&gt;
+&lt;li&gt;Access ISP를 묶어서 Global ISP에 연결해주는 &lt;strong&gt;regional networks&lt;/strong&gt;들이 등장&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Content Provider&lt;/strong&gt;(Google, Akamai)들이 &lt;strong&gt;자체 네트워크&lt;/strong&gt;를 구성함&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Delay, Loss, Throughput&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Packet Delay Sources &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transmission Delay&lt;/strong&gt; : 라우터로 들어오는 패킷에 대한 딜레이 (L/R_in)&lt;/li&gt;
+&lt;li&gt;Nodal Processing Delay : 패킷 헤더 조사, 라우팅 경로 결정 (매우 짧은시간)&lt;/li&gt;
+&lt;li&gt;Queueing Delay : 큐에 들어가서 output link로 나가기까지의 딜레이 (congestion 상황에 따라 다름)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Propagation Delay&lt;/strong&gt; : 매질을 통해 실제 데이터가 전송되는 속도 
+Ex. 라우터간 거리 200km, 전기의 속도 2*10^8m/sec → 2*10^5 / 2*10^8 = 1/1000 sec = 1 ms&lt;/li&gt;
+&lt;li&gt;Packet Loss : 라우터에 큐가 꽉 차면서 발생하는 문제.&lt;/li&gt;
+&lt;li&gt;Throughput : 1초에 몇 비트를 받고있는가? 전송률 (bits/time unit)
+
+&lt;ul&gt;
+&lt;li&gt;instantaeous : 순간 전송률&lt;/li&gt;
+&lt;li&gt;average : 평균 전송률&lt;/li&gt;
+&lt;li&gt;전송량 Rc, Rs이 있고 전달해주는 Core의 전송량이 R이고 열명이 나눠 쓸 경우
+throughput은 min(Rc, Rs, R/10)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://gaia.cs.umass.edu/kurose_ross/interactive/end-end-throughput.php&quot;&gt;http://gaia.cs.umass.edu/kurose_ross/interactive/end-end-throughput.php&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h1&gt;Chapter 3 Transport-layer&lt;/h1&gt;
+
+&lt;h3&gt;Transport-layer services&lt;/h3&gt;
+
+&lt;p&gt;다른 host에 있는 &lt;strong&gt;Application&lt;/strong&gt;이 서로 통신 할 수 있는 &lt;strong&gt;Logical communication&lt;/strong&gt;&lt;br&gt;
+Network layer은 다른 &lt;strong&gt;Host&lt;/strong&gt; 끼리 서로 통신할 수 있는 것 &lt;strong&gt;구별하기&lt;/strong&gt;
+break message into segments and reassemble it&lt;/p&gt;
+
+&lt;h3&gt;Multiplexing / Demultiplexding at Transport Layer&lt;/h3&gt;
+
+&lt;p&gt;Transport Layer에서 어떻게 데이터를 처리해줄것인지에 대한 내용
+Network Level에서 IP Datagrams를 받음. 여기에는 host, dest ip 정보가 들어있음.
+그리고 Datagram한 개에는 Transport Layer segment가 들어있고 여기 헤더에 port정보가 들어있음.&lt;/p&gt;
+
+&lt;p&gt;multiplexing : L7 → L4 일 때 여러개의 Application Level socket에서 들어온 데이터들에 transport header를 추가 해줘서 어떤 포트로 갈지에 대한 정보를 넣어 줌
+demultiplexing : L4 → L7 헤더에 있는 포트 정보를 보고 해당 프로세스 소켓으로 넘겨줌&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;When demuliplexing&lt;/strong&gt; 
+UDP는 기본적으로 Connectionless 그냥 &lt;strong&gt;dest ip, port&lt;/strong&gt;만 알게 되면 보낼 수 있음. src ip,port 와 상관 없이 dest ip, port만 알게되면 같은 소켓으로 통신가능.
+TCP는 그와 반대로 Connection orientied  &lt;strong&gt;src ip,port 그리고 dest ip, port&lt;/strong&gt; 총 4개를 이용해 소켓을 구분. 저 4개 중 한 개라도 달라지면 다른 소켓을 사용.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;UDP&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Connectionless&lt;/strong&gt; : No handshaking, independent UDP segment.
+순서 없음. 수신 송신에 대한 확인이 없기 때문에 loss발생 가능. → No reliability
+(Application Level에서 하려면 할 수 있긴함.)
+하지만 이런 특성 때문에 간단해서 많이 쓰임. Congestion Control이 없기 때문에 원하는 만큼 보낼 수 있음.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1ihK-svJ6qkG3QNziDPIwhYrglCtwjubo&quot; data-lightbox=&quot;uc?export=view&amp;id=1ihK-svJ6qkG3QNziDPIwhYrglCtwjubo&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1ihK-svJ6qkG3QNziDPIwhYrglCtwjubo&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;(&lt;a href=&quot;https://tools.ietf.org/html/rfc768&quot;&gt;https://tools.ietf.org/html/rfc768&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;Source Port is an optional field, when meaningful, it indicates the port
+of the sending  process,  and may be assumed  to be the port  to which a
+reply should  be addressed  in the absence of any other information.&lt;/p&gt;
+
+&lt;h3&gt;Checksum&lt;/h3&gt;
+
+&lt;p&gt;UDP헤더를 보면 Checksum이 존재하는데 IP header의 일부, UDP header, UDP data를 가지고 한다.
+문제는 Transport Layer에서는 IP header에 대한 정보를 안가지고 있기 때문에 정보중 일부인 persudo header를 만들어 계산한다. → TCP도 같은 방법으로
+&lt;a href=&quot;http://www.netfor2.com/udpsum.htm&quot;&gt;http://www.netfor2.com/udpsum.htm&lt;/a&gt; ← checksum calculation code&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;흠,,, L3 switching 에서 DSR(Direct Server Return)을 하게 될 경우 
+dst ip addr을 vip로 바꿔주게 될텐데 그러면 다시 checksum을 업데이트..
+&lt;a href=&quot;http://tech.kakao.com/2014/05/28/l3dsr/&quot;&gt;http://tech.kakao.com/2014/05/28/l3dsr/&lt;/a&gt; 그냥 갑자기 난 생각&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=17ymVpuFihSOUKPYurKw-0uRgTFLkSz2f&quot; data-lightbox=&quot;uc?export=view&amp;id=17ymVpuFihSOUKPYurKw-0uRgTFLkSz2f&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=17ymVpuFihSOUKPYurKw-0uRgTFLkSz2f&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;이때 one&amp;#39;s complement를 사용해서 계산을 한다. left most에 carry가 발생하면 더해주는 방식으로.
+checksum에 들어가는거는 마지막의 one&amp;#39;s complement를 취해준다(not)
+IPv4기준으로 checksum은 optional. 0으로 넣어두면 검사를 안한다는 뜻으로 사용한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1S7QTkE_I1AlromhK68esoQTHJ5upbAu8&quot; data-lightbox=&quot;uc?export=view&amp;id=1S7QTkE_I1AlromhK68esoQTHJ5upbAu8&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1S7QTkE_I1AlromhK68esoQTHJ5upbAu8&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;RDT(Reliable data transfer)- 중요&lt;/h3&gt;
+
+&lt;p&gt;Reliable data transfer은 좀 일반적인 의미로써의 프로토콜로 어떤 프로토콜이던 spec을 맞추면 
+rdt protocol이라 불릴 수 있음. 
+The requirements are &lt;strong&gt;retransmission&lt;/strong&gt;, &lt;strong&gt;error detection&lt;/strong&gt;, and acknowledgments.
+PPT상에서는 Unreliable data transfer send함수를 랩핑 해서 하는 식으로&lt;/p&gt;
+
+&lt;h3&gt;rdt 1.0&lt;/h3&gt;
+
+&lt;p&gt;그냥 안전한 채널(no loss, no bit error)에서 전송하면 그 자체로 안-전&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=19HT83cxO8S56K8YTP87o6FMra0FmoT6t&quot; data-lightbox=&quot;uc?export=view&amp;id=19HT83cxO8S56K8YTP87o6FMra0FmoT6t&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=19HT83cxO8S56K8YTP87o6FMra0FmoT6t&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;rdt 2.0&lt;/h3&gt;
+
+&lt;p&gt;조건 : bit error 발생하는 상황. no loss. 
+→ checksum 추가. 
+    feedback 추가 : 체크섬이 이상할경우 NACK (Retransmission), 괜찮으면 ACK&lt;/p&gt;
+
+&lt;p&gt;문제점 : ACK/NACK 가 corrupt되는 상황이 발생할수도 있음&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1J0gw4AXvtwJbjDsC97JHLV0NIUDuaAPf&quot; data-lightbox=&quot;uc?export=view&amp;id=1J0gw4AXvtwJbjDsC97JHLV0NIUDuaAPf&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1J0gw4AXvtwJbjDsC97JHLV0NIUDuaAPf&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;rdt 2.1&lt;/h3&gt;
+
+&lt;p&gt;해결책
+ - ACK/NACK에 Checksum을 추가해서 error검출. corupt가 발생시 데이터 재전송
+ - Sequence number를 추가해서 recv측에서 duplicated data를 검출해냄&lt;/p&gt;
+
+&lt;p&gt;질문&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;과연 NAK가 필요한가? → 1번 State에서 corrupt가 일어났을 때 NAK대신 0번 ACK를 받는다면?
+(실제로 여러 TCP Implementation에서 쓴 receipt &amp;quot;Triple duplicate ack&amp;quot;&lt;br&gt;
+→ TCP Fast retransmittion) : 2번 중복된 ACK가 오더라도 timeout 되기 전까지는 no retransmission
+ But 3번 중복된 ACK가 오게 되면 Fast retransmission. (SR ARQ)&lt;/li&gt;
+&lt;li&gt;이전보다 2배 늘어난 state&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1pxKseLNwrvLVycgX69qedQVif9B-8SXU&quot; data-lightbox=&quot;uc?export=view&amp;id=1pxKseLNwrvLVycgX69qedQVif9B-8SXU&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1pxKseLNwrvLVycgX69qedQVif9B-8SXU&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1QqH4i6bDwKA8czgrzcU3U635EvXkPDTB&quot; data-lightbox=&quot;uc?export=view&amp;id=1QqH4i6bDwKA8czgrzcU3U635EvXkPDTB&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1QqH4i6bDwKA8czgrzcU3U635EvXkPDTB&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;rdt 2.2&lt;/h3&gt;
+
+&lt;p&gt;NAK-free protocol : ACK만 쓰임. corrupt 발생시 이전 ACK를 보냄. → ACK에 sequence 필수 포함&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1sfIz3Nnn9_5BcEICz7DPKZiPC39aO3rn&quot; data-lightbox=&quot;uc?export=view&amp;id=1sfIz3Nnn9_5BcEICz7DPKZiPC39aO3rn&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1sfIz3Nnn9_5BcEICz7DPKZiPC39aO3rn&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1Zo_UfQ2wrVi34HaMXxYllYzwX8UZFl6R&quot; data-lightbox=&quot;uc?export=view&amp;id=1Zo_UfQ2wrVi34HaMXxYllYzwX8UZFl6R&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1Zo_UfQ2wrVi34HaMXxYllYzwX8UZFl6R&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;rdt 3.0&lt;/h3&gt;
+
+&lt;p&gt;조건 : bit error 발생, loss 발생.
+해결 : &lt;strong&gt;timeout&lt;/strong&gt;을 둬서 시간안에 ACK가 안올경우 retransmission. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=11OhF73N281J2R2xlODZOTgN-XbPIXSLi&quot; data-lightbox=&quot;uc?export=view&amp;id=11OhF73N281J2R2xlODZOTgN-XbPIXSLi&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=11OhF73N281J2R2xlODZOTgN-XbPIXSLi&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Stop&amp;amp;Wait 분석: 1 Gbps Link,  15ms propagation, 8kb packet&lt;/p&gt;
+
+&lt;p&gt;→ Transmission Time = 8*10^3bit / 10^9 bit/sec = 8 / 10^6 sec = 8000 ms = 8usec (micro second)
+Utilization : 전송에 쓰인 시간 / (총 걸린 시간)
+→ Transmission Time / (RTT + Transmission Time) = 0.008 ms / (30.008) ms = 0.00027&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;Pipelined protocols&lt;/h3&gt;
+
+&lt;p&gt;문제 : 하나 보내고 time out을 기다리던가 하는건 솔직히 말이 안됨. 여러 개를 보낼 수 있는 방법을 생각.&lt;/p&gt;
+
+&lt;p&gt;해결 : &lt;strong&gt;Pipelining&lt;/strong&gt;을 사용해서 여러개를 한꺼번에 보내자
+→ 여러개를 보내기 위해서 &lt;strong&gt;Sequence number를 확장&lt;/strong&gt;해야함. 각 패킷마다 unique한 number가 필요
+→ &lt;strong&gt;Buffer&lt;/strong&gt;를 확장해야함. 이전에는 한개만 가지고 했지만 이제는 pipeline 할때 필요한 사이즈 만큼 필요&lt;/p&gt;
+
+&lt;p&gt;효과 : 3개씩 보낸다고 하면 Utilization이 3배 확장!&lt;/p&gt;
+
+&lt;p&gt;이제 밑에서 기술하는 protocol들에서는 &lt;strong&gt;Sliding window&lt;/strong&gt;라는 개념이 들어간다. 위에서 얘기한 buffer와 
+같은 얘기로 0~10까지 보내야 할 패킷들이 있을 때 buffer size가 3이라면 (0, 2) ~ (8, 10) 이렇게 움직이며 
+처리를 한다.&lt;/p&gt;
+
+&lt;p&gt;Pipelined protocols를 볼때는 세가지 event point를 중점적으로 봐야한다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Send invocation : send함수가 호출 될 때 sequence number과 sliding window status&lt;/li&gt;
+&lt;li&gt;Receipt of an ACK : ACK를 받을 때 어떻게 처리 하는지&lt;/li&gt;
+&lt;li&gt;Timeout Event :  Timeout을 받을 때 어떻게 처리 하는지&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3&gt;GBN (Go-back-N)&lt;/h3&gt;
+
+&lt;p&gt;처음 Send가 호출 됐을 때 window가 꽉 찼다면 거-절. 아니면 윈도우에 넣고 패킷 전송.&lt;/p&gt;
+
+&lt;p&gt;N개의 패킷을 받을 때 마지막에 잘 수신된 패킷의 sequence number ack를 보냄. (&lt;strong&gt;cumulative ack)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;→ 0~5 까지의 패킷을 보낸다고 했을때 0, 1, 2 ack를 보낼 수도 있지만 2 ack만 보내게 되면 2 이전의 것까지
+다 잘 도착한 상황이라고 가정&lt;/p&gt;
+
+&lt;p&gt;Timeout의 기준은 제일 오래 ACK를 못받은 패킷(윈도우 맨 처음) 발생시 timeout된것 부터 전부 다시 전송
+→ timer은 가장 마지막 패킷 기준으로 한 개. 어차피 윈도우 전체를 다시 재전송 하는데..&lt;/p&gt;
+
+&lt;p&gt;Error가 발생하거나 순서대로 오지 않을 경우 이전 sequence number를 포함한 ACK를 보냄.
+&lt;strong&gt;out-of-order discard&lt;/strong&gt; : 2번까지 ACK를 보낸 후 3번을 못받고 4번이 먼저옴. 그러면 discard하고 2번 ACK를 보냄&lt;/p&gt;
+
+&lt;p&gt;duplicated ack를 받게 될 경우 무시. sender은 해당 ACK가 오지 않을 경우 timeout이 날 때 까지 기다렸다가 retransmission.&lt;/p&gt;
+
+&lt;p&gt;→ GBN은 rdt프로토콜들의 명세가 다 지켜지고 스펙이 좋기 때문에 후에 TCP에서 GBN Style을 많이 사용.
+그러나 segment가 순서대로 오지 않아도 buffer상에는 순서대로 들어감. + SR(Selective Repeat)&lt;/p&gt;
+
+&lt;h3&gt;SR (Selective Repeat)&lt;/h3&gt;
+
+&lt;p&gt;send가 호출 됐을 때 남아있는 Sequence number가 있는지 확인한다. 남은 sequence number가 현재 sender의 윈도우에 범위 안에 있다면 바로 보내고 아니라면 buffering하거나 다시 상위 레이어로 올린다.&lt;/p&gt;
+
+&lt;p&gt;N개의 패킷을 받을 때 각각 패킷에 대해 모두 ACK를 보낸다.. (&lt;strong&gt;individual ACK&lt;/strong&gt;)&lt;/p&gt;
+
+&lt;p&gt;각각 ACK가 안와서 timeout된 패킷에 대해 다시 재전송.  → unACKed packet 갯수만큼 타이머 필요&lt;/p&gt;
+
+&lt;p&gt;문제점 : sender와 receiver간의 &lt;strong&gt;sliding window synchronization&lt;/strong&gt; &lt;/p&gt;
+
+&lt;p&gt;윈도우 사이즈가 3, Sequence Number범위가 0~3일 때 아래와 같이 ACK가 drop될 경우 synchronization이 깨지게됨. 슬라이딩 윈도우가 어떻게 움직이는지는 보이지 않고 Sequence number가 
+어떻게 오는지만 알 수 있기 때문에 이런 문제가 생김.
+이게 지금 윈도우의 못 받은 0인지 아님 이전 윈도우의 0인지를 구분할 수 없는 문제.&lt;/p&gt;
+
+&lt;p&gt;최소 Sliding window size *2 ≤ Sequence number size가 돼야 이 문제를 해결 할 수 있다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1nhUksi0iIeoCCsqKJQ0X0iou5A0PpgDA&quot; data-lightbox=&quot;uc?export=view&amp;id=1nhUksi0iIeoCCsqKJQ0X0iou5A0PpgDA&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1nhUksi0iIeoCCsqKJQ0X0iou5A0PpgDA&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;TCP(Transmission Control Protocol)&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Connection-oriented&lt;/strong&gt; : 맨 처음 서로 연결 할 때 &lt;strong&gt;establish&lt;/strong&gt;과정이 필요함. → &lt;strong&gt;handshaking&lt;/strong&gt;
+establish 함으로써 서로 state variables들을 초기화 한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Full duplex data&lt;/strong&gt; : 양방향 통신으로 서로 데이터 통신을 할 수 있다. &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Point to Point&lt;/strong&gt; : 양 끝 단말기기간 둘이서만 통신을 한다. → multicasting은  TCP로 불가능&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Flow controlled&lt;/strong&gt; : sender가 receiver의 buffer를 과부화 시키지 않음&lt;/p&gt;
+
+&lt;h3&gt;TCP segment structure&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1GsFmE40p5OSWv5m3wmeatkPCv7Duwlml&quot; data-lightbox=&quot;uc?export=view&amp;id=1GsFmE40p5OSWv5m3wmeatkPCv7Duwlml&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1GsFmE40p5OSWv5m3wmeatkPCv7Duwlml&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Src, Dst port each 16bits&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Sequence Number 32bits : 이 세그먼트의 첫번째 바이트의 순서
+→ SYN은 ISN(initial sequence number)를 뜻하고 맨 첨 데이터의 바이트는 ISN+1&lt;/p&gt;
+
+&lt;p&gt;If SYN is present the sequence number is the
+    initial sequence number (ISN) and the first data octet is ISN+1.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Acknowledgement Number 32bits : 이 다음 받을 세그먼트의 예상 sequence number&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Data offset 4bits : 4byte 단위로 TCP 헤더의 길이 및 데이터 시작 offset을 알려준다.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Reserved 6bits : 예약석 0으로 셋팅&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Control Bits 6bits&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;URG : Urgent Pointer 필드가 사용될 때.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;ACK : Acknowledgment 필드가 사용될 때.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;RST, SYN, FIN : connection establishment&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;PSH : Push Function 상위 레이어로 데이터를 바로 보냄 &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;URG : 긴급한 데이터가 있다고 표현할 때? Urgent Pointer랑 같이 쓰임 (PSH랑 안중요)&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Window 16bits : Flow control에 쓰이는 size. 
+그냥 간단하게 receiver가 받고싶어하는 세그먼트 크기라고 생각&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Checksum 16bits : 데이터 체크섬. udp랑 방식이 같다.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;밑에는 안중요해서 패스&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;TCP RTT&lt;/h3&gt;
+
+&lt;p&gt;RTT &amp;lt; TimeOut 이여야 패킷이 정상적으로 도달 할 수 있는데 RTT가 워낙 많은 경우의 수가 있다.
+그러면 대략 측정을 어떻게 할 것 인가? &lt;/p&gt;
+
+&lt;p&gt;→ &lt;strong&gt;Sample RTT :&lt;/strong&gt; 데이터를 보낸 이후 ACK가 돌아오기 까지를 걸린시간을 체크. 
+근데 이 값은 network congestion에 따라 값이 많이 바뀐다. 그래서 이 값을 그냥 쓰진 않는다.
+&lt;strong&gt;Estimate RTT&lt;/strong&gt; : (1 - a)&lt;em&gt;EstimateRTT + a * SampleRTT
+각각 SampleRTT를 지수이동평균 (Exponential Moving Average)를 구해준다.
+지수 이동 평균은 최근 값에 높은 가중치를 주고 이전 값 또한 영향을 미칠 수 있게 한다.
+위 식에서 가중치 a 는 일반적으로 0.125 라는 값을 많이 쓴다.
+근데 이 값은 평균이지  RTT보다 크다는 보장이 없다. 실제 그래프를 보게 되면 평균 정도라
+정반정도가 timeout이 날 수도 있다.
+**DevRTT&lt;/em&gt;* : (1-b)&lt;em&gt;DevRTT + B&lt;/em&gt;|SampleRTT - EstimatedRTT| 
+이 값은 safety margin을 주기 위한 값으로 평균과 현재 값의 차를 계속해서 평균을 내 놓는다.
+여기서 가중치 b는 일반적으로 0.25 값을 사용한다.
+&lt;strong&gt;TimeoutInterval&lt;/strong&gt; = EstimatedRTT + 4*DevRTT ( 최종 값 )&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;TCP RDT&lt;/h3&gt;
+
+&lt;p&gt;TCP 또한 rdt를 하기 위해 기능들을 추가&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Pipelined segments&lt;/li&gt;
+&lt;li&gt;Cumulative acks&lt;/li&gt;
+&lt;li&gt;single retransmission timer&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Retransmission Condition : timeout, duplicate ack
+Timeout : retransmit unacked 패킷중 sequence number가 제일 작은 것 부터&lt;/p&gt;
+
+&lt;p&gt;Sender가 패킷을 보낼 때 Seq에 현재 Sequence Number 이랑 data size를 보내준다.
+Receiver은 잘 받았을 경우 ACK에 다음 받을껄로 예상대는 Sequence Number를 보낸다.
+위에 써놨다 싶이 Cumulative acks가 적용된다.&lt;/p&gt;
+
+&lt;p&gt;Receiver은 out-of-order packet을 받았을 때 원래 받아야 할 Sequence number를 포함한 ack를 보내준다.&lt;/p&gt;
+
+&lt;p&gt;이 과정 중 Timeout delay가 너무 길 경우 &lt;strong&gt;TCP fast retransmit&lt;/strong&gt;을 이용한다.
+lost segment에 대한 ACK를 3 번 보낼 경우 sender는 timeout 때와 같은 행동을 한다.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;Flow Control&lt;/h3&gt;
+
+&lt;p&gt;|OS| TCP Code → TCP socket recv buffer  → |USER| Application Process &lt;/p&gt;
+
+&lt;p&gt;이런 방식으로 구조가 돼 있을 때 unordered segment를 처리 하지 않는다는 가정하에 ordered segment를 받았을 경우 recv buffer에 들어가게 된다. 그러면 Application Process에서 Recv를 통해 버퍼에 있는 데이터들을 가져간다.  그치만,,, Application Process가 처리할 양이 많다면 recv buffer가 꽉 차게될 수도 있다. 이렇게 되면 패킷이 drop되고 다시 전송 받아야한다. &lt;/p&gt;
+
+&lt;p&gt;이러한 이유에서 &lt;strong&gt;flow control&lt;/strong&gt;이 만들어졌다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1bkW1_oNCFEgzZIcKUmevWFLy2wdQLExC&quot; data-lightbox=&quot;uc?export=view&amp;id=1bkW1_oNCFEgzZIcKUmevWFLy2wdQLExC&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1bkW1_oNCFEgzZIcKUmevWFLy2wdQLExC&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;위 그림이 Receiver의 버퍼이다. 
+RecvBuffer : 전체 버퍼의 크기 일반적으로 4096bytes
+RecvWindow (rwnd) : buffer에 남은 공간으로 이 공간을 Window Size로 정해준다.&lt;/p&gt;
+
+&lt;p&gt;Receiver : 자신이 남은 RcvWindow를 rwnd에 담아서 보내준다&lt;/p&gt;
+
+&lt;p&gt;Sender : Rwnd 만큼 보내준다 했을 때 &lt;strong&gt;LastByteSent, LastByteAcked&lt;/strong&gt; 이 두가지 변수를 고려해야 한다.  &lt;code&gt;LastByteAcked - LaskyteSent ≤ Rwnd&lt;/code&gt; 여야 하기 때문에 이 값을 세션이 유지되는 동안 유지해야한다. &lt;/p&gt;
+
+&lt;p&gt;이걸 지키면 overflow나지 않는 걸 보장 할 수 있음&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;Three-way Handshaking (Connection)&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1LFefF1l7ANSPkA9tbl9sgOTXcip_90Yb&quot; data-lightbox=&quot;uc?export=view&amp;id=1LFefF1l7ANSPkA9tbl9sgOTXcip_90Yb&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1LFefF1l7ANSPkA9tbl9sgOTXcip_90Yb&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;여러 호스트를 받을 수 있는 UDP랑은 달라달라달라~ 
+TCP는 sender, receiver당 한개의 Connection이 만들어진다. 그래서 이 Connection을 맺기 위한 과정을 &lt;strong&gt;handshake&lt;/strong&gt;이라고 한다. &lt;/p&gt;
+
+&lt;p&gt;이 과정은 세 번에 걸쳐서 진행된다고 해서 &lt;strong&gt;Three-way handshaking&lt;/strong&gt;이라고 불린다.&lt;/p&gt;
+
+&lt;p&gt;TCP A &amp;lt;------&amp;gt; TCP B&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;———SEQ (ISN(initial Sequence Number) A) CTL&amp;lt;SYN&amp;gt; → 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;←———SEQ(ISN, B), ACK(ISN A + 1), CTL&amp;lt;SYN, ACK&amp;gt; -
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt; ———SEQ(ISN, A+1), ACK(ISN B + 1), CTL&amp;lt;ACK&amp;gt;—&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;다음과 같은 과정으로 진행된다. 
+이렇게 3번에 걸쳐서 하는 이유는 서로의 &lt;strong&gt;ISN(Initial Sequence Number)&lt;/strong&gt;를 동기화 시키기 위해서이다. 또한 2-way로 할 경우 서로의 state를 못 보게 된다. connection initiation 과정에서 네트워크 상황 때문에 오래된 Duplicate connection request는 &lt;strong&gt;half-open&lt;/strong&gt; 상황이 일어나게 한다. 즉 한 쪽만 open되고 나머지 한쪽은 이미 timeout되서 커넥션이 일어나지 않을 수도 있는 상황을 뜻 한다.&lt;/p&gt;
+
+&lt;p&gt;하지만 three-way hand shaking 은 SYN-ACK, ACK 이 과정에서 상대방에 state를 알 수 있어 &lt;strong&gt;Simultaneous Connection Synchronization&lt;/strong&gt;과 &lt;strong&gt;duplicated initialization&lt;/strong&gt; 등에 대해 대응할 수 있다.  잘못된 커넥션은 RST condition을 통해 끊어준다.
+자세한 내용은 &lt;a href=&quot;https://tools.ietf.org/html/rfc793#page-31&quot;&gt;https://tools.ietf.org/html/rfc793#page-31&lt;/a&gt; 에서 볼 수 있다. &lt;/p&gt;
+
+&lt;p&gt;Session Closing 과정은 &lt;strong&gt;Four-way handshaking&lt;/strong&gt;이라 불린다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1XzYkdo9dp2bibD60L4d8d78s0xeIZfOL&quot; data-lightbox=&quot;uc?export=view&amp;id=1XzYkdo9dp2bibD60L4d8d78s0xeIZfOL&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1XzYkdo9dp2bibD60L4d8d78s0xeIZfOL&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;이 과정은 양쪽 모두 닫는걸 목적으로 하기 때문에 FIN, ACK 를 양쪽에서 한 번 씩 보내준 후 각 요청에 대해 ACK를 한 번 씩 보내준다.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;Congestion Control&lt;/h2&gt;
+
+&lt;p&gt;Flow Control이 Host의 buffer가 overflow될 수 있는 상황이였다면 &lt;strong&gt;Congestion&lt;/strong&gt;은 Network 상황이 안좋다는 뜻이다. 여기서 Network의 상황이 안좋다는 것은 Router의 link buffer들이 꽉 찰 수 있다는 것을 뜻 한다.&lt;/p&gt;
+
+&lt;p&gt;cwnd( Congestion Window ) : sender-slide limit, ack를 받기 전까지 얼마나 많은 양의 데이터를 보낼 수 있는지. 이 값은 알고리즘에 의해 정해지는 값이다.
+rwnd (Receiver&amp;#39;s advertised window) : receiver-side limit, 얼마나 많은 데이터를 감당 할 수 있는지
+SMSS(Sender Maximum Segment Size) : Sender가 전송할 수 있는 가장 큰 segment size. network의 MTU(Maximum Transmission Unit)에 따라 결정된다.
+RMSS(Receiver Maximum Segment Size) : Receiver가 받길 원하는 가장 큰 segment size.  Connection이 맺어질 때 이 정보를 MSS option에 같이 보낸다.&lt;/p&gt;
+
+&lt;p&gt;ssthresh(Slow Start Threshold) : slow start를 할지 Congestion avoidance를 사용할지를 결정하는 변수.&lt;/p&gt;
+
+&lt;h3&gt;Slow Start &amp;amp; Congestion Avoidance&lt;/h3&gt;
+
+&lt;p&gt;Slow Start와 Congestion Avoidance는 기본적으로  network에 capacity를 추측하는 알고리즘이다.
+이 알고리즘에 따라서 변화하는 두 변수 &lt;strong&gt;cwnd, ssthresh&lt;/strong&gt;가 어떤 이벤트에 따라서 값이 변화하는지를 알아보자.&lt;/p&gt;
+
+&lt;p&gt;먼저 현재 네트워크 상황을 모르기 때문에 데이터를 천천히 보내는 것 부터 시작한다. (Slow start) 그렇다면 처음에 아무것도 안 보내줄 수는 없기 때문에 cwnd에 초기값을 2*SMSS보다 작거나 같게 설정 해준다. ssthresh는 값이 조금 커야한다. &lt;code&gt;ssthresh = max (FlightSize / 2, 2*SMSS)&lt;/code&gt; 이정도로 설정한다고 한다.&lt;/p&gt;
+
+&lt;p&gt;이렇게 초기값이 잡히고 나면 ACK가 돌아올 때 마다 &lt;code&gt;cwnd = min(rwnd, 2*cwnd)&lt;/code&gt; 로 설정을 해준다. 이 과정은 &lt;code&gt;cwnd &amp;lt; ssthresh&lt;/code&gt;일 때 까지 계속 증가한다. 이 과정을 &lt;strong&gt;Slow Start&lt;/strong&gt; 라고 부른다.&lt;/p&gt;
+
+&lt;p&gt;cwnd &amp;gt; ssthresh인 상황이 오게 되면 &lt;strong&gt;Congestion Avoidance&lt;/strong&gt;상황으로 가게 된다. 네트워크가 congestion되지 않도록 천천히 보내는 경우이다. 이 때 부터는 ACK가 올때 마다
+ &lt;code&gt;cwnd = cwnd + SMSS*(SMSS/cwnd)&lt;/code&gt; 즉 ACK가 윈도우 갯수 만큼 올 때 1씩 증가한다. 이렇게 쬐끔씩 올라가는 과정을 &lt;strong&gt;Additive Increase&lt;/strong&gt; 라고 부른다. 혼잡해지지 않게 조심 또 조심해주는 것 이다.&lt;/p&gt;
+
+&lt;p&gt;그리고 Congestion Avoidance 에서 timeout이 일어나게 되면 congestion이 발생했다는걸 감지하고 &lt;code&gt;ssthresh = cwnd/2&lt;/code&gt; , &lt;code&gt;cwnd = 1*SMSS&lt;/code&gt; 다음과 같이 설정하고 slow start로 다시 돌아가게 된다. 즉 cwnd를 최솟값부터 해서 congestion 상태를 최소화하는것이다. 이렇게 window를 확 줄이는것을 &lt;strong&gt;Multiplicaive Decrease&lt;/strong&gt; 라고 부른다. 그리고 이렇게 window를 제어하는 알고리즘을 &lt;strong&gt;Addictive Incerease &amp;amp; Mulitplicative Decrease&lt;/strong&gt; 라고 부른다. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1qtmanmW7HYGx047ZaNmxOwEF8mbz5JpM&quot; data-lightbox=&quot;uc?export=view&amp;id=1qtmanmW7HYGx047ZaNmxOwEF8mbz5JpM&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1qtmanmW7HYGx047ZaNmxOwEF8mbz5JpM&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;Fast Retransmit &amp;amp; Fast Recovery&lt;/h3&gt;
+
+&lt;p&gt;이제 약간 입이 지겨울 정도로 얘기해서 여기서는 대략 설명한다. ACK가 중복돼서 3번 오게 되면 해당 segment만 loss가 일어났다고 판단을 해서 timeout을 기다리지 않고 바로 retransmit을 해준다. 이 과정을 &lt;strong&gt;Fast Retransmit&lt;/strong&gt;이라고 한다. 왜 3 번 오는것만 빠르게 처리 해주냐면 해당 segment만 drop돼서 reordering 때문이라 전체 다 보내는 것 보다는 해당 segment를 빠르게 처리해 주는 것이 좋다.&lt;/p&gt;
+
+&lt;p&gt;retransmit을 한 후에는 congestion이 약간 발생했다고 가정해서 일단 &lt;code&gt;ssthresh = cwnd / 2&lt;/code&gt;, &lt;code&gt;cwnd = ssthresh + 3&lt;/code&gt; 다음과 같이 값을 설정한다. 그리고 duplicate ACK들이 올때마다 &lt;code&gt;cwnd = cwnd + SMSS&lt;/code&gt;를 해준다. 이과정을 &lt;strong&gt;Fast Recovery&lt;/strong&gt;라고 부른다. Congestion을 피해야 하긴 하지만 다시 Slow Start까지는 아닌 정도라 이렇게 한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1zSo08vDmOnrYlRnLkBOV8NqT6yeA4E6R&quot; data-lightbox=&quot;uc?export=view&amp;id=1zSo08vDmOnrYlRnLkBOV8NqT6yeA4E6R&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1zSo08vDmOnrYlRnLkBOV8NqT6yeA4E6R&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://tools.ietf.org/html/rfc793#ref-3&quot;&gt;RFC 793 - Transmission Control Protocol&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www2.ic.uff.br/%7Emichael/kr1999/3-transport/3_05-segment.html&quot;&gt;Transmission Control Protocol&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 23 May 2019 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2019/05/transport-layer-note.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2019/05/transport-layer-note.html</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>

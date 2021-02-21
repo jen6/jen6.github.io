@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="http://static.airbridge.io/images/og_tags/404f13ef-9487-4e0b-980e-9af07205c3c9.png">
+  <title>First week of GSOC, Piece Table Implement - make all</title>
+    <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WLM8LQ2');</script>
+  <!-- End Google Tag Manager -->
+
+    <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2679022832321753');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2679022832321753&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
+  <meta name="description" content="{: width=&quot;50%&quot; height=&quot;50%&quot;}">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2019/06/first-week-of-gsoc-piece-table-implement.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/lightbox.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/lightbox.js"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <div class="c-article__author_date">
+      <p class="c-article__time"><time datetime="2019-06-11T00:00:00+09:00" itemprop="datePublished">Jun 11, 2019</time></p>
+      <p class="c-article__name">By Geon Son</p>
+    </div>
+    <h1 class="c-article__title">First week of GSOC, Piece Table Implement</h1>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">GSOC</li>
+    
+    <li class="c-tag">KDE</li>
+    
+    <li class="c-tag">markdown</li>
+    
+    <li class="c-tag">piece table</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <p><a href="http://drive.google.com/uc?export=view&id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7" data-lightbox="uc?export=view&id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7" data-title=""><img src="http://drive.google.com/uc?export=view&id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7" alt="" title=""></a>{: width=&quot;50%&quot; height=&quot;50%&quot;}</p>
+
+<p>Hi! 
+Last week was start of the GSOC coding period.  So I started my project.
+Also I opened my code on the KDE git.
+ <a href="https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/">https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/</a></p>
+
+<p>If you are interested in my project feel free to look and give me some advices.</p>
+
+<h2>Parser using Spirit::x3</h2>
+
+<p>First, I started to make the markdown parser using the Boost Spirit X3.</p>
+
+<p>Spirit makes easy to express grammar using the PEG.
+But it&#39;s templet based library so it was hard to find out which part is wrong.
+Also documentation of spirit was limited. </p>
+
+<p>So I had a lots of trial and error to get compilable source code.</p>
+
+<p><a href="http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf">http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf</a></p>
+
+<p><a href="https://ciere.com/cppnow15/using_x3.pdf">https://ciere.com/cppnow15/using_x3.pdf</a></p>
+
+<p>this two slides was really helpful for me.</p>
+
+<h2>Markdown AST Structure</h2>
+
+<p>if we type markdown document like this</p>
+<div class="highlight"><pre class="highlight plaintext"><code># hello
+&gt; &gt; 1. - **sadf** - 
+&gt; &gt; 
+&gt; &gt; sadf
+&gt; 
+&gt; asdf
+</code></pre></div>
+<p>we will get result like this. </p>
+
+<p><a href="http://drive.google.com/uc?export=view&id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj" data-lightbox="uc?export=view&id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj" data-title=""><img src="http://drive.google.com/uc?export=view&id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj" alt="" title=""></a></p>
+
+<p>Markdown document&#39;s can be splited in each <strong>lines</strong>. line is the smallest unit of the markdown document. Also line can be expressed <strong>attributes,</strong> <strong>string, emphasizes</strong>.</p>
+
+<ul>
+<li>attributes : Line&#39;s attribute that change the block style. There are two types of attribute. </li>
+<li>Single Attribute : # header. Style applied only once.</li>
+<li>Multiple Attributes : &gt; BlockQuote, Lists. Sytle applied recursively.</li>
+<li>String : Content of the document. It contains only string.</li>
+<li>Emphasize : Bold, Cancleline, Underline... It contains index of string to be emphasized</li>
+</ul>
+
+<p>All line can be parsed in parallel on multiple threads. Because each line is independent from other lines. After parsing seperatly it can be reassembled after parsing phase.</p>
+
+<p>So we can express this grammar with the Spirit grammar like this
+<code>cpp
+    auto const Line_def= 
+        Header[pushFunc] &gt;&gt; String[setContent]
+        | (MultipleAttribute)* &gt;&gt; EmphasizeString[getEmphStr];
+</code></p>
+
+<h2>Piece Table</h2>
+
+<p>I had a hard time to implementing the Emphasize String.</p>
+
+<p>All String Emphasize token should be paired. If tokens not paired it should be inserted in original points
+```
+    <strong>this is paired example</strong></p>
+<div class="highlight"><pre class="highlight plaintext"><code>**This token -&gt; -- is not paired**
+</code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>Like this exampled `--` should be inserted in middle of the string as the normal character.
+
+We can simply using insert method but it has performance issue. 
+
+If there is a original string length N and another string length M to be inserted in position P.
+
+First split the original string at position P and shift the splited string as mush as M.
+
+Then put the string length M in position P. It takes almost O(N). 
+
+If there are alot of non-paired tokens, It will consume more time.
+
+---
+So I found the VSCode team's article about reimplementing text buffer using the **Piece Table**.
+
+[https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation](https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation)
+
+
+
+The main idea of the Piece Table is seperate the original buffer and added buffer. 
+
+And split the strings in a small pieces containing position to insert and the string length.  
+
+Make a table about how to make new string using each pieces.
+
+So I applied this structure in appending non-paired emphasize tokens.
+```cpp
+    const auto EmphasizeString_def = 
+      +(omit[Emphasize[setEmp]] | Content[setEmpText]); 
+</code></pre></div>
+<p>In my grammar definition, it do not check the pairness of Emphasize token.</p>
+
+<p>Basically Emphasize token are temporary stored in Emphasize Stack to check pairness.</p>
+
+<p>First If there is token can be paired, add token in Emphasize vector and clean the non-paired tokens. </p>
+
+<p>Or there are not tokens can be paired just push the token in the Emphasize Stack and push token&#39;s string value in the buffer vector.</p>
+
+<hr>
+
+<p>Strings are also added in the buffer vector and inserted in the <strong>Piece Map.</strong></p>
+
+<p>Piece Map works same as Piece table but effective on find the piece on some position.</p>
+
+<p>Piece Map is multimap that use Piece&#39;s index and Piece as key value. </p>
+
+<p>So we can iterate whole pieces and make new string with non-paired tokens.
+```cpp
+    namespace AST {
+      struct Piece {
+        int start = 0, len = 0;
+        int bufIdx = 0;
+      };</p>
+<div class="highlight"><pre class="highlight plaintext"><code>  struct Emphasize {
+    int start = 0, end = 0, bufIdx = 0;
+    EmphasizeType empType = EmphasizeType::DEFAULT;
+  };
+
+  using PieceMap = std::multimap&lt;int, Piece&gt;;
+  using PieceMapIter = PieceMap::iterator;
+
+  class EmphasizeString {
+    private:
+      int currPos = 0, addedTokenLen = 0;
+      std::vector&lt;std::string&gt; buffer;
+      std::vector&lt;Emphasize&gt;  empSt, emps;
+      PieceMap pieceMap;
+
+    private:
+      int clearNonComplete(std::vector&lt;Emphasize&gt;::iterator );
+    public:
+      EmphasizeString();
+      void addEmphToken(EmphasizeType empt);
+      void appendText(const std::string&amp; text);
+      std::string getString();
+      const std::vector&lt;Emphasize&gt; &amp;getEmphasizes() const;
+  };
+};
+</code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>You can check my whole code on KDE git.
+
+---
+
+## After first week
+
+I think it was good starting for me.  But this week and next week is my final exam in the school.
+
+So me and my mentors Eike and SungJae planned to refactor the code and make view of markdown.
+
+They also mentioned adding the licensing policy and following the KDE's codding convention.
+
+Thank you for reading my article and I'll write next article after my final finish.
+</code></pre></div>
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> May 27, 2019</small>
+      <br>
+      <a class="no-hov" href="/2019/05/hi-kde-hi-gsoc2019.html">&laquo; HI KDE, HI GSOC 2019</a>
+    </div>
+    
+    
+    <div class="wrapper" id="right">
+      <small>Jul 30, 2019 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2019/07/aws-aws-s3-athena-quicksihtiaws.html">AWS에서 데이터처리 맛보기 AWS S3 , Athena , Quicksight &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2021</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+    <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLM8LQ2"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+</html>

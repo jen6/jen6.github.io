@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="http://static.airbridge.io/images/og_tags/404f13ef-9487-4e0b-980e-9af07205c3c9.png">
+  <title>아직도 손으로 OTP를 입력하세요? <br>⚒︎Hammer spoon으로 2FA OTP 인증 자동화 하기 - make all</title>
+    <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WLM8LQ2');</script>
+  <!-- End Google Tag Manager -->
+
+    <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2679022832321753');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2679022832321753&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
+  <meta name="description" content="">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2020/05/otp-automation.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/lightbox.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/lightbox.js"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <div class="c-article__author_date">
+      <p class="c-article__time"><time datetime="2020-05-16T00:00:00+09:00" itemprop="datePublished">May 16, 2020</time></p>
+      <p class="c-article__name">By Geon Son</p>
+    </div>
+    <h1 class="c-article__title">아직도 손으로 OTP를 입력하세요? <br>⚒︎Hammer spoon으로 2FA OTP 인증 자동화 하기</h1>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">자동화</li>
+    
+    <li class="c-tag">hammer spoon</li>
+    
+    <li class="c-tag">apple script</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <p><a href="https://drive.google.com/uc?export=view&id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB" data-lightbox="uc?export=view&id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB" data-title="https://drive.google.com/uc?export=view&id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB"><img src="https://drive.google.com/uc?export=view&id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB" alt="https://drive.google.com/uc?export=view&id=1eE2RxRvJwa8radQT7B3VbNnmGfcc8suB" title=""></a></p>
+
+<p>회사 vpn이나 aws console에 접근 하려면 TOTP(Time-based One-time password)를 이용한 2FA를 반드시 사용해야한다. 출근하자마자 매일 쓰게되는 이 두 가지를 로그인 하는 일은 어~~ㅁ청 귀찮다... </p>
+
+<p>대부분의 서비스는 자동 로그인이 가능하지만 OTP 코드만은 2FA authenticator인 <a href="https://authy.com/">authy</a> 를 켜고 복사하고 붙여 넣어야 한다. 문제는 이걸 켜놓게 되면 Command-Tab으로 작업 전환시 크롬대신 authy창이 포커스가 된다. Vimnium을 써서 가능한 키보드만 이용해서 작업 하려는 내 작업 방식에 큰 방해가 되는 요소 였다.</p>
+
+<p>이 귀찮은 일을 자동화 하게 된 계기는 최근 즐겨보는 블로그 중 한 개인 John Grib님의 블로그에 맥에서 이런저런 자동화를 시킬 수 있는 <a href="https://johngrib.github.io/wiki/hammerspoon/">hammerspoon툴 시리즈</a> 글을 보고 내 매일 아침을 30초 정도 단축할 수 있겠다 싶어서 시작했다.</p>
+
+<h2>이 글을 10분 동안 따라하면 할 수 있는 것</h2>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1Z5I2xkIoJeex3klP9eTIu9pnYZnhomyc" data-lightbox="uc?export=view&id=1Z5I2xkIoJeex3klP9eTIu9pnYZnhomyc" data-title="aws console"><img src="https://drive.google.com/uc?export=view&id=1Z5I2xkIoJeex3klP9eTIu9pnYZnhomyc" alt="aws console" title=""></a></p>
+
+<p>위 두 영상처럼 aws console, tunnelblick등 OTP를 입력해야하는 곳을 자동화 할 수 있다.</p>
+
+<h2>준비물</h2>
+
+<p>맥, 그리고 Hammer spoon</p>
+
+<h2>Hammer spoon과 AppleScript</h2>
+
+<p>먼저 <a href="https://www.hammerspoon.org/">Hammer spoon</a>은 운영체제 단에서 일어나는 wifi, process, file-system등의 event들을 받고 lua를 통해 매크로를 실행시킬 수 있는 툴이다. 설명을 빌려오자면</p>
+
+<ul>
+<li><code>Esc</code> 키를 누를 때마다 input source를 영문으로 전환하게 한다. Vim 사용자에게 너무 좋은 기능.</li>
+<li>현재 실행 중인 애플리케이션의 윈도우를 특정 위치로 움직이게 하거나 사이즈를 조절한다.</li>
+<li>특정 애플리케이션(파인더라던가)이 실행될 때마다 무언가 다른 작업을 수행하게 한다.</li>
+<li>맥북이 회사 와이파이에 연결되면(출근하면) 맥북의 사운드 볼륨을 0으로 조정한다.</li>
+<li>애플스크립트를 실행한다.</li>
+<li>iMessage를 전송한다.</li>
+<li>터미널 명령어를 실행한다.</li>
+</ul>
+
+<blockquote>
+<p>출저 : <a href="https://johngrib.github.io/wiki/hammerspoon-tutorial-00/">https://johngrib.github.io/wiki/hammerspoon-tutorial-00/</a></p>
+</blockquote>
+
+<p>이외에도 특정 기능을 url에 바인딩 시켜 해당 url이 호출 되면 특정 매크로를 실행 시키는 등 편리한 기능들이 많다.</p>
+
+<p><strong>AppleScript</strong>는 Mac 환경에서 UI 요소들을 통해 자동화를 할 수 있는 도구이다. Apple에서 직접 제공하는거라 상당히 강력한 기능들이 많이 있고 hammer spoon에서는 화면에서 text를 가져온다거나 하는 일을 할 수 없는데 AppleScript에서는 가능하다.</p>
+
+<ul>
+<li>iTunes에서 가사를 추가 한다</li>
+<li>이미지를 선택했을 때 포맷을 바꿔주거나 리사이징을 해준다.</li>
+<li>iMessage로 주소록에 있는 모든 유저에게 메세지 보낸다.</li>
+<li>pdf를 열었을 때 구글 번역을 통해 번역된 상태로 보게 한다.</li>
+<li>크롬에서 특정 페이지 열렸을 때 매크로를 실행시킨다.</li>
+</ul>
+
+<blockquote>
+<p>출저 : <a href="https://www.macscripter.net/">https://www.macscripter.net/</a></p>
+</blockquote>
+
+<h2>Step 1. Authy에서 TOTP URI 뽑아내기</h2>
+
+<p>Authy같은 authenticators에 새로운 인증을 등록 하려면 대부분 QR코드 혹은 secret key를 입력해줘야한다. 자동화를 하려면 콘솔 authenticator에 이 키를 등록해줘야하는데 안가지고 있는 경우가 대부분이라 secret key를 포함하고 있는 TOTP URI를 Authy에서 뽑아줘야한다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO" data-lightbox="uc?export=view&id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO" data-title="https://drive.google.com/uc?export=view&id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO"><img src="https://drive.google.com/uc?export=view&id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO" alt="https://drive.google.com/uc?export=view&id=1cvYDcdW0maqUOFQZyagf3HbXI-DF2yJO" title=""></a></p>
+
+<blockquote>
+<p>이미지 출저 : <a href="https://www.allthingsauth.com/2018/04/20/a-medium-dive-on-the-totp-spec/">https://www.allthingsauth.com/2018/04/20/a-medium-dive-on-the-totp-spec/</a></p>
+</blockquote>
+
+<p>위 그림에서 보이는 것처럼 URI format이 있고 query parameter로 들어가는 secret부분이 필요하다. 이 글에서는 내가 쓰는 authy기준으로 URI를 뽑는 방법을 설명한다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e" data-lightbox="uc?export=view&id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e" data-title="https://drive.google.com/uc?export=view&id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e"><img src="https://drive.google.com/uc?export=view&id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e" alt="https://drive.google.com/uc?export=view&id=1Ovk7cqxwgIFUkez4xucV9k2-2y4cUj7e" title=""></a></p>
+
+<p>먼저 Authy chrome app이 설치 돼 있다면 <code>chrome://extensions/?id=gaedmjdfmmahhbjefcbgaolhhanlaolb</code> 로 들어가서 Authy의 extension 정보 페이지로 들어가준다. 그 다음 Authy를 실행시켜 주면 &#39;뷰 검사&#39; 항목에 <code>main.html</code> 이라는 항목이 생긴다. 이걸 눌러줘서 Authy의 개발자 콘솔로 들어가자.</p>
+
+<p><noscript><pre>400: Invalid request</pre></noscript><script src="https://gist.github.com/a13ef83a5af57e45c4820c3da5ba0e31.js?file=authy_export.js"> </script></p>
+
+<p>위 스크립트를 개발자 콘솔에서 입력을 하게 되면 아래와 같이 authy에 등록 돼 있는 TOTP URI를 얻을 수 있다. 이 URI에서 아까 얘기했던 <code>secret</code> query parameter 값을 잘 저장해둔다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue" data-lightbox="uc?export=view&id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue" data-title="https://drive.google.com/uc?export=view&id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue"><img src="https://drive.google.com/uc?export=view&id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue" alt="https://drive.google.com/uc?export=view&id=1qIAi3slxxAZpyLgInjRTTp602sOYkVue" title=""></a></p>
+
+<h2>Step 2. Console authenticator에 키 등록하기</h2>
+
+<p>먼저 console에서 OTP 기능을 쓸 수 있게 해주는 oath-toolkit을 설치해준다</p>
+<div class="highlight"><pre class="highlight shell"><code><span class="nv">$ </span>brew install oath-toolkit
+</code></pre></div>
+<p>oath-toolkit은 OTP 기능을 사용할 수 있게 해주지만 키를 관리해주거나 하는 등의 역할은 해주지 않는다. 간단한 shellscript로 OTP 키를 등록, 삭제를 할 수 있도록 <code>.bash_profile</code> 혹은 <code>.zshrc</code> 에 아래 스크립트를 추가 해 준다.</p>
+
+<p><noscript><pre>400: Invalid request</pre></noscript><script src="https://gist.github.com/a13ef83a5af57e45c4820c3da5ba0e31.js?file=otp_console.sh"> </script></p>
+
+<p>위 스크립트를 제대로 추가했는지 확인 해주기 위해 아까 authy에서 뽑아놓은 TOTP secret key를 등록하고 제대로 나오는지 확인해 보자</p>
+<div class="highlight"><pre class="highlight shell"><code><span class="c"># OTP Secret 키를 등록한다 mfa_add {서비스 이름} {TOTP secret key}</span>
+<span class="nv">$ </span>mfa_add aws XVWXDMXZZXJIXA3XIOHX46VXXKQEXXXI73D6SX7VXXXNVFXXIOYF5F74BYHTI7FK
+Secret added to keychain
+
+<span class="c"># OTP 토큰을 가져온다. mfa {등록한 서비스 이름}. 토큰은 클립보드에 저장 돼 있어서 붙여넣기를 하면된다.</span>
+<span class="nv">$ </span>mfa aws
+19:49:58 822269
+
+<span class="c"># 등록한 서비스를 삭제한다. mfa_delete {서비스 이름}</span>
+<span class="nv">$ </span>mfa_delete aws
+password has been deleted.
+</code></pre></div>
+<h2>Step 3. VPN Client OTP 입력 자동화 하기</h2>
+
+<p>Tunnelblick은 회사에서 쓰는 VPN client인데 역시 OTP를 사용해야한다. VPN Client OTP 입력은 Hammer spoon의 <code>Application Watcher</code> 기능을 이용해서 만들거다.</p>
+
+<p>로직은 간단하게 Tunnelblick이라는 application이 activated 즉 창이 선택 됐을 경우 특정 루틴을 실행시켜주는 역할을 한다. 아까 만들어둔 console authenticator을 실행시켜줘서 OTP 토큰을 복붙한다음 엔터를 쳐주는 매크로이다.</p>
+<div class="highlight"><pre class="highlight lua"><code><span class="nb">require</span><span class="p">(</span><span class="s2">"hs.ipc"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">hs</span><span class="p">.</span><span class="n">ipc</span><span class="p">.</span><span class="n">cliStatus</span><span class="p">())</span> <span class="k">then</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">ipc</span><span class="p">.</span><span class="n">cliInstall</span><span class="p">()</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">show</span><span class="p">(</span><span class="s2">"cli Installed"</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">appwatcher</span> <span class="o">=</span> <span class="n">hs</span><span class="p">.</span><span class="n">application</span><span class="p">.</span><span class="n">watcher</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">event</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span> <span class="n">appwatch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">event</span><span class="p">,</span><span class="n">app</span><span class="p">)</span> <span class="k">end</span><span class="p">):</span><span class="n">start</span><span class="p">()</span>
+<span class="k">function</span> <span class="nf">appwatch</span><span class="p">(</span><span class="n">appName</span><span class="p">,</span> <span class="n">eventType</span><span class="p">,</span> <span class="n">appObject</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">eventType</span> <span class="o">==</span> <span class="n">hs</span><span class="p">.</span><span class="n">application</span><span class="p">.</span><span class="n">watcher</span><span class="p">.</span><span class="n">activated</span><span class="p">)</span> <span class="k">then</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">appName</span> <span class="o">==</span> <span class="s2">"Tunnelblick"</span><span class="p">)</span> <span class="k">then</span>
+            <span class="n">hs</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"mfa openvpn"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+            <span class="n">hs</span><span class="p">.</span><span class="n">application</span><span class="p">.</span><span class="n">launchOrFocus</span><span class="p">(</span><span class="s1">'Tunnelblick'</span><span class="p">)</span>
+            <span class="n">hs</span><span class="p">.</span><span class="n">eventtap</span><span class="p">.</span><span class="n">keyStrokes</span><span class="p">(</span><span class="n">hs</span><span class="p">.</span><span class="n">pasteboard</span><span class="p">.</span><span class="n">getContents</span><span class="p">())</span>
+            <span class="n">hs</span><span class="p">.</span><span class="n">eventtap</span><span class="p">.</span><span class="n">keyStroke</span><span class="p">({},</span> <span class="s2">"return"</span><span class="p">)</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+<p>위 스크립트를 Hammer Spoon Config에 추가한 다음 reload를 해주자. 이제 VPN Client에다가 OTP를 입력해야하는 반복 노동에서 벗어날 수 있다 🎉.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=10GRUg-yVfQAN6Ji1Z_H3wpAdCxxwPE8a" data-lightbox="uc?export=view&id=10GRUg-yVfQAN6Ji1Z_H3wpAdCxxwPE8a" data-title="vpn"><img src="https://drive.google.com/uc?export=view&id=10GRUg-yVfQAN6Ji1Z_H3wpAdCxxwPE8a" alt="vpn" title=""></a></p>
+
+<blockquote>
+<p>Known Issue :  Tunnelblick의 다른 창이 뜰 경우에도 위 루틴이 동작하기 때문에 종종 이상한 창이 뜨는 경우가 있다. 그래도 매번 authy를 안 켤 수 있는게 귀찮음이 더 적다</p>
+</blockquote>
+
+<h2>Step 4. AWS Console Login OTP 입력 자동화 하기</h2>
+
+<p>위에 Step 3에서 한 방식대로 AWS console 도 해결할 수 있으면 좋겠지만 바로 입력화면이 뜨는 VPN client 와 달리 크롬에서 특정 페이지가 열렸는지를 알아내는건 Hammer spoon로는 해결 할 수 없다. 대신 Apple Script를 이용해서 크롬에서 aws login 페이지가 열렸는지를 확인하고 Hammer spoon의 <code>url event</code> 기능을 이용해서 지정해놓은 매크로를 호출하는 방식으로 했다.</p>
+
+<p>나는 기본적으로 chrome의 자동 로그인 기능을 사용해서 id, password까지는 자동 완성이 된다. 엔터 눌러주고 OTP를 자동입력하는 스크립트를 작성해보자.</p>
+<div class="highlight"><pre class="highlight lua"><code><span class="nb">require</span><span class="p">(</span><span class="s2">"hs.ipc"</span><span class="p">)</span> 
+
+<span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">hs</span><span class="p">.</span><span class="n">ipc</span><span class="p">.</span><span class="n">cliStatus</span><span class="p">())</span> <span class="k">then</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">ipc</span><span class="p">.</span><span class="n">cliInstall</span><span class="p">()</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">show</span><span class="p">(</span><span class="s2">"cli Installed"</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="c1">-- 위에서 추가 했으면 꼭 추가해주지 않아도 됨</span>
+
+<span class="c1">-- urlevent 등록: awsTotp</span>
+<span class="n">hs</span><span class="p">.</span><span class="n">urlevent</span><span class="p">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">"awsTotp"</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="n">eventName</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"mfa aws"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">application</span><span class="p">.</span><span class="n">launchOrFocus</span><span class="p">(</span><span class="s1">'Google Chrome'</span><span class="p">)</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">eventtap</span><span class="p">.</span><span class="n">keyStrokes</span><span class="p">(</span><span class="n">hs</span><span class="p">.</span><span class="n">pasteboard</span><span class="p">.</span><span class="n">getContents</span><span class="p">())</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">eventtap</span><span class="p">.</span><span class="n">keyStroke</span><span class="p">({},</span> <span class="s2">"return"</span><span class="p">)</span>
+  <span class="n">hs</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">show</span><span class="p">(</span><span class="s2">"🎉login🎉"</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+</code></pre></div>
+<p>위에 코드를 Hammer Spoon config에 추가 하게 되면 <code>hammerspoon://awsTotp</code> url 로 GET 요청을 날리게 되면 지정한 기능을 실행시켜준다. 이번에는 로그인하면 축하해주기 위해서 성공 문구도 추가해뒀다. </p>
+
+<p><noscript><pre>400: Invalid request</pre></noscript><script src="https://gist.github.com/a13ef83a5af57e45c4820c3da5ba0e31.js?file=chrome_tracking.applescript"> </script></p>
+
+<p>Apple Script에서는 hammerspoon에서 지정해놓은 매크로를 호출하는 조건을 다음과 같이 설정한다.</p>
+
+<ol>
+<li>Chrome이 제일 최상단이고</li>
+<li> 현재 탭의 URL이 AWS 일본리전(ap-northeast-1)의 로그인 페이지 <a href="https://ap-northeast-1.signin.aws.amazon.com/"><code>https://ap-northeast-1.signin.aws.amazon.com/</code></a> 로 시작 하는 경우</li>
+</ol>
+
+<p>Apple Script에서도 shell script를 실행 할 수 있지만 bashrc같은 곳에 적용 해놓은 env등이 적용이 안되기 때문에 해당 기능은 hammerspoon으로 분리해서 관리 했다. 만약 분리하고 싶지 않다면 위에서 bashrc에 적용해 둔 각 function을 shellscript로 만든 후 PATH에 추가 해주면 될 것 같다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB" data-lightbox="uc?export=view&id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB" data-title="https://drive.google.com/uc?export=view&id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB"><img src="https://drive.google.com/uc?export=view&id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB" alt="https://drive.google.com/uc?export=view&id=1Yg36lHIDNLJb--mh7QOclm3eVPyrZTpB" title=""></a></p>
+
+<p>기본적으로 apple script는 일 회 실행되고 종료되게 돼 있지만 idle 구문을 통해서 백그라운드에서 계속 실행되게 할 수 있다. 스크립트를 실행 파일로 만들려면 Mac의 <code>스크립트 편집기</code> 를 열고 붙여 넣은 다음 <code>파일</code> → <code>내보내기</code> 에서 파일 포맷을 <code>응용 프로그램</code>으로 설정 후 저장 해주면 된다. 그리고 옵션에서 반드시 <code>처리기 실행 후에 열어놓기</code>를 체크해야한다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E" data-lightbox="uc?export=view&id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E" data-title="https://drive.google.com/uc?export=view&id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E"><img src="https://drive.google.com/uc?export=view&id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E" alt="https://drive.google.com/uc?export=view&id=1MlTb4N3lL6OeLoTkz0ENMIfDlvqkjD6E" title=""></a></p>
+
+<p>그리고 스크립트 자제가 UI elements 들에 접근하고 제어를 하기 때문에 손쉬운 사용에서 응용 프로그램 화 시킨 스크립트를 추가 해 줘야한다. <code>시스템 환경설정</code> → <code>보안 및 개인정보 보호</code> → <code>개인 정보 보호</code> → <code>손쉬운 사용</code> 에서 <code>+</code> 버튼을 눌러서 추가해주자.</p>
+
+<p>이렇게 스크립트를 잘 저장해줬다면 Hammer spoon config에서 chrome_tracking을 실행 시킬 수 있도록 추가 해 주면 부팅 시 스크립트가 실행되도록 할 수 있다.</p>
+<div class="highlight"><pre class="highlight lua"><code><span class="n">hs</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"open /Applications/chrome_tracking.app"</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>Known Issue : 다른 리전의 로그인 창이 뜬 경우는 안된다. contain을 이용해 해결 할 수 있지만 나는 일본 리전만 사용하고 있기 때문에 그냥 strats with으로 해결했다.</p>
+</blockquote>
+
+<p>작업에 필요한 소스코드들은 여기에 모아두었다. <a href="https://abr.ge/odw1td">https://abr.ge/odw1td</a> </p>
+
+<h2>후기</h2>
+
+<p>간단한 자동화지만 아침에 AWS 자동으로 로그인 될 때 마다 스스로 뿌듯함을 느낀다.
+미루지 말고 한 번 시도해보자.</p>
+
+<hr>
+
+<h2>참고자료</h2>
+
+<p><strong>Generating Authy passwords on other authenticators</strong></p>
+
+<p><a href="https://gist.github.com/gboudreau/94bb0c11a6209c82418d01a59d958c93">https://gist.github.com/gboudreau/94bb0c11a6209c82418d01a59d958c93</a></p>
+
+<p><strong>mac-oath-mfa</strong></p>
+
+<p><a href="https://github.com/alanplatt/mac-oath-mfa">https://github.com/alanplatt/mac-oath-mfa</a></p>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> Dec 15, 2019</small>
+      <br>
+      <a class="no-hov" href="/2019/12/find-house-for-me.html">&laquo; 바쁜 개발자가 집 알아보는 방법 🐌    방 정보 크롤링 및 필터링 하기</a>
+    </div>
+    
+    
+    <div class="wrapper" id="right">
+      <small>Aug 23, 2020 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2020/08/python-async-profiling.html">Profiling을 통해 python async web application 병목지점 찾기 ⛑ &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2021</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+    <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLM8LQ2"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+</html>
