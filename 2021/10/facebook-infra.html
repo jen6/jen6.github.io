@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="http://static.airbridge.io/images/og_tags/404f13ef-9487-4e0b-980e-9af07205c3c9.png">
+  <title>Facebook Infra scaling 관점에서 살펴보기 - make all</title>
+    <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WLM8LQ2');</script>
+  <!-- End Google Tag Manager -->
+
+    <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2679022832321753');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2679022832321753&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
+  <meta name="description" content="">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2021/10/facebook-infra.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/lightbox.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/lightbox.js"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <div class="c-article__author_date">
+      <p class="c-article__time"><time datetime="2021-10-30T00:00:00+09:00" itemprop="datePublished">Oct 30, 2021</time></p>
+      <p class="c-article__name">By Geon Son</p>
+    </div>
+    <h1 class="c-article__title">Facebook Infra scaling 관점에서 살펴보기</h1>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">facebook</li>
+    
+    <li class="c-tag">infra</li>
+    
+    <li class="c-tag">scaling</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <p><a href="https://drive.google.com/uc?export=view&id=157eeEzScmciyMiJRJaDeS1cl246GQ_4n" data-lightbox="uc?export=view&id=157eeEzScmciyMiJRJaDeS1cl246GQ_4n" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=157eeEzScmciyMiJRJaDeS1cl246GQ_4n" alt="Untitled" title=""></a></p>
+
+<h2>나의 패킷이 페이스북에 닿기까지</h2>
+
+<p>방학을 맞이한 대학생이 할 일이라곤 🍚, 🛏, 🕹,📱페이스북과 인스타그램 밖에 없다.  페이스북은 속도라도 답답하게 느껴지면 덜하기라도 하겠지만 매우 쾌적하게 작동 하면서 수 많은 사람들의 시간을 뺏어간다. 그렇다면 페이스북은 어떻게 인프라를 구성했기에 쾌적한 글로벌서비스를 운영할 수 있는건지 한 번 알아보자.</p>
+
+<h2>닿기... 전에... 네트워크 복습🗃</h2>
+
+<p>인프라에서 어떻게 패킷을 효율적으로 전송할 것인지는 중요한 부분 중 한 개 이기 때문에 네트워크 이론이 조금 필요하다. 이 글에서는 <strong>매우 생략된 설명만 할 것 임으로</strong> 다들 모니터, 🍜 냄비 받침으로 쓰던 네트워크 책을 한번 살펴보자. </p>
+
+<p><strong>OSI 7 LAYER</strong></p>
+
+<p>어떤 책으로 시작하던 대부분 시작은 이 계층 모델과 함께 한다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1gSNrO3BUCnedm1dkaT4WCeJ41v44_7hX" data-lightbox="uc?export=view&id=1gSNrO3BUCnedm1dkaT4WCeJ41v44_7hX" data-title="https://drive.google.com/uc?export=view&id=1gSNrO3BUCnedm1dkaT4WCeJ41v44_7hX"><img src="https://drive.google.com/uc?export=view&id=1gSNrO3BUCnedm1dkaT4WCeJ41v44_7hX" alt="https://drive.google.com/uc?export=view&id=1gSNrO3BUCnedm1dkaT4WCeJ41v44_7hX" title=""></a></p>
+
+<p>이 계층을 보면 일반적으로 쓰는 Layer7 Application에서 각 계층을 거칠 때 어떤 정보들이 붙는지를 볼 수 있다. 패킷을 보내는 입장에서 먼저 생각해보자. 페이스북 서버로 HTTP GET 요청을 보내게 될 경우 웹 브라우저에서 작성하는 데이터는 아래와 같다.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>GET / HTTP/1.1
+HOST: www.facebook.com
+</code></pre></div>
+<p>보통 Layer 5,6,7을 Application Layer로 묶어서 본다(정확히는 TCP/IP model에서 지만 자세하게는 생략). 이 단계에서는 우리가 보낼 데이터를 넣고 HTTP, SSH등 다양한 프로토콜 중 어떤 걸 사용할 것 인지 그리고 어떻게 표현 할 것 인지에 대한 데이터를 추가 해준다. </p>
+
+<p>하지만 위 데이터만 가지고 우리의 요청은 페이스북에 닿을 수 없다. 우리의 컴퓨터 안에 존재하는 많은 프로그램 중 어떤 프로그램으로 이 데이터가 가야 하는지에 대한 정보를 적어야 한다.이 정보는 Layer 4에서 정의가 된다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1oy0-VhxQUlPlJMJOtpKe2cXj0P3r07Xt" data-lightbox="uc?export=view&id=1oy0-VhxQUlPlJMJOtpKe2cXj0P3r07Xt" data-title="https://drive.google.com/uc?export=view&id=1oy0-VhxQUlPlJMJOtpKe2cXj0P3r07Xt"><img src="https://drive.google.com/uc?export=view&id=1oy0-VhxQUlPlJMJOtpKe2cXj0P3r07Xt" alt="https://drive.google.com/uc?export=view&id=1oy0-VhxQUlPlJMJOtpKe2cXj0P3r07Xt" title=""></a></p>
+
+<p><a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP Header</a> wikipedia</p>
+
+<p>Layer 4에서는 어떤 포트로 갈지 어떻게 연결을 할지에 대한 프로토콜을 정의한다. 주로 널리 알려져 있는TCP, UDP가 여기에 해당된다. 위 표에서는 <code>Source Port</code>, <code>Destination Port</code> 가 어떤 포트를 통해 가는지에 대한 정보를 알려준다. 하지만 어떤 포트로 가야 하는가에 대한 정보가 있다 하더라도 우리의 요청이 페이스북에 닿을려면 아직 부족하다. 어떤 컴퓨터로 가야하는지에 대한 정보인 IP가 없기 때문이다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=18mVav3oULhFAZ4pTxx5K-cNltR7j9OFe" data-lightbox="uc?export=view&id=18mVav3oULhFAZ4pTxx5K-cNltR7j9OFe" data-title="https://drive.google.com/uc?export=view&id=18mVav3oULhFAZ4pTxx5K-cNltR7j9OFe"><img src="https://drive.google.com/uc?export=view&id=18mVav3oULhFAZ4pTxx5K-cNltR7j9OFe" alt="https://drive.google.com/uc?export=view&id=18mVav3oULhFAZ4pTxx5K-cNltR7j9OFe" title=""></a></p>
+
+<p><a href="https://en.wikipedia.org/wiki/IPv4#Header">IP Header</a> wikipedia</p>
+
+<p>Layer 3에서는 어떤 IP로 가야하는지 출발지와 목적지에 해당하는 정보를 담고 있다. 위 표에서는 <code>Source Address</code> , <code>Destination Address</code> 가 있다. Layer 2, 1 에서도 위 과정과 같이 필요한 정보를 붙이는과정을 거친다. 이렇게 보내는 입장에서 하위 레이어로 갈 수록 필요한 내용들이 붙는 것을 <strong>Encapsulation</strong>이라 부른다. 필요한 정보가 캡슐을 씌우듯이 계속 붙는다. 반대로 받는 입장에서는 하위 레이어부터 시작해서 필요한 내용을 읽어나간다. Layer 3에서는 출발 도착지 IP를 Layer 4에서는 포트정보를. 이렇게 하위 레이어에서 상위레이어로 필요한 정보를 얻으면서 올라가는 과정을 <strong>Decapsulation</strong>이라고 부른다. </p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1CLVCE2nXyEAGMqkqqnT1H68ZxF9OuXGN" data-lightbox="uc?export=view&id=1CLVCE2nXyEAGMqkqqnT1H68ZxF9OuXGN" data-title="https://drive.google.com/uc?export=view&id=1CLVCE2nXyEAGMqkqqnT1H68ZxF9OuXGN"><img src="https://drive.google.com/uc?export=view&id=1CLVCE2nXyEAGMqkqqnT1H68ZxF9OuXGN" alt="https://drive.google.com/uc?export=view&id=1CLVCE2nXyEAGMqkqqnT1H68ZxF9OuXGN" title=""></a></p>
+
+<p>인프라 단에서 다루게 되는 레이어는 보통 이렇게 Layer 3, 4, 7정도가 되니 각각 Encapsulation과 Decapsulation과정에서 어떤 데이터를 읽을 수 있을지를 생각 해 보면 아래 글을 이해할 때 조금 도움이 될 것이다.</p>
+
+<h2>페이스북은 얼마나 많은 트래픽을 받을까?</h2>
+
+<p>페이스북은 우리가 생각하는 페이스북 뿐만아니라 양대산맥 SNS 인스타그램, 외국에서 많이 쓰이는 What&#39;s App 그리고 MZ세대들이 많이쓰는 메신저인 FB Messanger까지 대충 듣기만해도 트래픽 많이 받을 것 같은 서비스들만 모아놓은게 페이스북이다. 그렇기 때문에 아래와 같은 😈무시무시한 수치들을 볼 수 있다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=10jfRWd18ozK81mba8Qj0sumUd5wkstK4" data-lightbox="uc?export=view&id=10jfRWd18ozK81mba8Qj0sumUd5wkstK4" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=10jfRWd18ozK81mba8Qj0sumUd5wkstK4" alt="Untitled" title=""></a></p>
+
+<p>2015년 기준 공개된 FB 트래픽</p>
+
+<ul>
+<li>📈 1+ Tb/초 egress</li>
+<li>🎥 동영상 40억뷰/일</li>
+<li>🏃🏻 100만 Request/초</li>
+</ul>
+
+<p>이렇게는 잘 감이 안온다면 좀더 일반유저 관점에서 나온 통계들을 보자</p>
+
+<ul>
+<li>24억 - 전세계 사람들이 월간 페이스북에 접근하는 횟수의 합</li>
+<li>10억 - Instagram의 월간 활성 사용자 수</li>
+<li>15억 - WhatsApp을 월간 사용하는 횟수</li>
+</ul>
+
+<p>숫자들이 동방의 작은 소국에서는 경험할 수 없는 스케일이긴 하다. 각각 15년 19년에 발표된 자료라 지금은 저것보다 훨씬 많을껄로 추정된다</p>
+
+<h2>스케일을 키우는 방법</h2>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1eH9RKHLPzZTKKkrCvstch_xAsN3cc60v" data-lightbox="uc?export=view&id=1eH9RKHLPzZTKKkrCvstch_xAsN3cc60v" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=1eH9RKHLPzZTKKkrCvstch_xAsN3cc60v" alt="Untitled" title=""></a></p>
+
+<p>자 잠깐 눈을 감고 나는 페이스북을 만든 주커버그다 생각해보자. 페이스북을 처음 만들어서 서비스를 하게 됐고 약 300명정도의 사용자가 생겼다. 집에 굴러다니는 라즈베리파이가 슬슬 버거워해서 서버를 한 대 뒀고 웹서버에(위 사진에서는 HHVM) 페이스북 도메인을 물려놨다. 이렇게 해서 몇달 버티다가 입소문이 났는지 점점 서버가 버거워 한다. 결국 눈물을 머금고 서버를 몇대 더 띄우기로 했다😭.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1r6YQJn3P4qexw4HMYRRh3dV163An3SmM" data-lightbox="uc?export=view&id=1r6YQJn3P4qexw4HMYRRh3dV163An3SmM" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=1r6YQJn3P4qexw4HMYRRh3dV163An3SmM" alt="Untitled" title=""></a></p>
+
+<p>그냥 서버만 여러대 더 띄우면 될까? 도메인에 접속했을때 여러서버로 DNS는 여전히 서버 한대의 ip만 알려줄 수 있을꺼고 다른 서버로는 요청이 가지 않을꺼다. 이렇게 서버가 여러대 있을때 각 서버로 요청을 나눠주기 위해 <strong>Load Balancer(LB)</strong>를 쓰게 된다. LB의 경우 위에서 봤던 OSI 7 Layer 중 어느 단계에서 트래픽을 로드밸런싱 해주는지에 따라 L4, L7 LB라고 부른다. </p>
+
+<p>일반적으로 여러 웹서버를 대상으로 트래픽 로드밸런싱이 필요할 경우 Host나 HTTP Request URL의 Path에 따라 어느 서버로 갈지 결정해주는 라우팅이 필요해 해당 정보를 알수 있는 L7 LB를 사용하게 된다. L7 LB 같은경우 우리가 일반적으로 개발할 때 쓰는 오픈소스 LB인 Nginx가 있고 AWS상의 서비스로 생각해보면 Application Load Balancer(ALB)가 해당 역할을 한다.</p>
+
+<p>L7 LB의 경우 비지니스 로직을 처리하지 않고 트래픽을 어느 서버로 보낼지 결정만 해주니깐 웹서버에 비해 상대적으로 더 많은 rps를 버틸 수 있다. 되면 기존에 약 한대당 300rps를 웹서버가 버틸수 있었다고 하면 L7 LB를 사용해 5대의 서버로 로드밸런싱을 해주면 약 1500 rps를 견딜 수 있게 된다.하지만 모든 서버에 수용량의 한계가 있는 것 처럼 L7 LB도 결국 어느순간 처리하지 못할 만큼에 Connection을 가지고 있게될수도 있다. 만약 여기서 사용자가 더 몰리게 되면 어떻게 해야할까?</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1osDPEKc0DyHy2_BTXryuuw3Wli8SPdp6" data-lightbox="uc?export=view&id=1osDPEKc0DyHy2_BTXryuuw3Wli8SPdp6" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=1osDPEKc0DyHy2_BTXryuuw3Wli8SPdp6" alt="Untitled" title=""></a></p>
+
+<p>정답은 L7 LB도 더 띄우고 웹서버도 더 많이 띄우는 것이다. 이전에 웹서버에 트래픽 로드밸런싱 하기 위해 L7 LB를 사용한 것처럼 여러대가 된 L7 LB로 가는 트래픽을 로드밸런싱 하기위해 이번엔 L4 LB를 사용하게 된다.</p>
+
+<p>L4 LB의 경우 L7LB와 다르게 OSI 4계층에서 트래픽을 로드밸런싱 해준다. 4계층에서 알 수 있는 정보는 7계층보다 제한돼있어 IP와 Port로만 로드밸런싱 할 수 있지만 훨씬 더 많은 양의 트래픽을 버틸 수 있게 된다. 오픈소스로 된 L4 LB엔 HAProxy가 있고 AWS service에는 Network Load Balancer(NLB)가 존재한다. 이 전에 L7 LB 한 개만 쓸때보다 훨씬 더 많은 웹서버를 운용할 수 있게 된다. </p>
+
+<p>꽤 괜찮아졌지만 여전히 현재 페이스북의 무시무시한 트래픽을 받기에는 부족하다. 여기서 한 번 더 트래픽을 많이 받을 수 있게 하려면 어떻게 해야할까? 이미 예상했겠지만 L4 LB를 더 띄워야 한다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1TaiIB-rKhwjbEpUm98XGUccn2NbFKKdo" data-lightbox="uc?export=view&id=1TaiIB-rKhwjbEpUm98XGUccn2NbFKKdo" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=1TaiIB-rKhwjbEpUm98XGUccn2NbFKKdo" alt="Untitled" title=""></a></p>
+
+<p>L4 LB를 더 띄우기 위해 이번에는 Switch를 사용한다. 위 사진에서 나오는 ECMP라는건 Equal-cost multi-path routing의 약자로 하나의 목적지로 패킷 라우팅을 수행하면서 여러 개의 경로를 선택하는 라우팅 기법이다. 즉 여러개의 경로를 선택하면서 여러 L4 LB로 트래픽을 라우팅 시켜줄 수 있는 것이다. 여기까지 왔으면 아래 사진과 같이 Facebook에서 쓰고 있는 서버 클러스터 한개가 완성됐다고 생각하면 된다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1RMzfQicgaxjdBMNswL3uniUUNW-0B5ob" data-lightbox="uc?export=view&id=1RMzfQicgaxjdBMNswL3uniUUNW-0B5ob" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=1RMzfQicgaxjdBMNswL3uniUUNW-0B5ob" alt="Untitled" title=""></a></p>
+
+<p>이후 여기서 한 번...더! 를 외치면 서버 클러스터를 늘려 데이터 센터를 만드는거고 이걸로도 모자라 한 번더! 를 외치면 여러개의 데이터센터를 운영한다 생각하면 된다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1wbt3wVFViVQ4ctpp1tl2wXwxjIv8gmyJ" data-lightbox="uc?export=view&id=1wbt3wVFViVQ4ctpp1tl2wXwxjIv8gmyJ" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=1wbt3wVFViVQ4ctpp1tl2wXwxjIv8gmyJ" alt="Untitled" title=""></a></p>
+
+<p>페이스북 사이즈로 수평적 확장(Scale-Out)을 지속적으로 하려면 눈물을 한번 머금는걸로는 안되고 쉴세없이 흘려야 가능할까 말까가 되지 않을까 싶다.</p>
+
+<h2>Edge Networking</h2>
+
+<p>데이터 센터는 매우 크기가 크기도 하고 많은 💸이 필요하기 때문에 비교적 적은 수 만 있다. 페이스북의 데이터 센터는 <a href="https://code.fb.com/data-center-engineering/data-centers-2018/">2018년 기준으로 총 15개가 운영되고 있다</a>. 데이터센터 대부분은 미국에서 운영되고 있고 스웨덴이나 아일랜드 쪽에 일부 존재한다. 미국이나 북유럽 유저들은  데이터센터와 물리적 거리가 까깝기 때문에 한국에서 네이버 접속하는 것 처럼 빠르게 접근할 수 있을것이다. 하지만 페이스북은 전체 트래픽에 82% 가량이 미국 밖에서 발생하는 글로벌 서비스 회사이다. 일부 지역에 몰려있는 데이터센터 만으로는 많은 국가에서 서비스를 할 때 latency문제를 감당하기 힘들다는 문제점이 있다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1629fjuA0lpcPzaiEXntma4rG8Z18iK8a" data-lightbox="uc?export=view&id=1629fjuA0lpcPzaiEXntma4rG8Z18iK8a" data-title="https://drive.google.com/uc?export=view&id=1629fjuA0lpcPzaiEXntma4rG8Z18iK8a"><img src="https://drive.google.com/uc?export=view&id=1629fjuA0lpcPzaiEXntma4rG8Z18iK8a" alt="https://drive.google.com/uc?export=view&id=1629fjuA0lpcPzaiEXntma4rG8Z18iK8a" title=""></a></p>
+
+<p>위 그림의 시나리오는 서울에서 유저가 미국 Oregon에 있는 데이터 센터에서 Dynamic  Resources들을 받아 올 때를 가정한 상황이다. 요즘 웹이던 앱이던 보안을 위해 HTTPS를 사용한다. HTTPS를 쓰기 위해서는 먼저 TCP Conneciton을 맺어야한다. 이때 TCP connection을 맺기위해 3-way handshake 과정을 거친다. 이후 SSL session을 맺기 위해 4-way handshake를 추가적으로 해야한다. 손이 닳도록 악수한 후에야 SSL session 이 맺어지고 드디어 본론인 http request를 보낼 수 있게된다. (<a href="https://hanjungv.github.io/2017-11-07-1_CS_SSL/">자세한 내용은 생략한다</a>)</p>
+
+<p>이 과정에서 걸리는 시간을 정리해 보자면 서울에서 보낸 패킷이 Oregon에 위치한 데이터 센터까지 도착하는데에 75ms가 걸린다. 일반적으로 네이버에 ping을 쐇을때 응답 받기까지 걸리는 시간이 8ms고 서울에서 일본까지 15~20ms 라는 점을 생각해보면 엄청나게 오래걸리는 것을 알 수 있다. 정리해보자면 위 그림과 같이 TCP Connection 150ms + SSL Session 300ms + HTTP 150ms 로 총 600ms가 소요된다.</p>
+
+<p><a href="https://www.nngroup.com/articles/response-times-3-important-limits/">Nielsen Norman Group</a> 이라는 유명한 User Experience research group에서 말하기를 사람이 견딜수 있는 시간의 세 단계가 있다고 한다.</p>
+
+<ul>
+<li>0.1초: UI를 눌렀을때 빠릿빠릿하게 동작한다라고 느끼는 제한시간.</li>
+<li>1초: 사람들이 느려서 답답하다 생각하지 않고 하던 동작을 할 수 있는 제한시간. 0.2 ~ 1 초안에 동작이 끝나면 빠르진 않지만 답답할 정도는 아니라고 생각 할 수 있다</li>
+<li>10초: 사람들의 인내심의 한계까지의 제한시간. 10초가 넘으면 기다리지 않는다</li>
+</ul>
+
+<p>이런 UX적인 시간기준을 봤을때 0.6초는 API를 여러개 친다고 하면 슬슬 사람들이 답답하다고 느껴 사용자 경험을 해칠 가능성이있다. 또한 사용자는 이렇게 답답하다고 느낄때마다 앱에서 이탈할 확률이 크게 증가한다고 한다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1hEDPVkOTH3cnPr2Dj3N_cvYLcy9S1uhr" data-lightbox="uc?export=view&id=1hEDPVkOTH3cnPr2Dj3N_cvYLcy9S1uhr" data-title="https://drive.google.com/uc?export=view&id=1hEDPVkOTH3cnPr2Dj3N_cvYLcy9S1uhr"><img src="https://drive.google.com/uc?export=view&id=1hEDPVkOTH3cnPr2Dj3N_cvYLcy9S1uhr" alt="https://drive.google.com/uc?export=view&id=1hEDPVkOTH3cnPr2Dj3N_cvYLcy9S1uhr" title=""></a></p>
+
+<p>이 문제를 해결하기 위해 페이스북은 세계 곳곳에 <strong>Edge PoP</strong>(Points of Presence)를 운영하고 있다. Edge PoP는 L4, l7 Load Balancer를 가지고 있어 PoP에서 TCP Connection과 SSL session을 만든 후 페이스북 데이터 센터에 요청을 보내 Latency를 줄일 수 있게 해준다.</p>
+
+<p>위 그림과 같이 바로 Oregon에 있는 데이터 센터와 연결 하는게 아니라 도쿄에 있는 Edge PoP를 거쳐 통신하게 되면 TCP Connection 30ms + SSL Session 60ms + HTTP 150ms 로 총 240ms가 소요된다. 사용하기 전과 비교하면 무려 요청속도가 60%나 개선 됐다는걸 알 수 있다.또한 Edge PoP를 사용하면서 Static Resource들을 캐싱해서 굳이 Oregon까지 가지 않아도 되도록 하게끔 해서 요청빠르게 데이터들을 받을 수 있다.</p>
+
+<h2>정리</h2>
+
+<p>페이스북의 놀라운점은 위에 나온것중 휴대폰을 제외한 모든걸 만들어서 쓴다. L4, L7 LB, DNS, 서버랙부터 스위치 그리고 스위치 안에 들어가는 OS까지 모든걸 만든다. 2015년 정도에 글로벌서비스를 하기위해 이런 인프라들을 사용 할 수 있는 회사는 자체 데이터 센터와 네트워크 인프라를 가지고 있는 소수의 회사들만 할 수 있었을 걸로 보인다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1F4Jd9uJF5yI9JCDT9fNK-wBa_elBENwq" data-lightbox="uc?export=view&id=1F4Jd9uJF5yI9JCDT9fNK-wBa_elBENwq" data-title="Untitled"><img src="https://drive.google.com/uc?export=view&id=1F4Jd9uJF5yI9JCDT9fNK-wBa_elBENwq" alt="Untitled" title=""></a></p>
+
+<p>그래도 2021년 현재 소규모 회사들도 점점 이런 스케일러블한 구조를 가지기 쉬워지는게 AWS 상에 이미 다양한 서비스들이 생겨서 유사한 구조를 가져갈 수 있게 됐다.</p>
+
+<ul>
+<li>L4 LB - Network Load Balancer</li>
+<li>L7 LB - Application Load Balancer</li>
+<li>Scalable한 서버 - EC2</li>
+<li>Edge POP - multi region + cloudfront</li>
+<li>등등..</li>
+</ul>
+
+<p>위에서 얘기한 Edge Networking 같은경우도 완전 동일하게 구현은 못하더라도 CloudFront를 사용해 유사하게 구현할 수 있고 여러국가에 있는 데이터센터는 multi region 서비스를 하면 비교적 큰 돈 들이지 않고 전세계에서 안정적인 서비스가 가능해진다.</p>
+
+<p>소개한 자료들이 완전 최신은 아니라 페이스북(이제는 meta가 됐지만) 현재 인프라와는 많이 다르겠지만 스케일링 관점에서 어떤 기술을 쓰고 있는지 10년전 큰 기업들이 했던 고민을 커가는 스타트업들에 적용 해 볼 수 있을 것 같아서 글을 써봤다.</p>
+
+<hr>
+
+<h2>참고자료</h2>
+
+<ol>
+<li><a href="https://www.usenix.org/conference/srecon15europe/program/presentation/failla">https://www.usenix.org/conference/srecon15europe/program/presentation/failla</a></li>
+<li><a href="https://www.usenix.org/conference/srecon15europe/program/presentation/shuff">https://www.usenix.org/conference/srecon15europe/program/presentation/shuff</a></li>
+<li><a href="https://www.cs.unc.edu/xcms/wpfiles/50th-symp/Moorthy.pdf">https://www.cs.unc.edu/xcms/wpfiles/50th-symp/Moorthy.pdf</a></li>
+<li><a href="https://www.netmanias.com/ko/post/blog/5366/dhcp-ip-allocation-network-protocol/what-is-a-dhcp-relay-agent">https://www.netmanias.com/ko/post/blog/5366/dhcp-ip-allocation-network-protocol/what-is-a-dhcp-relay-agent</a></li>
+<li><a href="http://www.enterprisenetworkingplanet.com/netsp/article.php/3615896/Networking-101-Understanding-BGP-Routing.htm">http://www.enterprisenetworkingplanet.com/netsp/article.php/3615896/Networking-101-Understanding-BGP-Routing.htm</a></li>
+<li><a href="https://code.fb.com/networking-traffic/steering-oceans-of-content-to-the-world/">https://code.fb.com/networking-traffic/steering-oceans-of-content-to-the-world/</a></li>
+<li><a href="http://tech.kakao.com/2014/05/28/l3dsr/">http://tech.kakao.com/2014/05/28/l3dsr/</a></li>
+<li><a href="http://tech.kakao.com/2014/05/29/anycast/">http://tech.kakao.com/2014/05/29/anycast/</a></li>
+<li><a href="https://www.youtube.com/watch?v=KICp-9yXOT0&t">https://www.youtube.com/watch?v=KICp-9yXOT0&amp;t</a></li>
+<li><a href="https://code.fb.com/data-center-engineering/data-centers-2018/">https://code.fb.com/data-center-engineering/data-centers-2018/</a></li>
+<li><a href="https://uxplanet.org/how-page-speed-affects-web-user-experience-83b6d6b1d7d7">https://uxplanet.org/how-page-speed-affects-web-user-experience-83b6d6b1d7d7</a></li>
+<li><a href="https://www.slideshare.net/AmazonWebServices/aws-reinvent-2016-offload-security-heavylifting-to-the-aws-edge-ctd204">https://www.slideshare.net/AmazonWebServices/aws-reinvent-2016-offload-security-heavylifting-to-the-aws-edge-ctd204</a></li>
+</ol>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> Feb 21, 2021</small>
+      <br>
+      <a class="no-hov" href="/2021/02/ios14-att-skadnetwork.html">&laquo; 📱iOS 14 이야기 - 1. ATT,SKAdNetwork에 대비하는 전략</a>
+    </div>
+    
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2021</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+    <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLM8LQ2"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+</html>

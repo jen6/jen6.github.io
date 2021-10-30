@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:image" content="http://static.airbridge.io/images/og_tags/404f13ef-9487-4e0b-980e-9af07205c3c9.png">
+  <title>📱iOS 14 이야기 - 1. ATT,SKAdNetwork에 대비하는 전략 - make all</title>
+    <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WLM8LQ2');</script>
+  <!-- End Google Tag Manager -->
+
+    <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2679022832321753');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2679022832321753&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
+  <meta name="description" content="iOS 14와 App Tracking Transparency framework">
+  <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans:400" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300,400,900,400italic' rel='stylesheet' type='text/css'>
+  <link rel="canonical" href="https://jen6.github.io/2021/02/ios14-att-skadnetwork.html">
+  <link rel="alternate" type="application/rss+xml" title="make all" href="https://jen6.github.io/feed.xml">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/lightbox.css">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/assets/lightbox.js"></script>
+</head>
+
+  <body>
+    <main class="u-container">
+      <div class="c-page">
+  <header class="c-page__header">
+  <div class="c-header__logo">
+    <a id="header-logo-link" href="/">
+      <img alt="Dieline" src="https://drive.google.com/thumbnail?id=1wdy4Gkg-AUDaDPHmL528IYBVeRVoKcyk&sz=w930">
+    </a>
+  </div>
+
+  <nav id="c-header__nav">
+    <a class="c-header-nav-item" href="/">Home</a>
+    <a class="c-header-nav-item" href="/about/">About</a>
+    <a class="c-header-nav-item" href="/feed.xml">RSS</a>
+    <a class="c-header-nav-item" href="http://jen6.tistory.com">Previous Blog</a>
+  </nav>
+</header>
+
+  <div class="c-page__main">
+    <article class="c-article">
+  <header class="c-article__header">
+    <div class="c-article__author_date">
+      <p class="c-article__time"><time datetime="2021-02-21T00:00:00+09:00" itemprop="datePublished">Feb 21, 2021</time></p>
+      <p class="c-article__name">By Geon Son</p>
+    </div>
+    <h1 class="c-article__title">📱iOS 14 이야기 - 1. ATT,SKAdNetwork에 대비하는 전략</h1>
+  </header>
+  <!-- Post Tags -->
+  <ul class="c-tags">
+    
+    <li class="c-tag">ios</li>
+    
+    <li class="c-tag">adtech</li>
+    
+    <li class="c-tag">skadnetwork</li>
+    
+    <li class="c-tag">privacy</li>
+    
+  </ul>
+  <div class="c-article__main">
+    <h2>iOS 14와 App Tracking Transparency framework</h2>
+
+<p>지난 2020년 10년 16일 애플은 iOS 14를 릴리즈 하면서 유저들을 구별 가능한 고유값 즉 IDFA(ID for Advertisers) 수집을 어렵게 하는 ATT(App Tracking Transparency framework)을 출시했습니다. IDFA를 이전과 같이 수집하고 싶다면 앱설치시 일 회만 뜨게되는 팝업에서 유저가 Allow Tracking을 눌러야만 얻을 수 있고 허용하지 않는다면 수집할 수 없도록 변경됐습니다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb" data-lightbox="uc?export=view&id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb" data-title="https://drive.google.com/uc?export=view&id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb"><img src="https://drive.google.com/uc?export=view&id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb" alt="https://drive.google.com/uc?export=view&id=1RMDpWm5Kh8AFa09rbtvMbLWcneePgAwb" title=""></a></p>
+
+<p>기존에는 Facebook같은 앱 광고 지면에서 광고를 보고 설치하는 상황에서(App-to-App 광고) IDFA를 이용해 지면앱에서 광고를 누른 유저와 앱스토어를 통해 앱을 설치한 유저의 동일성을 Mobile Measurement Partner(MMP)를 에서  확인해주는 방식을 통해 파악할 수 있었습니다. 따라서 유저의 동일성을 바탕으로 어떤 광고 채널의 광고 성과가 좋은지도 측정 할 수 있었습니다. </p>
+
+<p>하지만 ATT가 도입되게 따라 유저가 지면앱과 광고주앱 양쪽 모두의 동의없인 다른 앱간의 연결고리를 해주던 IDFA를 못 얻기 때문에 서로 다른 앱간 유저의 동일성을 파악할수 없게됐고 채널별 광고성과 또한 측정할 수 없게 됐습니다. </p>
+
+<p>이런 문제 때문에 여러 회사들에서는 ATT의 허용 비율을 높이기 위해 아래와 같은 팝업의 문구 그리고 유저에게 어느 시점에 Tracking 허용을 물어볼지에 대한 다양한 <a href="https://www.adjust.com/blog/opt-in-design-for-apple-app-tracking-transparency-att-ios14/">연구</a>가 진행되고 있으나 확실한점은 허용을 안하는 유저의 비율은 높을 것이고 App to App 광고 성과 측정이 쉬워지지 않을꺼라는 점입니다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F" data-lightbox="uc?export=view&id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F" data-title="https://drive.google.com/uc?export=view&id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F"><img src="https://drive.google.com/uc?export=view&id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F" alt="https://drive.google.com/uc?export=view&id=1j2bp0LM2l1OIHBZ5ZolObVeBa74oOl4F" title=""></a></p>
+
+<p>위에 까지는 전지적 MMP 개발자 시점이였고 서비스를 하는곳에서 조금 더 고민해 봐야할 점은 이게 단순히 IDFA를 얻고 못얻고의 문제가 아니라는 점 입니다. 애플에서 내린 앱의 <strong>추적</strong> 이라는것의 정의는 상당히 넓은 범위를 포함하고 있습니다.. </p>
+
+<blockquote>
+<p>추적이란 맞춤형 광고 또는 광고 측정 목적으로 앱에서 수집된 사용자 또는 기기 데이터와 다른 회사의 앱, 웹 사이트 또는 오프라인 속성에서 수집된 사용자 또는 기기 데이터를 연결하는 행위를 말합니다. 또한 추적은 사용자 또는 기기 데이터를 데이터 브로커와 공유하는 것을 의미하기도 합니다.</p>
+</blockquote>
+
+<p>애플에서는 사기 탐지 행위, 사기 방지 목적으로만 데이터를 타사로 공유 할 수 있다고 얘기하고 이 외의 경우에는 모두 어떤 유저가 어떤행동을 했는지 모르도록 비식별화를 해야한다고 말합니다. 하면 안되는 행동들의 예로는</p>
+
+<ol>
+<li>사용자가 다른 앱, 웹을 돌아다니며 얻은 데이터를 받아서 해당 유저가 관심있어 하는 맞춤형 광고를 제공하는것 (리타게팅 광고)</li>
+<li>유저 정보를 매체랑 공유하여 유사한 사용자 그룹을 찾는것 (유사 잠재고객 타게팅 광고)</li>
+<li>구글 혹은 페이스북 계정으로 여러 서비스에 로그인할 수 있는 SSO를 사용해서 유저가 추적 대상이 되는것</li>
+<li>직접적인 유저 식별데이터는 아니지만 간접적인 방식(웹브라우저, IP, 위치)으로 유저를 식별하는것 (finger printing)</li>
+</ol>
+
+<p>등등 갑자기 앱스토어에서 앱이 내려가지 않으려면 확인해야할 것 들이 늘었습니다. 개발을 편하게 하기 위해서 쓴 Third-party SDK에서 금지된 행동을 했다 하더라도 책임은 앱을 배포한 사람에게 있다고 하니 SDK개발사의 iOS14정책도 확인해볼 필요가 있습니다. 더 자세한건 애플의 <a href="https://developer.apple.com/kr/app-store/user-privacy-and-data-use/">사용자 개인정보 보호 및 데이터 사용</a> 문서를 참고하면 됩니다.</p>
+
+<p>만약 우리 나라 회사가 이렇게 했다고 하면 온라인 광고 종사자들이 광화문에 모여서 규탄시위를 벌였을듯 싶은데 애플의 힘이 쌔서인지 코로나 때문인지 그렇게 하지는 않고 가장 많은 피해를 입을듯한 페이스북이 위 정책에 <a href="https://www.cnbc.com/2021/02/01/facebook-strikes-back-against-apple-ios-14-idfa-privacy-change.html">반대하는 성명</a>을 온라인으로 내고 있습니다.</p>
+
+<p>iOS14 자체는 2020년 말에 출시 됐지만 바로 적용하게 될 경우 광고 시장 전반의 임팩트가 너무 클 수밖에 없어서 각 회사들에서 대응 할 수 있도록 2021년 상반기로 밀렸습니다. 정확한 릴리즈 일자는 아직 나오지 않았지만 iOS 14.5 부터 애플은 ATT를 적용하겠다고 <a href="https://developer.apple.com/kr/app-store/user-privacy-and-data-use/">공식 페이지</a>에 적어놨고, 이전 릴리즈 주기를 봤을때 약 2월 말 그리고 3월 초 사이에 릴리즈 될것으로 예상 하고 있습니다.</p>
+
+<h2>Apple의 대안책 SKAdNetwork</h2>
+
+<p>그럼 앞으로 iOS상에서는 유저의 허락없이는 광고 채널별로 성과가 어떻게 되는지 전혀 알 수 없는걸까요? 애플도 이런 부분에 있어 어려움을 예상하고 애플의 꿩대신 닭인 <a href="https://developer.apple.com/documentation/storekit/skadnetwork">SKAdNetwork</a> 2.0 버전도 함께 발표 했습니다.</p>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs" data-lightbox="uc?export=view&id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs" data-title="https://drive.google.com/uc?export=view&id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs"><img src="https://drive.google.com/uc?export=view&id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs" alt="https://drive.google.com/uc?export=view&id=1ARsVzLeNb7O8151OsfnMjRklJsH8gwZs" title=""></a></p>
+
+<p>SKAdNetwork는 기존에 MMP에서 해주던 유저가 어느 채널을 통해 들어왔는지에 대한 분석을(Attribution) 애플이 대신 해주는 프레임워크 입니다. 어떤 채널로 들어하지만 기존처럼 모든 데이터를 받을 수 있는게 아니라 애플의 개인정보보호 대 전제인 <code>어떤 유저가 무슨 행동을 했는지 허락 없이는 알수 없다</code>를 지킨 데이터만 받을 수 있습니다. 위 대전재를 지키기 위한 많은 제약사항 들이 있는데 대표적인 제약 3개만 말해보자면</p>
+
+<h3>1. 앱 한 개당 광고 지면에서 구분할 수 있는 캠페인의 숫자는 총 100개 입니다.</h3>
+
+<p>일반적으로 광고가 나간다고 할 때 한 개의 광고만 돌리는게 아니라 높은 수익을 가져올 (예를 들자면 우리 앱을 설치하고 구매를 많이 할만한 유저) 유저를 타게팅 하기 위해 정말 많은 정보들을 사용하고 있었습니다. 위치, 연령, 성별, 관심사 등등 많은 정보를 수집하고 해당 정보들을 통해 유저그룹을 세분화 시켜 수많은 광고 캠페인을 돌리게 됩니다. 하지만 SKAdNetwork에서는 캠페인의 세분화를 통해 특정 유저를 유추 할 수 없도록 100개의 캠페인만 쓰도록 제한했습니다.</p>
+
+<p>페이스북의 경우 100개 안에서도 광고 최적화를 하기위해 캠페인 9개와 한 캠페인 안에서 최적화를 하기위한 유형 5개 세트로 제한했다고 합니다. (<a href="https://developers.facebook.com/blog/post/2020/10/29/preparing-our-partners-ios-14-latest-guidance-on-skadnetwork/">facebook iOS 14 대비 문서</a>)</p>
+
+<h3>2. 유저가 지면 앱에서 광고를 보고 앱을 설치 할 경우 설치된 앱 안에서는 애플이 제공하는 api를 통해 유저에 대한 정보(Conversion Value)를 6Bit 즉 64가지로만 표현해서 보낼 수 있게끔 해줍니다.</h3>
+
+<p>애플은 유저가 앱을 설치한 다음 해당 채널에서 들어온 유저가 어떤 특성을 가지는지를 표현할수 있지만 유저를 식별할 수 없게끔 0~63 까지의 숫자를 앱내에서 설정하고 보낼수 있게끔 해줍니다. 이 숫자는 conversion value라고 부르고 매체에 conversion value가 전달되는건 postback 이라고 부릅니다. </p>
+
+<p>conversion value는 여러번 설정 할 수 있는데 0 → 3 → 64 와 같이 커지는 값으로만 설정 할 수 있고 0 → 5 → 2 와 같은 식으로 작아지게끔 설정하는건 무시되게 됩니다. conversion value는 설치된 시간 혹은 값이 마지막으로 update된 시간 기준 24시간 뒤에 더이상 업데이트 하지 못하고 postback이 전송되게 됩니다.</p>
+
+<p>conversion value를 어떤식으로 설정해서 유저 정보를 최적화시켜 보낼수 있는게 앞으로 SKAdNetwork 광고 성과의 핵심일꺼라고 많은 사람들이 얘기하고 있습니다. 그럼 어떤 방식을 통해 conversion value를 통해 최적화 할 수 있는지는 다음 글에서 설명드리도록 하겠습니다.</p>
+
+<h3>3. Attribution에 대한 정보를 최소 25시간 이후에만 받을 수 있습니다.</h3>
+
+<p>유저가 앱을 설치 하자마자 혹은 conversion value의 마지막 업데이트 이후 정확히 24시간 뒤에 postback을 받을 수 있다면 설치한 시간을 통해 어떤 광고 채널을 통해 유저가 유입 했는지 유추해 볼 수 있기 때문에 conversion value timer가 만료된 이후 1시간~24시간 이내의 시간 중 랜덤하게 포스트백을 매체쪽으로 보내주게 됩니다.</p>
+
+<h2>그래서 SKAdNetwork를 통해 달라지는 점과 전략적으로 준비해야할 것은🤔?</h2>
+
+<p>아마 글을 읽으시는 분들은 뭔진 모르겠지만 엄청 복잡하고 이걸 어떻게 해야하나 싶으실듯 합니다. SKAdNetwork가 나온 후로 관련된 내용을 쭉 보는 저도 가끔 기존 방식과 햇갈려서 안되는걸 된다고 생각하는 경우도 있으니까요. 위와 같은 기술적인 변경사항 대신 앞으로 격게될 점들을 얘기해보도록 하겠습니다.</p>
+
+<h3>1. 채널 기여결과와 In-app Event간의 간극</h3>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI" data-lightbox="uc?export=view&id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI" data-title="https://drive.google.com/uc?export=view&id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI"><img src="https://drive.google.com/uc?export=view&id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI" alt="https://drive.google.com/uc?export=view&id=1gylmBVkeC2f48DMwDF8-rX5e52AQKPXI" title=""></a></p>
+
+<p>Adjust, Airbridge, AppsFlyer, Branch, Singular등등 MMP를 기존에 사용하시던 곳이 SKAdNetwork광고를 돌리게 된다면 postback을 통해 어떤 광고 지면으로 부터 설치가 얼마나 됐는지를 볼수 있고, 기존에 수집하던 In-app Event들도 계속 들어오게 됩니다. 다만 In-app Event들의 대다수가 광고를 거치지 않은 유저 즉 organic 유저로 구분이 됩니다. organic 유저로 잡히는 이유는 SKAdNetwork의 결과와 In-app Event의 결과를 묶어서 볼 수 있는 방법이 없어 SKAdNetwork의 attribution 정보를 In-app Event를 볼때 사용할 수 없기 때문입니다.</p>
+
+<p>두 데이터를 따로 보게 되면 유저가 앱 안에서 어떤 이벤트를 일으키나 알수는 있지만 어떤 광고 채널을 통해 들어온 유저가 평균 수익이 높은지 혹은 광고비 지출대비 수입 즉 ROAS(Return of Ad Spending)을 분석하기 힘들어져 광고비 계획 세우는게 힘들어질거라 예상해봅니다.</p>
+
+<p>결국 이런 간극을 매울 수 있는 유일한 도구는 결국 conversion value라고 생각 됩니다. 이 글 후에 conversion value에 대한 글을 따로 작성하겠지만 먼저 조금만 얘기해보자면 64가지 경우의 수 안에서 얻을 수 있는 정보의 양을 최대화 하는게 중요하다고 생각됩니다. 게임이라면 어떻게 퍼널을  conversion value에 최적화 시킬지, 커머스라면 구매액을 conversion value에서  어떤 방식으로 표현할건지, 내가 원하는 기간동안 postback이 발송되지 않고 트래킹 할 수 있도록 적절한 주기로 발생하는 이벤트는 어떤건지를 고민하고 실험해봐야할듯 합니다.</p>
+
+<h3>2. 광고 성과를 바로바로 볼 수 없음</h3>
+
+<p><a href="https://drive.google.com/uc?export=view&id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF" data-lightbox="uc?export=view&id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF" data-title="https://drive.google.com/uc?export=view&id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF"><img src="https://drive.google.com/uc?export=view&id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF" alt="https://drive.google.com/uc?export=view&id=1BtQ-IxNAgAdrtWK5ATjRrJbvQDxHdDOF" title=""></a></p>
+
+<p>SKAdNetwork를 사용하게되면 위에서 얘기했던 것 처럼 conversion value 타이머 : 24시간 + postback 타이머 : 1~24시간 이기때문에 최소 25시간 이후에나 광고 성과를 볼 수 있습니다. 라면 물 끓는 시간도 길게 느껴  찬물에 스프와 라면을 같이 넣고 끓여도 괜찮다는걸 연구하는 민족에게 최소 25시간 이후 광고성과를 볼 수 있다는건 매우 가혹합니다. 특히 게임 같이 출시 초기에 광고 데이터를 빠르게 봐야하는 곳 같은 경우 더 답답할 수 있겠죠.</p>
+
+<p>답답한것도 있지만 다른것보다 주의해야할 점은 conversion value가 계속해서 업데이트 되면 postback이 나가는 시간도 점점 밀린다는 것 입니다. conversion value를 하루에 1씩만 오르게 한다면 최대 65일 후에나 postback이 보내지는 경우가 생길 수도 있습니다. 이는 광고비 정산 관련해 문제가 생길 수도 있기 때문에 MMP혹은 매체와 잘 얘기해서 최대로 conversion value를 업데이트 할 수 있는 기간을 확인 후 조정할 필요가 있을꺼라 예상합니다. </p>
+
+<p>또한 conversion value 값에 대한 전략을 바꾸게 될 경우 이전 설정으로 업데이트 해주던 conversion value 값이 현재 설정으로 해석하게 되면서 값들이 이상하게 보일 수 있습니다.  이런 값의 해석 차이 문제 때문에 facebook은 conversion value 설정을 바꾸게 되면 3일간 광고를 못돌리게 되니 이 문제 역시 신경쓰셔야 합니다.</p>
+
+<h3>3. 정확한 데이터란 없음</h3>
+
+<p>리포트를 열어 1원 단위의 광고 채널 별 매출액을 보던건 이제 옛날 얘기가 돼갑니다. 0~64 까지의 값만 지정가능한 conversion value로는 정확한 값을 알수가 없겠죠. 이런 문제에 대해서 대다수의 MMP 들은 구매액을 범위로 표현하는 방식을 사용합니다. 0원인 경우 1~5천원 사이 5천원~만원 사이 와 같은 구간으로 유저가 산 구매액을 측정해서 데이터의 해상도가 낮아지는 문제가 발생합니다.</p>
+
+<p>conversion value를 설정해주는 기간도 원하는 대로 할 수 없습니다. 7일간 새로운 값으로 설정해주고 싶다고 해도 유저가 하루라도 앱을 안들어오면 7일이 되기도 전에 postback이 나가버리는 경우도 있기 때문입니다.이런 문제 때문에 기존에 계산하던 N일 동안의 광고 지출대비 수익(ROAS)을 계산하는 새로운 방법이 필요할수도 있습니다.</p>
+
+<p>앞으로는 비지니스 특성과 중요도에 따라 포기할 점은 포기하고 트래킹 하고 싶은 부분을 확실하게 해서 주어진 환경에서 데이터의 해상도를 올리는 작업이 가장 중요할거라 생각해봅니다.</p>
+
+<h3>4. 가격적 측면</h3>
+
+<p>최근 몰로코에서 <a href="https://www.youtube.com/watch?v=ofKCQ3aeNX4">발표한 자료</a>를 보면 IDFA를 허용한 광고 트래픽과 허용 안한 광고 트래픽의 비용 차이가 약 4배정도 된다고 합니다. IDFA를 허용한 트래픽에 더 비싼 비용을 내고 더 높은 수익을 안겨줄 유저를 타게팅 하는것도 전략이 될 수 있고 아니면 conversion value를 정교화 시켜 저렴한 가격의 IDFA 허용 안한 광고 비중을 늘려 광고 볼륨을 늘리는것도 전략이 될 수 있을 듯 합니다.</p>
+
+<h2>글을 마치며</h2>
+
+<p>이 글에서 많은 걸 적었지만 사실 대부분이 가정이고 SKAdNetwork를 통한 광고들이 어떻게 될지는 돌려보기 전까지 어떻게 될지 아무도 모른다고 생각합니다. 다만 시장이 변해가는 중간에 서로 정보공유를 통해 조금이나마 대비를 하고 연구를 통해 IDFA가 없어진 이후를 견딜 수 있는 더 나은 방법들이 나오지 않을까 싶습니다. </p>
+
+<p>추가적으로 궁금한 점이나 글에 오류가 있다면 언제든 댓글 혹은 work.jen6@gmail.com 으로 메일 주시면 답변해드리도록 하겠습니다. 긴 글 읽어주셔서 감사합니다.</p>
+
+  </div>
+  <!-- Previous / Next Buttons -->
+  <div class="pagenav">
+    
+    <div class="wrapper" id="left">
+      <small><b>Previous</b> Aug 23, 2020</small>
+      <br>
+      <a class="no-hov" href="/2020/08/python-async-profiling.html">&laquo; Profiling을 통해 python async web application 병목지점 찾기 ⛑</a>
+    </div>
+    
+    
+    <div class="wrapper" id="right">
+      <small>Oct 30, 2021 <b>Next</b></small>
+      <br>
+      <a class="no-hov" href="/2021/10/facebook-infra.html">Facebook Infra scaling 관점에서 살펴보기 &raquo;</a>
+    </div>
+    
+  </div>
+  <!-- Disqus comments view -->
+  
+  <div class="post-disqus">
+    <section id="disqus_thread"></section>
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://makeall-jen6.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+
+  </div>
+  
+</article>
+
+  </div>
+  <footer class="c-page__footer">
+  <p>&copy; Son Geon(jen6) 2021</p>
+  <p><a href="https://github.com/jen6">Github</a></p>
+</footer>
+
+</div>
+
+    </main>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782418-1"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-140782418-1');
+  </script>
+
+
+  </body>
+    <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLM8LQ2"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+</html>

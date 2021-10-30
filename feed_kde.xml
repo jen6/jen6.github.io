@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>make all</title>
+    <description>Write a description of your website here.
+</description>
+    <link>https://jen6.github.io/</link>
+    <atom:link href="https://jen6.github.io/feed_kde.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 30 Oct 2021 13:42:40 +0900</pubDate>
+    <lastBuildDate>Sat, 30 Oct 2021 13:42:40 +0900</lastBuildDate>
+    <generator>Jekyll v3.6.3</generator>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <item>
+        <title>First week of GSOC, Piece Table Implement</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7&quot; data-lightbox=&quot;uc?export=view&amp;id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1aVmYiLCsi4DSpwYc6LvYyKB7rZF8-Qq7&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;{: width=&amp;quot;50%&amp;quot; height=&amp;quot;50%&amp;quot;}&lt;/p&gt;
+
+&lt;p&gt;Hi! 
+Last week was start of the GSOC coding period.  So I started my project.
+Also I opened my code on the KDE git.
+ &lt;a href=&quot;https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/&quot;&gt;https://cgit.kde.org/scratch/songeon/kmarkdownparser.git/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you are interested in my project feel free to look and give me some advices.&lt;/p&gt;
+
+&lt;h2&gt;Parser using Spirit::x3&lt;/h2&gt;
+
+&lt;p&gt;First, I started to make the markdown parser using the Boost Spirit X3.&lt;/p&gt;
+
+&lt;p&gt;Spirit makes easy to express grammar using the PEG.
+But it&amp;#39;s templet based library so it was hard to find out which part is wrong.
+Also documentation of spirit was limited. &lt;/p&gt;
+
+&lt;p&gt;So I had a lots of trial and error to get compilable source code.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf&quot;&gt;http://becpp.org/blog/wp-content/uploads/2019/02/Ruben-Van-Boxem-Parsing-CSS-in-C-with-Boost-Spirit-X3.pdf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://ciere.com/cppnow15/using_x3.pdf&quot;&gt;https://ciere.com/cppnow15/using_x3.pdf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;this two slides was really helpful for me.&lt;/p&gt;
+
+&lt;h2&gt;Markdown AST Structure&lt;/h2&gt;
+
+&lt;p&gt;if we type markdown document like this&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;# hello
+&amp;gt; &amp;gt; 1. - **sadf** - 
+&amp;gt; &amp;gt; 
+&amp;gt; &amp;gt; sadf
+&amp;gt; 
+&amp;gt; asdf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;we will get result like this. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj&quot; data-lightbox=&quot;uc?export=view&amp;id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1goYc8X9Z1O9qKqGYE442-twWJq_CkSkj&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Markdown document&amp;#39;s can be splited in each &lt;strong&gt;lines&lt;/strong&gt;. line is the smallest unit of the markdown document. Also line can be expressed &lt;strong&gt;attributes,&lt;/strong&gt; &lt;strong&gt;string, emphasizes&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;attributes : Line&amp;#39;s attribute that change the block style. There are two types of attribute. &lt;/li&gt;
+&lt;li&gt;Single Attribute : # header. Style applied only once.&lt;/li&gt;
+&lt;li&gt;Multiple Attributes : &amp;gt; BlockQuote, Lists. Sytle applied recursively.&lt;/li&gt;
+&lt;li&gt;String : Content of the document. It contains only string.&lt;/li&gt;
+&lt;li&gt;Emphasize : Bold, Cancleline, Underline... It contains index of string to be emphasized&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All line can be parsed in parallel on multiple threads. Because each line is independent from other lines. After parsing seperatly it can be reassembled after parsing phase.&lt;/p&gt;
+
+&lt;p&gt;So we can express this grammar with the Spirit grammar like this
+&lt;code&gt;cpp
+    auto const Line_def= 
+        Header[pushFunc] &amp;gt;&amp;gt; String[setContent]
+        | (MultipleAttribute)* &amp;gt;&amp;gt; EmphasizeString[getEmphStr];
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2&gt;Piece Table&lt;/h2&gt;
+
+&lt;p&gt;I had a hard time to implementing the Emphasize String.&lt;/p&gt;
+
+&lt;p&gt;All String Emphasize token should be paired. If tokens not paired it should be inserted in original points
+```
+    &lt;strong&gt;this is paired example&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;**This token -&amp;gt; -- is not paired**
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;Like this exampled `--` should be inserted in middle of the string as the normal character.
+
+We can simply using insert method but it has performance issue. 
+
+If there is a original string length N and another string length M to be inserted in position P.
+
+First split the original string at position P and shift the splited string as mush as M.
+
+Then put the string length M in position P. It takes almost O(N). 
+
+If there are alot of non-paired tokens, It will consume more time.
+
+---
+So I found the VSCode team's article about reimplementing text buffer using the **Piece Table**.
+
+[https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation](https://code.visualstudio.com/blogs/2018/03/23/text-buffer-reimplementation)
+
+
+
+The main idea of the Piece Table is seperate the original buffer and added buffer. 
+
+And split the strings in a small pieces containing position to insert and the string length.  
+
+Make a table about how to make new string using each pieces.
+
+So I applied this structure in appending non-paired emphasize tokens.
+```cpp
+    const auto EmphasizeString_def = 
+      +(omit[Emphasize[setEmp]] | Content[setEmpText]); 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In my grammar definition, it do not check the pairness of Emphasize token.&lt;/p&gt;
+
+&lt;p&gt;Basically Emphasize token are temporary stored in Emphasize Stack to check pairness.&lt;/p&gt;
+
+&lt;p&gt;First If there is token can be paired, add token in Emphasize vector and clean the non-paired tokens. &lt;/p&gt;
+
+&lt;p&gt;Or there are not tokens can be paired just push the token in the Emphasize Stack and push token&amp;#39;s string value in the buffer vector.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Strings are also added in the buffer vector and inserted in the &lt;strong&gt;Piece Map.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Piece Map works same as Piece table but effective on find the piece on some position.&lt;/p&gt;
+
+&lt;p&gt;Piece Map is multimap that use Piece&amp;#39;s index and Piece as key value. &lt;/p&gt;
+
+&lt;p&gt;So we can iterate whole pieces and make new string with non-paired tokens.
+```cpp
+    namespace AST {
+      struct Piece {
+        int start = 0, len = 0;
+        int bufIdx = 0;
+      };&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;  struct Emphasize {
+    int start = 0, end = 0, bufIdx = 0;
+    EmphasizeType empType = EmphasizeType::DEFAULT;
+  };
+
+  using PieceMap = std::multimap&amp;lt;int, Piece&amp;gt;;
+  using PieceMapIter = PieceMap::iterator;
+
+  class EmphasizeString {
+    private:
+      int currPos = 0, addedTokenLen = 0;
+      std::vector&amp;lt;std::string&amp;gt; buffer;
+      std::vector&amp;lt;Emphasize&amp;gt;  empSt, emps;
+      PieceMap pieceMap;
+
+    private:
+      int clearNonComplete(std::vector&amp;lt;Emphasize&amp;gt;::iterator );
+    public:
+      EmphasizeString();
+      void addEmphToken(EmphasizeType empt);
+      void appendText(const std::string&amp;amp; text);
+      std::string getString();
+      const std::vector&amp;lt;Emphasize&amp;gt; &amp;amp;getEmphasizes() const;
+  };
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight plaintext&quot;&gt;&lt;code&gt;You can check my whole code on KDE git.
+
+---
+
+## After first week
+
+I think it was good starting for me.  But this week and next week is my final exam in the school.
+
+So me and my mentors Eike and SungJae planned to refactor the code and make view of markdown.
+
+They also mentioned adding the licensing policy and following the KDE's codding convention.
+
+Thank you for reading my article and I'll write next article after my final finish.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Tue, 11 Jun 2019 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2019/06/first-week-of-gsoc-piece-table-implement.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2019/06/first-week-of-gsoc-piece-table-implement.html</guid>
+        
+        <category>GSOC</category>
+        
+        <category>KDE</category>
+        
+        <category>markdown</category>
+        
+        <category>piece table</category>
+        
+        
+      </item>
+    
+    
+    
+      <item>
+        <title>HI KDE, HI GSOC 2019</title>
+        <description>&lt;h1&gt;HI KDE, HI GSOC2019&lt;/h1&gt;
+
+&lt;p&gt;Hi I&amp;#39;m SonGeon live in Seoul, South Korea.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1MVbLu69UDVpp8vpAM_fVzDDUReFdHHnv&quot; data-lightbox=&quot;uc?export=view&amp;id=1MVbLu69UDVpp8vpAM_fVzDDUReFdHHnv&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1MVbLu69UDVpp8vpAM_fVzDDUReFdHHnv&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;On this summer I&amp;#39;m working with the KDE community by participating the &amp;quot;Google Summer of Code&amp;quot; Program. &lt;/p&gt;
+
+&lt;p&gt;My main goal during GSOC period is making a &lt;strong&gt;markdown view, WYSIWIG editor&lt;/strong&gt; using C++ and Qt. &lt;/p&gt;
+
+&lt;p&gt;There were two reasons that I started to make a new markdown view.&lt;/p&gt;
+
+&lt;p&gt;First, most markdown editors are using webview based renderer. But webview based editors have the lack of printing options. Because Markdown is aiming to make a good looking document with simple text notations on the web environment. In a single webpage, It doesn’t have pagination for printing. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://drive.google.com/uc?export=view&amp;id=1fhRBHuVDkfqELUKJ9Auuum4MSm5IDGEW&quot; data-lightbox=&quot;uc?export=view&amp;id=1fhRBHuVDkfqELUKJ9Auuum4MSm5IDGEW&quot; data-title=&quot;&quot;&gt;&lt;img src=&quot;http://drive.google.com/uc?export=view&amp;id=1fhRBHuVDkfqELUKJ9Auuum4MSm5IDGEW&quot; alt=&quot;&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So webview based renders have the same problems. For example, document elements are printed across multiple pages and the document’s paragraphs, word spacing, and line spacing are slightly different compared to the screen. If the markdown editor support the preview of the paging,  better text rendering with the layout of printing, It will be more powerfull like word processors.&lt;/p&gt;
+
+&lt;p&gt;Second, the KDE project already has the markdown renderer kmarkdownWebview. Currently, It has a forked third-party javascript library for markdown rendering. I want to minimize the dependencies. And It use the Qt’s QWebEngine and QWebChannel. Those are used to run a JS library and It brings a lot of overhead.&lt;/p&gt;
+
+&lt;p&gt;I think writing new renderer using Qt API and C++ without a third-party library is a lighter approach. So I choose to make parser with the &lt;strong&gt;Boost Spirit&lt;/strong&gt;. It&amp;#39;s the PEG parser generator implemented in the boost library and It&amp;#39;s &lt;a href=&quot;https://www.boost.org/doc/libs/1_66_0/libs/spirit/doc/html/spirit/karma/performance_measurements/numeric_performance/int_performance.html&quot;&gt;super fast&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I want to contribute many way not only makaing my own markdown editor. One of the main goal in this summer is make as a KDE part to reuse it. It can be markdown preivew module in Okular. &lt;/p&gt;
+
+&lt;p&gt;If you interested in this project please feel free to contact me. I&amp;#39;ll check KDevelop, kde-soc telegram group (I joined in irc but it&amp;#39;s hard to check) . Or you can use my email kde.jen6@gmail.com.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 27 May 2019 00:00:00 +0900</pubDate>
+        <link>https://jen6.github.io/2019/05/hi-kde-hi-gsoc2019.html</link>
+        <guid isPermaLink="true">https://jen6.github.io/2019/05/hi-kde-hi-gsoc2019.html</guid>
+        
+        <category>GSOC</category>
+        
+        <category>KDE</category>
+        
+        <category>markdown</category>
+        
+        
+        <category>GSOC</category>
+        
+      </item>
+    
+    
+    
+    
+  </channel>
+</rss>
